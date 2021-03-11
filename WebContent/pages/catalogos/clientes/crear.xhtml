@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <p:panel id="panel-crear" styleClass="innermenu" >
+        <p:commandButton id="clientes-crear-guardar" title="Guardar" icon="ui-icon-disk"
+                         styleClass="ui-icon-ADSave" validateClient="true"
+                         process="@this clientes-panel-crear-formulario"
+                         update="clientes-panel-crear-formulario clientes-tabla mensajes2"
+                         oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-clientes-crear').hide()"
+                         actionListener="#{clientesController.crear}"/>
+    </p:panel>
+    <center>
+        <p:panel id="clientes-panel-crear-formulario" style="border:none;">
+            <h:panelGrid styleClass="catalogos-datatable" columns="2" cellpadding="5" >
+
+                <p:outputLabel id="clientes-crear-nombre-Label" styleClass="text-label"
+                               for="clientes-crear-nombre-value" value="Nombre"/>
+                <p:inputText id="clientes-crear-nombre-value" value="#{clientesController.current.nombre}" required="true" >
+                    <pe:keyFilter regEx="#{msg.alpha}"/>
+                </p:inputText>
+
+
+                <p:outputLabel id="clientes-crear-unidadNegocio-label" styleClass="text-label"
+                               for="clientes-crear-unidadNegocio-value" value="Unidad de negocio"/>
+                <p:selectManyMenu id="clientes-crear-unidadNegocio-value" required="true"
+                                 value="#{clientesController.listaUnidadesNegociosSeleccionadas}" >
+                    <f:selectItems value="#{clientesController.listaUnidadesNegocios}"
+                                   var="unidad" itemLabel="#{unidad.nombreUnidad}"
+                                   itemValue="#{unidad.idUnidadNegocio}"/>
+                </p:selectManyMenu>
+
+
+                <p:outputLabel id="clientes-crear-contacto-Label" styleClass="text-label"
+                               for="clientes-crear-contacto-value" value="Nombre de contacto"/>
+                <p:inputText id="clientes-crear-contacto-value" value="#{clientesController.current.encargado}" required="true" >
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters0}"/>
+                </p:inputText>
+
+                <p:outputLabel id="clientes-crear-email-Label" styleClass="text-label"
+                               for="clientes-crear-email-value" value="Correo Electrónico"/>
+                <p:inputText id="clientes-crear-email-value" validatorMessage="El formato de email no es valido"
+                             value="#{clientesController.current.email}"  >
+                    <f:validator validatorId="emailValidator"/>
+                </p:inputText>
+                
+                <p:outputLabel id="clientes-crear-notificaciones-Label" styleClass="text-label"
+                               for="clientes-crear-notificaciones-value" value="Notificaciones"/>
+                <p:selectBooleanCheckbox  id="clientes-crear-notificaciones-value" 
+                             value="#{clientesController.current.notificaciones}" />
+
+            </h:panelGrid>
+        </p:panel>
+    </center>
+</h:body>
+</html>
+

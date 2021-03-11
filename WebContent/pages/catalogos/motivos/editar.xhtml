@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <p:panel id="panel-editar" styleClass="innermenu" >
+        <p:commandButton id="motivos-editar-guardar"   title="Guardar" icon="ui-icon-disk"
+                         styleClass="ui-icon-ADSave"  validateClient="true"
+                         process="@this motivos-panel-editar-formulario"
+                         ignoreAutoUpdate="true"
+                         update="motivos-panel-editar-formulario motivos-tabla mensajes2"
+                         oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-motivos-editar').hide()"
+                         actionListener="#{motivosController.editar}" />
+    </p:panel>
+    <center>
+        <p:panel id="motivos-panel-editar-formulario" style="border:none;">
+            <h:panelGrid columns="2" cellpadding="5" >
+                <p:outputLabel id="motivos-editar-label" styleClass="text-label"
+                               for="motivos-editar-value" value="Motivo"/>
+                <p:inputText id="motivos-editar-value" required="true"
+                             value="#{motivosController.current.nombre}" >
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                    <f:attribute name="label" value="Motivo"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+            </h:panelGrid>
+        </p:panel>
+    </center>
+</h:body>
+</html>
+

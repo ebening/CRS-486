@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+
+                <p:dataTable id="opciones-plano-tabla" var="o"
+                             styleClass="tablaPlana"
+                             rendered="#{opcionesController.catalogo}"
+                             value="#{opcionesController.current.opcionPlanaList}"
+                             emptyMessage="#{msg.emptyMessage}"
+                             rows="10"
+                             editable="true"
+                             paginator="true"
+                             paginatorTemplate="#{msg.paginatorTemplate}"
+                             rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+                    <f:facet name="header">
+                        Catálogo
+                    </f:facet>
+
+                    <p:column headerText="Texto">
+                        <p:cellEditor >
+                            <f:facet name="output"><h:outputText   value="#{o.texto}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="texto" value="#{o.texto}">
+                                <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                            </p:inputText></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Orden">
+
+                        <p:cellEditor  >
+                            <f:facet name="output"><h:outputText value="#{o.orden}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="valor" value="#{o.orden}">
+                                <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                            </p:inputText></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Código de Barras">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{o.codigoBarra}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="codigoBarra" value="#{o.codigoBarra}">
+                                <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                            </p:inputText></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Valor variable">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{o.valor}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="valorVariable" value="#{o.valor}">
+                                <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                            </p:inputText></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Visible">
+                        <p:cellEditor>
+                            <f:facet name="output">  <p:selectBooleanCheckbox value="#{o.visible}" disabled="true" /></f:facet>
+                            <f:facet name="input">  <p:selectBooleanCheckbox id="visible"  value="#{o.visible}" >
+                                <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                            </p:selectBooleanCheckbox></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:rowEditor/>
+                    </p:column>
+
+
+                    <p:ajax event="rowEdit" listener="#{opcionesController.onRowEditPlano}"
+                            process=":center-form:opciones-plano-tabla:texto,
+                            :center-form:opciones-plano-tabla:valor,
+                            :center-form:opciones-plano-tabla:codigoBarra,
+                            :center-form:opciones-plano-tabla:visible" />
+                    <p:ajax event="rowEditCancel" listener="#{opcionesController.onRowCancelPlano}" />
+                </p:dataTable>
+
+</h:body>
+</html>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:composition>
+        <p:dialog id="crearPerfil" header="#{msg.crear_perfil}" 
+                    widgetVar="crearPerfil" 
+                    showEffect="explode" hideEffect="fade" 
+                    height="230"
+                    width="470"
+                    resizable="false" modal="true">
+            
+        <p:panel styleClass="innermenu" >
+            
+            <p:commandButton id="perfilGuardarNuevo" title="Guardar" icon="ui-icon-disk"
+                             actionListener="#{MBPerfiles.crearPerfil()}"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             process="@this,panelNuevoPerfil"
+                             update="panelNuevoPerfil,tablePerfiles" 
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('crearPerfil').hide()"/>
+            <!--
+            <p:commandButton id="perfilRegresarNuevo" title="Regresar" update="panelNuevoPerfil tablePerfiles" 
+                             styleClass="ui-icon-ADGo-left" oncomplete="PF('crearPerfil').hide()"/>-->
+        </p:panel>
+            
+            <div class="page-content">
+                <p:panelGrid id="panelNuevoPerfil" styleClass="panelGridNoBorde" >
+                    
+                    <p:row>
+                        <p:column >
+                            <p:outputLabel for="nombreNuevo" value="#{msg.nombre_perfil}" styleClass="text-label"/>
+                        </p:column>
+                        <p:column >
+                            <p:inputText id="nombreNuevo" value="#{MBPerfiles.selectedPerfil.nombre}" 
+                                         required="true" requiredMessage="Ingrese el nombre para el perfil"  validator="tituloCadena" />
+                            <p:message for="nombreNuevo" display="tooltip"/>
+                        </p:column>
+                        <p:column >
+                            <p:outputLabel for="accesoMovilNuevo" value="#{msg.acceso_movil_perfil}" styleClass="text-label"/>
+                        </p:column>
+                        <p:column >
+                            <p:selectBooleanCheckbox id="accesoMovilNuevo" value="#{MBPerfiles.selectedPerfil.accesoMovil}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column >
+                            <p:outputLabel for="descripcionNuevo" value="#{msg.descripcion_perfil}" styleClass="text-label"/>
+                        </p:column>
+                        <p:column colspan="3" styleClass="no-borde">
+                            <p:inputTextarea id="descripcionNuevo" value="#{MBPerfiles.selectedPerfil.descripcion}"  rows="5" cols="40" autoResize="false"/>
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+            </div>
+            
+            
+            
+            <!--
+            <p:confirmDialog   global="true" showEffect="fade" hideEffect="explode">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            -->
+        </p:dialog>
+    </ui:composition>
+</html>
+

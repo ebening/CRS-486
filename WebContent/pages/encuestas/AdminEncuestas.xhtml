@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBEncuestas.query}"  />
+        <f:event type="preRenderView" listener="#{MBEncuestas.procesaQuery()}"/>
+    </f:metadata>
+    <h:body>
+
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center">
+                
+                <p:remoteCommand autoRun="true" process="@this,encuestasDT" actionListener="#{MBEncuestas.loadRefresh()}"
+                                 update="encuestasDT" />
+
+                <p:panel id="panel" styleClass="innermenu">
+                    <p:commandButton id="encuestas-agregar" icon="ui-icon-plus"
+                                     process="@this,encuestasDT"
+                                     oncomplete="PF('eligeTipoEncuesta').show()"
+                                     styleClass="ui-icon-ADAdd" title="Agregar encuesta" 
+                                     update=":center-form:panelPlantillaDinamica"
+                                     actionListener="#{MBEncuestas.limpiarNuevo()}" resetValues="true" />
+
+                    <p:commandButton id="encuestas-editar" styleClass="ui-icon-ADEdit" icon="ui-icon-pencil"
+                                     process="@this,encuestasDT"
+                                     title="Editar encuesta"  
+                                     update="tabDinamico,:center-form:panelPlantillaDinamica,panelConfiguraPregunta,miBanco,panelGuardaComoPlantilla"
+                                     actionListener="#{MBEncuestas.encuestaEditar()}" resetValues="true"/>
+                    <!--
+                    <p:commandButton id="encuestas-preview" styleClass="ui-icon-ADView-pdf"
+                                     title="Vista previa"  
+                                     process="@this,encuestasDT"
+                                     update="tabDinamico,:center-form:panelPlantillaDinamica,panelConfiguraPregunta,miBanco,panelGuardaComoPlantilla"
+                                     actionListener="{MBEncuestas.encuestaVistaPrevia()}" resetValues="true"/>
+                    -->
+                    <p:commandButton id="encuestas-eliminar" icon="ui-icon-trash"
+                                     update="encuestasDT" 
+                                     process="@this,encuestasDT"
+                                     actionListener="#{MBEncuestas.eliminaEncuesta()}" 
+                                     styleClass="ui-icon-ADTrash" title="Eliminar encuestas" 
+                                     >
+                        <p:confirm header="Confirmación"
+                                   message="¿Est&aacute; seguro que desea eliminar las encuestas seleccionadas?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:panel>
+
+                <h1 class="title">Encuestas</h1>
+                
+                
+                <!-- FINALIZA - Panel busqueda -->
+                <!-- INICIA - Panel resultado configuraciones  -->
+                <div align="center" class="page-content">
+                    <p:outputPanel id="panelListaEncuestas">
+                        <!--style="width: 95%" -->
+                        <p:dataTable var="encuestas" id="encuestasDT" 
+                                    value="#{MBEncuestas.listaEncuestas}"
+                                    emptyMessage="No existen registros" 
+                                    paginator="true" rows="10"
+                                    rowsPerPageTemplate="10,20,50,100"
+                                    selectionMode="multiple"
+                                    selection="#{MBEncuestas.encuestaSeleccionadas}"
+                                    rowKey="#{encuestas.encuestasId}"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                   
+                                    >
+
+                            <p:column filterBy="#{encuestas.encuestasId}"  headerText="Id Encuesta" sortBy="#{encuestas.encuestasId}"
+                                     filterMatchMode="contains">
+                                <h:outputText value="#{encuestas.encuestasId}" />
+                            </p:column>
+                            <p:column filterBy="#{encuestas.nombreEncuesta}" headerText="Nombre encuesta"
+                                     filterMatchMode="contains">
+                                <h:outputText value="#{encuestas.nombreEncuesta}" />
+                            </p:column>
+                            <p:column filterBy="#{encuestas.tipo}"
+                                     headerText="Tipo" 
+                                     filterMatchMode="contains">
+                                <h:outputText value="#{encuestas.tipo}" />
+                            </p:column>
+                            <p:column filterBy="#{encuestas.cantidadProyectosVigentes}"
+                                     headerText="Proyectos vigentes" 
+                                     filterMatchMode="contains">
+                                <h:outputText value="#{encuestas.cantidadProyectosVigentes}" />
+                            </p:column>
+                            <p:column filterBy="#{encuestas.estatus}"
+                                     headerText="Estatus" 
+                                     filterMatchMode="contains">
+                                <h:outputText value="#{encuestas.estatus}" />
+                            </p:column>
+                        </p:dataTable>
+                        
+                    </p:outputPanel>
+                    
+                </div>
+                
+                                <!-- FINALIZA - Panel resultado configuraciones-->
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si" type="button"
+                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button"
+                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                <!-- FINALIZA - Panel resultado configuraciones-->
+
+                <ui:include src="dialog/EligeTipoEncuesta.xhtml" />
+                <ui:include src="dialog/ConfigurarSeccion.xhtml" />
+                <ui:include src="dialog/ConfigurarPregunta.xhtml" />
+                <ui:include src="dialog/OpcionesPreguntas.xhtml" />
+                <!--<ui:include src="dialog/EditaEncuesta.xhtml" />-->
+                <ui:include src="dialog/PlantillaDinamica.xhtml" />
+                <ui:include src="dialog/BancoPreguntas.xhtml" />
+                <ui:include src="dialog/GuardaComoPlantilla.xhtml" />
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

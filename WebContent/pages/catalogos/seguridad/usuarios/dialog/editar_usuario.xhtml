@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="editarUsuario" header="#{msg.editar_usuario}" 
+                    widgetVar="editarUsuario" 
+                    showEffect="explode" hideEffect="fade" 
+                    height="600"
+                    width="780"
+                    resizable="false"  modal="true">
+        
+        <p:panel styleClass="innermenu" >
+            <p:commandButton id="perfilesLimpiarEdit" icon="ui-icon-refresh" 
+                             styleClass="ui-icon-ADClean" 
+                             title="Limpiar" type="reset"/>
+            
+            <p:commandButton id="usuarioGuardarEdit" title="#{msg.guardar_usuario}" icon="ui-icon-disk"
+                             actionListener="#{MBUsuarios.editarUsuario()}"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             process="@this,panelEditar"
+                             update="panelEditar,tableUsuarios,mensajes2" 
+                             ignoreAutoUpdate="true"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('editarUsuario').hide()"/>
+            
+        </p:panel>
+            
+            <p:panelGrid id="panelEditar" styleClass="panelGridNoBorde" >
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="usuario" value="#{msg.usuario_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="usuario" value="#{MBUsuarios.usuarioSeleccionado.userName}" 
+                                     readonly="true"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectBooleanCheckbox id="activo" value="#{MBUsuarios.usuarioSeleccionado.activo}" />
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="activo" value="#{msg.activo_usuario}" styleClass="text-label"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="nombre" value="#{msg.nombre_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="nombre" value="#{MBUsuarios.usuarioSeleccionado.nombre}" 
+                                    readonly="true" />
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="nombre2" value="#{msg.nombre2_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="nombre2" value="#{MBUsuarios.usuarioSeleccionado.nombre2}" 
+                                     readonly="true"  />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="apPaterno" value="#{msg.ap_paterno_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="apPaterno" value="#{MBUsuarios.usuarioSeleccionado.apellidoPaterno}" 
+                                     readonly="true"  />
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="apMaterno" value="#{msg.ap_materno_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="apMaterno" value="#{MBUsuarios.usuarioSeleccionado.apellidoMaterno}" 
+                                     readonly="true" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="direccion" value="#{msg.direccion_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column colspan="3">
+                        <p:inputTextarea rows="3" id="direccion" value="#{MBUsuarios.usuarioSeleccionado.direccion}" style="width: 100%;"
+                                readonly="true"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="colonia" value="#{msg.colonia_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column colspan="2">
+                        <p:inputText id="colonia" value="#{MBUsuarios.usuarioSeleccionado.colonia}" style="width: 100%;" 
+                                    readonly="true" />
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="cp" value="#{msg.cp_usuario}" styleClass="text-label" style="width: 20%;"/>
+                        &nbsp;&nbsp;&nbsp;
+                        <p:inputText id="cp" value="#{MBUsuarios.usuarioSeleccionado.cP}" style="width: 70%;"
+                                     readonly="true" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="estado" value="#{msg.estado_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu id="estado"  filterMatchMode="startsWith"
+                                 value="#{MBUsuarios.usuarioSeleccionado.estadosId}" >
+                            <f:selectItem itemValue="#{MBUsuarios.usuarioSeleccionado.estadosId}" itemLabel="#{MBUsuarios.usuarioSeleccionado.nombreEstados}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="ciudad" value="#{msg.ciudad_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu id="ciudad" filterMatchMode="startsWith"
+                                 value="#{MBUsuarios.usuarioSeleccionado.ciudadesId}" >
+                            <f:selectItem itemValue="#{MBUsuarios.usuarioSeleccionado.ciudadesId}" itemLabel="#{MBUsuarios.usuarioSeleccionado.nombreCiudades}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="mail" value="#{msg.mail_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column colspan="3">
+                        <p:inputText id="mail" value="#{MBUsuarios.usuarioSeleccionado.mail}" 
+                                    readonly="true"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="altitud" value="#{msg.altitud_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="altitud" value="#{MBUsuarios.usuarioSeleccionado.altitud}" 
+                                     required="true" >
+                            <pe:keyFilter regEx="#{msg.pnum}"/>
+                        </p:inputText>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="longitud" value="#{msg.longitud_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:inputText id="longitud" value="#{MBUsuarios.usuarioSeleccionado.longitud}" 
+                                     required="true" requiredMessage="#{msg.longitud_req_usuario}" >
+                            <pe:keyFilter regEx="#{msg.pnum}"/>
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="puesto" value="#{msg.puesto_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu id="puesto" filterMatchMode="startsWith"
+                                         value="#{MBUsuarios.usuarioSeleccionado.puestosId}" >
+                            <f:selectItem itemValue="#{MBUsuarios.usuarioSeleccionado.puestosId}" itemLabel="#{MBUsuarios.usuarioSeleccionado.nombrePuesto}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel for="perfil" value="#{msg.perfil_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu id="perfil"  required="true" requiredMessage="#{msg.perfil_req_usuario}" filter="true" filterMatchMode="startsWith"
+                                         value="#{MBUsuarios.usuarioSeleccionado.perfilesId}" >
+                            <f:selectItem itemValue="#{null}" itemLabel="#{msg.perfil_default_selection}" />
+                            <f:selectItems value="#{MBUsuarios.listPerfiles}"
+                                           var="perfil" itemLabel="#{perfil.nombre}" 
+                                           itemValue="#{perfil.perfilesId}"/>
+                            
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <p:outputLabel for="region" value="#{msg.region_usuario}" styleClass="text-label"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu id="region" filterMatchMode="startsWith"
+                                         value="#{MBUsuarios.regionesId}" >
+                            <f:selectItems value="#{MBUsuarios.listRegiones}"
+                                           var="region" itemLabel="#{region.nombre}" 
+                                           itemValue="#{region.id}"/>
+                            <p:ajax listener="#{MBUsuarios.changeRegion()}" update="tableEquipos"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column >
+                    </p:column>
+                    <p:column >
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <br /><br />
+            <h:panelGrid width="90%" columns="2">
+                <p:column width="50%">
+                    <p:dataTable id="tableEquipos" var="equipos" value="#{MBUsuarios.listEquipos}"
+                                 selectionMode="single"  rowKey="#{equipos.equiposId}" 
+                                 selection="#{MBUsuarios.equipoSelected}" emptyMessage="No hay registros" 
+                                 scrollable="true" scrollHeight="150" widgetVar="tableEquipos" style="width: 370px" >
+                        <p:column headerText="Equipo" style="width: 70%">
+                             <h:outputText value="#{equipos.nombre}" />
+                         </p:column>
+                        <p:column headerText="Pertenece" style="width: 30%">
+                            <h:outputText value="#{equipos.stringPertenece}" />
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{MBUsuarios.changeEquipo()}" />
+                     </p:dataTable> 
+                </p:column>
+                <p:column width="50%">
+                    <p:dataTable id="tableTerr" var="terris" value="#{MBUsuarios.territoriosAllByEquipo}"
+                                 selectionMode="multiple" rowKey="#{terris.territoriosId}" style="width: 370px"
+                                 selection="#{MBUsuarios.terrSelected}" widgetVar="tableTerr"
+                                 emptyMessage="No hay registros" scrollable="true" scrollHeight="150">
+                        <p:column headerText="Territorios">
+                            <h:outputText value="#{terris.nombre}" />
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{MBUsuarios.guardarSelectedTerr()}" />
+                        <p:ajax event="rowUnselect" listener="#{MBUsuarios.guardarSelectedTerr()}" />
+                    </p:dataTable> 
+                </p:column>
+            </h:panelGrid>  
+        </p:dialog>
+    </ui:composition>
+</html>
+

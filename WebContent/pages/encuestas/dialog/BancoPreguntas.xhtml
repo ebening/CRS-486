@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <ui:composition>
+        <p:dialog id="miBanco" header="Banco de Preguntas" widgetVar="bancoPreguntas" 
+                  showEffect="explode" 
+                  hideEffect="fade" 
+                  width="50%" modal="true"
+                  resizable="false" 
+                  style="position: absolute;">
+            
+            <div align="right">
+                <p:panel styleClass="innermenu">
+                    
+                    <p:commandButton id="btnAgregarPreguntaEncuesta" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                                     actionListener="#{MBEncuestas.agregarPreguntaBanco()}" process="@this,panelBancoPreguntas,preguntasBancoDT"
+                                     update="tabDinamico,panelPlantillaDinamica,mensajes2"/>
+                    <p:tooltip for="btnAgregarPreguntaEncuesta" value="Agregar pregunta a encuesta" trackMouse="true" />
+                    <!--
+                    <p:commandButton id="btnCierraBanco" title="Regresar"
+                                     styleClass="ui-icon-ADClose"
+                                     onclick="PF('bancoPreguntas').hide();" />
+                    <p:tooltip for="btnCierraBanco" trackMouse="true" value="Cerrar" />
+                    -->
+                </p:panel>
+            </div> 
+            <h1 class="title">Banco de preguntas</h1>
+            
+            <p:outputPanel id="panelBancoPreguntas">
+                <h:panelGrid columns="3"> 
+                    
+                    <p:outputLabel value="Categor&iacute;a" styleClass="text-label"/>
+                    <p:selectOneMenu  value="#{MBEncuestas.idCategoriaBanco}">
+                        <f:selectItem itemLabel="Selecciona una categor&iacute;a" itemValue="0" />
+                        <f:selectItems value="#{MBCategorias.listaCategorias()}" var="categoriaPregunta" 
+                                       itemLabel="#{categoriaPregunta.nombreCategoria}" itemValue="#{categoriaPregunta.idCategoria}" />
+                        <p:ajax update="subcategoriaBancoPregunta" listener="#{MBEncuestas.traeSubCategoriasBanco()}" />
+                    </p:selectOneMenu>
+                    <p:outputLabel value="" styleClass="text-label"/>
+                    
+                    <p:outputLabel value="Subcategor&iacute;a" styleClass="text-label"/>
+                    <p:selectOneMenu id="subcategoriaBancoPregunta" value="#{MBEncuestas.idSubCategoriaBanco}" >
+                        <f:selectItem itemLabel="Seleccione una subcategor&iacute;a" itemValue="0" />
+                        <f:selectItems value="#{MBEncuestas.listaSubCategorias}" var="subCategoriaPregunta" 
+                                       itemLabel="#{subCategoriaPregunta.nombreSubCategoria}" itemValue="#{subCategoriaPregunta.idSubCategoria}" />
+                        <p:ajax update="preguntasBancoDT" listener="#{MBEncuestas.listaBancoPreguntas()}" />
+                        
+                    </p:selectOneMenu>
+                    <p:outputLabel value="" styleClass="text-label"/>
+                </h:panelGrid>
+            </p:outputPanel>
+            
+            <div align="center" class="page-content">
+                <p:dataTable var="preguntas" id="preguntasBancoDT"  style="width: 95%" scrollHeight="500" 
+                             value="#{MBEncuestas.listaPreguntasBanco}"
+                             emptyMessage="No hay preguntas del banco con esa informaci&oacute;n" paginator="true" rows="5"
+                             rendered="true" selection="#{MBEncuestas.preguntasSeleccionada}"
+                             selectionMode="multiple" rowKey="#{preguntas.preguntaOID}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,20,50">
+                    
+                    <p:column filterBy="#{preguntas.descripcionPregunta}" headerText="Pregunta" filterMatchMode="contains">
+                        <h:outputText value="#{preguntas.descripcionPregunta}" />
+                    </p:column>
+                    <p:column headerText="Secci&oacute;n">
+                        <p:selectOneMenu id="seccionesXencuestaBanco" value="#{preguntas.seccionOIDSelect}" >
+                            <f:selectItem itemLabel="Seleccione una secci&oacute;n" itemValue="0" />
+                            <f:selectItems value="#{MBEncuestas.seccionesPorEncuesta}"
+                                           var="seccionEncuesta"
+                                           itemLabel="#{seccionEncuesta.nombreSeccion}"
+                                           itemValue="#{seccionEncuesta.seccionOID}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:dataTable>
+            </div>
+
+
+            <br />
+        </p:dialog>
+    </ui:composition>
+</html>
+
+
+
+

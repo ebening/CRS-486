@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <!--
+    <f:metadata>
+        <f:viewParam name="region" value="{MBRepCliCumplDetalleProyecto.region}" />
+        <f:viewParam name="territorio" value="{MBRepCliCumplDetalleProyecto.territorio}"  />
+        <f:viewParam name="equipo" value="{MBRepCliCumplDetalleProyecto.equipo}" />
+        <f:viewParam name="cliente" value="{MBRepCliCumplDetalleProyecto.cliente}"  />
+        <f:viewParam name="cadena" value="{MBRepCliCumplDetalleProyecto.cadena}"  />
+        <f:viewParam name="proyecto" value="{MBRepCliCumplDetalleProyecto.proyecto}" />
+        <f:viewParam name="encuesta" value="{MBRepCliCumplDetalleProyecto.encuesta}" />
+        <f:viewParam name="fechai" value="{MBRepCliCumplDetalleProyecto.fechai}"  />
+        <f:viewParam name="fechaf" value="{MBRepCliCumplDetalleProyecto.fechaf}" />
+        <f:viewParam name="format" value="{MBRepCliCumplDetalleProyecto.format}"/>
+        <f:event type="preRenderView" listener="{MBRepCliCumplDetalleProyecto.getStringHtmlCumplimientoDetalle(param.region, param.territorio,param.equipo, param.cliente,param.cadena,param.proyecto,param.encuesta, param.fechai,param.fechaf, param.format)}"/>
+    </f:metadata>
+    -->
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBRepCliCumplDetalleProyecto.query}"  />
+        <f:event type="preRenderView" listener="#{MBRepCliCumplDetalleProyecto.getStringHtmlCumplimientoDetalle()}"/>
+    </f:metadata>
+     <h:body>
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >
+                        <p:remoteCommand process="@this" autoRun="true" name="initBeanSession" action="#{MBSession.init()}"/>
+                        <p:panel id="panel" styleClass="innermenu">
+                            <!-- param.region, param.territorio,param.equipo, param.cliente,param.cadena,param.proyecto,param.encuesta, param.fechai,param.fechaf, 'excel' -->
+                            <p:commandButton ajax="false"  id="downloadReporte" styleClass="ui-icon-ADDownload" icon="ui-icon-arrowthickstop-1-s"
+                                             actionListener="#{MBRepCliCumplDetalleProyecto.navigateToRepRepCumplDetalleProyecto}" title="Descargar excel">
+                                <p:fileDownload value="#{MBRepCliCumplDetalleProyecto.file}" />
+                            </p:commandButton>
+                            <p:tooltip id="downloadReporte1" for="downloadReporte" value="Exportar a excel" trackMouse="true" />
+                            
+                            <p:commandButton id="regresarElement" action="#{MBRepCliCumplDetalleProyecto.navigateToRepCumplProyecto()}" styleClass="ui-icon-ADGo-left" icon="ui-icon-arrowthickstop-1-w" title="Regresar" immediate="true" />
+                            <p:tooltip for="regresarElement" value="Regresar a reporte de cumplimiento por proyecto" trackMouse="true" />
+                            
+                        </p:panel>
+                        
+                        <h1 class="title">Detalle de cumplimiento</h1>
+                        
+                        <div class="page-content">
+                            <div class="report-content" style="width: 100%;height: 480px;overflow: auto !important;"> 
+                                <h:outputText id="htmlCumplimientoDetalle" value="#{MBRepCliCumplDetalleProyecto.reportCumplDet}" escape="false" />
+                            </div>
+                        </div>
+                        
+                    </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="contentPlantilla" header="Grabar como Plantilla" widgetVar="guardaComoPlantilla" 
+                  showEffect="explode" hideEffect="fade" width="500" modal="true"
+                  style="position: absolute;">
+            
+                <p:panel styleClass="innermenu">
+
+                    <p:commandButton id="btnGuardaPlantilla" icon="ui-icon-disk"
+                                     actionListener="#{MBEncuestas.guardaEncuestaComoPlantilla()}" 
+                                     styleClass="ui-icon-ADSave" 
+                                     process="@this,panelGuardaComoPlantilla"                          
+                                     update="encuestasDT,eleccionTipo,panelGuardaComoPlantilla,mensajes2" 
+                                     oncomplete="if(args &amp;&amp; !args.validationFailed) PF('guardaComoPlantilla').hide()">
+                        <p:confirm header="Confirmación"
+                                   message="¿Desea guardar la encuesta como plantilla?" icon="ui-icon-alert"  />
+                    </p:commandButton>
+                    <p:tooltip for="btnGuardaPlantilla" trackMouse="true" value="Guardar" />
+
+                    <!--
+                    <p:commandButton id="btnCierraPlantilla" title="Regresar"
+                                     styleClass="ui-icon-ADClose"
+                                     onclick="PF('guardaComoPlantilla').hide();" />
+                    <p:tooltip for="btnCierraPlantilla" trackMouse="true" value="Cerrar" />
+                    -->
+                </p:panel>
+                <h1 class="title">Grabar como plantilla</h1>
+                
+            <br />
+                <h:panelGrid columns="2" id="panelGuardaComoPlantilla">
+                    <p:outputLabel for="guardarComoPlan" value="Nombre de la plantilla " styleClass="text-label"/>
+                    <p:inputText id="guardarComoPlan" value="#{MBEncuestas.nombrePlantilla}" required="true" requiredMessage="Ingrese un nombre para la plantilla." size="40" />
+                </h:panelGrid>
+            <br />
+        </p:dialog>
+
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+            <p:commandButton value="Si" type="button"
+                             styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button"
+                             styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+
+
+
+    </ui:composition>
+</html>
+
+
+

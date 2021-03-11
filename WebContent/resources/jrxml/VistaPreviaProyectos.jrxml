@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VistaPreviaProyectos" pageWidth="590" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="568" leftMargin="11" rightMargin="11" topMargin="7" bottomMargin="11" uuid="bb8a4300-217c-423d-83bf-ad237d2663e7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" fontName="SansSerif">
+		<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)]]></conditionExpression>
+			<style backcolor="#DFECFF" fill="Solid"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="dataset1" uuid="adf6c60f-2da5-4eed-97be-c9ca5d01e789">
+		<field name="_THIS" class="java.lang.Object"/>
+	</subDataset>
+	<parameter name="NOMBRE_SUC" class="java.lang.String"/>
+	<parameter name="NOMBRE_USR" class="java.lang.String"/>
+	<parameter name="BASE_PATH" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["/Users/jdominguez/Documents/Netbeans/CRS-486/WebContent/resources/jrxml/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PATH" class="java.lang.String"/>
+	<parameter name="pdf" class="java.lang.Boolean"/>
+	<parameter name="CLIENTE_PROY" class="java.lang.String"/>
+	<parameter name="CLAVE_PROY" class="java.lang.String"/>
+	<parameter name="NOMBRE_PROY" class="java.lang.String"/>
+	<parameter name="DESC_PROY" class="java.lang.String"/>
+	<parameter name="FEC_VISIBLE" class="java.util.Date"/>
+	<parameter name="FEC_INICIO" class="java.util.Date"/>
+	<parameter name="FEC_FIN" class="java.util.Date"/>
+	<parameter name="ENCUESTAS" class="java.util.List">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="225" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="98" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="af14577f-9e6e-4a67-a73d-17520fcaf8c5"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="221" width="559" height="1" forecolor="#CCCCCC" uuid="4b5b7889-edd5-4103-b453-0740895630bf">
+					<printWhenExpression><![CDATA[$P{pdf}.booleanValue()==true]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="115" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="beda0e52-e8ef-451f-b1a0-5265054ebc89"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clave Proyecto :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="132" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="6d29c63f-d61f-4fcd-acc1-cf5fb1eac721"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Proyecto :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="149" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="d81dd03e-5aa9-4e8e-a5b3-aec1cfb1504d"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción del Proyecto :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="166" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="27ad0ef3-5faf-4db3-8e16-2aedb8ba9ff7"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Visible :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="184" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="cf4b6d01-ce72-4c82-a78a-3399eb95dd2d"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Inicio :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="202" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="286c0e71-81c0-40f1-93e0-e31226d840ca"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Fin Vigencia :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="68" width="556" height="22" forecolor="#000000" backcolor="#CCCCCC" uuid="b74e908e-e2d5-450a-bc7b-cc427c03aa71"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="98" width="443" height="16" uuid="88181a67-1046-4d28-b173-a4edd975cd70"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CLIENTE_PROY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="115" width="443" height="16" uuid="b41d6c3f-4469-497f-af2c-5dd6f492f02d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CLAVE_PROY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="132" width="443" height="16" uuid="439d63e3-9a0b-49f0-87eb-539229f2e031"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_PROY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="149" width="443" height="16" uuid="831cb275-dc18-410a-a6ae-a81ffce8f513"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DESC_PROY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="166" width="100" height="16" uuid="68ef36e4-62c5-4c83-aeb5-2cc494b48265"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FEC_VISIBLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="184" width="100" height="16" uuid="91254b12-3527-437f-951d-39a3415b5e80"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FEC_INICIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="202" width="100" height="16" uuid="f8d0c5ea-e5b8-4111-b0cf-191d18519cd0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FEC_FIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="216" y="71" width="100" height="19" uuid="cd834cbc-57b8-414e-a081-42d224e3ff7c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_PROY}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="395" y="4" width="164" height="50" uuid="c8f9f9c1-c21c-4623-8ef6-f14ee7374ca5"/>
+				<imageExpression><![CDATA["/Users/jdominguez/Documents/Netbeans/CRS-486/WebContent/resources/images/logo.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="8" y="48" width="336" height="20" uuid="738fda7c-28bb-4ed7-96ce-2af734f7e218"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="108" y="2" width="99" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="7a80d527-edd4-4208-9619-0cb7ad1aeff6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2" y="2" width="114" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="4a1aa9fc-0be2-433a-90c4-a1ecf10ea26c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Encuestas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="207" y="2" width="360" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="2ab615ae-987d-4279-8f4c-884978c556b5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="107" splitType="Stretch">
+			<subreport>
+				<reportElement x="68" y="7" width="425" height="100" uuid="04229561-3396-46c2-aabf-a18128cdf1ad"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{ENCUESTAS})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "EncuestasPreview.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<line>
+				<reportElement x="-1" y="3" width="560" height="1" forecolor="#CCCCCC" uuid="caafb15c-b70a-4ac9-b572-2fa59e40b33a">
+					<printWhenExpression><![CDATA[$P{pdf}.booleanValue()==true]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="439" y="4" width="80" height="10" uuid="52f5c9cc-1b35-4fc7-9a82-278b730cf677"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="519" y="4" width="40" height="10" uuid="26dd033b-e7ce-4254-9d4d-11f32dabf24d"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="11" splitType="Stretch"/>
+	</summary>
+</jasperReport>

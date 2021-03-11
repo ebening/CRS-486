@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBTiendas.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBTiendas.processUrl()}" />
+    </f:metadata>
+
+    <h:body>
+        <ui:composition template="../template/templatef.xhtml">          
+            <ui:define name="center" > 
+                <p:remoteCommand autoRun="true" name="updateTableResult" actionListener="#{MBTiendas.tiendasListByTerritorio()}" update="tableResult,nombreTerritorio" /> 
+                <div align="right">
+                    <p:panel id="panelOpsTiendas" styleClass="innermenu">
+                        <p:commandButton id="bttnAddTiendas" styleClass="ui-icon-ADSearch" onclick="PF('busDialog').show();" icon="ui-icon-search"
+                                         title="Agregar Tiendas" />
+                        <p:tooltip for="bttnAddTiendas" value="Buscar Tiendas" trackMouse="true" />
+                        <p:commandButton id="bttnDelTienda" styleClass="ui-icon-ADTrash" title="Eliminar Tiendas" icon="ui-icon-trash"
+                                         actionListener="#{MBTiendas.delTiendasFromMainTable()}" update="tableResult">
+                        </p:commandButton>
+                        <p:tooltip for="bttnDelTienda" value="Eliminar Tiendas" trackMouse="true" />
+                        <p:commandButton id="bttnExportXLS" styleClass="ui-icon-ADDownload" title="Exportar" ajax="false" icon="ui-icon-arrowthickstop-1-s">
+                            <p:dataExporter type="xls" target="tableResult" fileName="Tiendas_Territorio" />
+                        </p:commandButton>
+                        <p:tooltip for="bttnExportXLS" value="Exportar Excel" trackMouse="true" />  
+                    </p:panel>  
+                    <p:confirmDialog widgetVar="confirmDelTienda" message="¿ Esta seguro que desea eliminar las tiendas del territorio?"
+                                     showEffect="fade" hideEffect="explode" severity="alert" appendTo="center-form">
+
+                        <p:commandButton value="Si" onclick="remoteConfirm()"
+                                         type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" onclick="PF('confirmDelTienda').hide()"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+
+                    </p:confirmDialog>
+                    <p:remoteCommand id="remoteConfirm" name="remoteConfirm" update="tableResult" 
+                                     actionListener="#{MBTiendas.confirmDeleteTienda()}" />
+                </div><br />
+                <h1 class="title">Tiendas por territorio</h1>
+                <br /><br />
+                <p:outputLabel id="nombreTerritorio" value="#{MBTiendas.equipoNombre} - #{MBTiendas.territorioNombre}" 
+                               styleClass="text-label" style="padding-left: 2.5%" />
+                <div class="page-content" align="center">
+                    <br/><br/>
+                    <p:dataTable id="tableResult"
+                                 paginator="true"
+                                 var="data"
+                                 value="#{MBTiendas.lazyModel}"
+                                 rows="10"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="10,20,50,100"
+                                 emptyMessage="No existen registros"
+                                 style="width: 95%"
+                                 selection="#{MBTiendas.mainTiendaSelected}"
+                                 selectionMode="multiple"
+                                 rowKey="#{data.id}"
+                                 filteredValue="#{MBTiendas.tiendasFiltered}"
+                                 lazy="true" >
+                        <p:column headerText="N&uacute;mero tienda" filterBy="#{data.clave}" filterMatchMode="contains" width="10%" >
+                            <h:outputText value="#{data.clave}" />
+                        </p:column>
+                        <p:column headerText="Nombre tienda" filterBy="#{data.Nombre}" 
+                                  filterMatchMode="contains" width="40%">
+                            <h:outputText value="#{data.nombre}" />
+                        </p:column>
+                        <p:column headerText="Cadena" width="15%" filterBy="#{data.cadena}" filterMatchMode="contains">
+                            <h:outputText value="#{data.cadena}" />
+                        </p:column>
+                        <p:column headerText="Estado" width="15%" filterBy="#{data.Estados}" filterMatchMode="contains">
+                            <h:outputText value="#{data.estados}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" width="15%" filterBy="#{data.Ciudades}" filterMatchMode="contains">
+                            <h:outputText value="#{data.ciudades}" />
+                        </p:column>
+                        <p:column headerText="Visitas" width="5%" exportable="false">
+                            <p:commandButton styleClass="ui-icon-ADSearch-grid20x20" id="bttnVisitasView" icon="ui-icon-search">                                  
+                                <f:param name="tiendaNombreSel" value="#{data.nombre}" />
+                                <f:param name="tiendaId" value="#{data.id}" />
+                                <p:ajax event="click" oncomplete="PF('visitasDialog').show()"
+                                        listener="#{MBTiendas.tiendaNombreForVisitasView()}" />
+                            </p:commandButton>
+                            <p:tooltip for="bttnVisitasView" value="Ver Visitas" trackMouse="true" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <ui:include src="dialog/BuscarTiendasDialog.xhtml"/>
+                <ui:include src="dialog/VisitasProgramadasDialog.xhtml" /> 
+            </ui:define>
+        </ui:composition> 
+    </h:body>
+</html>

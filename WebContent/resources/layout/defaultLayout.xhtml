@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link href="/resources/css/main_style.css" type="text/css" rel="stylesheet" />
+        <script type="text/javascript"  src="/resources/js/script_main.js" />
+        <title>#{msg.proyect_title}</title>
+
+
+    </h:head>
+    <h:body>
+        <div class="layout">
+            <div class="header">
+                <a href="#">
+                    <h:graphicImage name="images/logo.jpg" alt="Logo"  width="20%" height="63" id="Insert_logo" style="background-color: #FFFFFF; display:block;" />
+                </a> 
+                <!-- end .header --></div>
+            <div class="sidebar1">
+                <ul class="nav">
+                    <li><a href="#">Administración</a></li>
+                    <li><a href="#">Clientes</a></li>
+                    <li><a href="#">Otra opción</a></li>
+                    <li><a href="#">Cuarta</a></li>
+                </ul>
+                <p> Texto adicional opcional. El largo de la columna se modifica de acuerdo a la cantidad de contenido en ella.</p>
+                <!-- end .sidebar1 --></div>
+
+            <div class="content">
+
+                <ui:insert name="content" >
+                    <table width="100%" >
+                        <tr>
+                            <td><br/></td>
+                        </tr>
+
+                        <tr >
+                            <td align="center" height="100%">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><br/></td>
+                        </tr> 
+                    </table>
+
+                </ui:insert>
+            </div>
+
+            <div class="footer">
+
+                <p:panel styleClass="piePagina">
+                    <h:outputText value="#{msg.footer_text}" />
+                </p:panel>
+            </div>
+        </div>
+
+    </h:body>
+</html>

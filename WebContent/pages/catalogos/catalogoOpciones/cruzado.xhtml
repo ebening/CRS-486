@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+
+    <p:dataTable id="opciones-cruzado-tabla" var="o"
+                 rendered="#{opcionesController.cruzada}"
+                 value="#{opcionesController.current.opcionCruzadasList}"
+                 emptyMessage="#{msg.emptyMessage}"
+                 rows="10"
+                 editable="true"
+                 paginator="true"
+                 paginatorTemplate="#{msg.paginatorTemplate}"
+                 rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+        <f:facet name="header">
+            Cruzado
+        </f:facet>
+
+        <p:ajax event="rowEdit" listener="#{opcionesController.onRowEditCruzado}"
+                process=":center-form:opciones-cruzado-tabla:t_variable :center-form:opciones-cruzado-tabla:t_valor"/>
+        <p:ajax event="rowEditCancel" listener="#{opcionesController.onRowCancelCruzado}"/>
+
+        <p:column headerText="Valor">
+            <p:cellEditor>
+                <f:facet name="output"> <h:outputText value="#{o.valor}"/></f:facet>
+                <f:facet name="input">  <p:inputText id="t_valor" value="#{o.valor}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                </p:inputText></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Variable">
+            <p:cellEditor>
+                <f:facet name="output"> <h:outputText value="#{opcionesController.nameVariable(o.variable)}"/></f:facet>
+                <f:facet name="input"> 
+                    <p:selectOneMenu id="t_variable" 
+                                     value="#{o.variable}" style="width: 90%;">
+                            <f:selectItem itemLabel="Selecciona una variable." itemValue="#{null}" />
+                            <f:selectItems value="#{opcionesController.listVariable}" var="filtro"
+                                           itemLabel="#{filtro.nombre}"
+                                           itemValue="#{filtro.variablesId}" />
+                            <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column style="width:32px">
+            <p:rowEditor/>
+        </p:column>
+
+    </p:dataTable>
+
+</h:body>
+</html>

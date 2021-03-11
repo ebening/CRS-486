@@ -1,0 +1,56 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 3/11/2014, 03:29:08 PM
+    Author     : christian
+*/
+
+/**
+azulfondo rgb(0,96,169);
+rojofondo rgb(207,10,44);
+rojoElement rgb(188,28,52);
+rojoFondo nuevo rgb(182,3,3);
+rojoElement nuevo rgb(148,3,3);
+**/
+
+
+.AD-treemenu {
+    background: rgb(207,10,44);
+    border:none;
+
+}
+
+
+.AD-treemenu .ui-tree-container{
+    background-color: rgb(207,10,44);
+
+}
+
+
+.AD-treemenu li.treeElement  span{
+    color: #ffffff;
+    font-weight: bolder;
+}
+
+.AD-treemenu li.treeElement  span:hover{
+    color:rgb(207,10,44);
+    font-weight: bolder;
+}
+
+.AD-treemenu li.treeElement  span > .ui-treenode-label{
+    background-color:rgb(188,28,52) ;
+    padding: 4px;
+    width: 80%;
+}
+.AD-treemenu li.treeElement span > .ui-treenode-label:hover  {
+    background-color:#ffffff;
+    padding: 4px;
+    width: 80%;
+}
+
+
+
+

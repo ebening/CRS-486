@@ -1,0 +1,473 @@
+
+.AD-body{
+    font-family:  sans-serif !important;
+    background-color: #87CEFA;
+    margin: 0px;
+    padding: 0px;
+    color: #323232;
+}
+
+
+.AD-body .ui-widget{
+    font-family: sans-serif !important;
+}
+
+/*Inicia css paco*/
+.title {
+    font-family:sans-serif !important;
+    border-bottom: 1px solid #AFAFAF; 
+    font-size:  18px;
+    font-weight: bold;
+    margin: 0px;
+    padding-left:1%;
+    padding-top: 8px;
+    padding-right:1%;
+    width: 98%;
+    color: #424242;
+}
+
+.text-label-message {
+    font-style: italic;
+    font-size:  12px !important;
+    font-weight: bold !important;
+    color: #424242;
+}
+
+.text-label {
+    font-size:  12px !important;
+    font-weight: bold !important;
+    color: #424242;
+}
+
+
+.ui-tree {
+    width: 100% !important;
+}
+.panelGridNoBorde{
+    width: 100%;
+}
+/*Css para quitar los border de rows y cols de un panelGrid*/
+.panelGridNoBorde tr, .panelGridNoBorde td {
+    border: none !important;
+}
+
+.AD-ui-selecton-control tr td:first-child { width: 2em !important; }
+
+/*Css para quitar los border de rows y cols de un panelGrid*/
+.electManyMenuX100{
+    height: 100px !important;
+}
+
+.electManyMenuX100 > .ui-selectlistbox-filter-container{
+    height: 10% !important;
+}
+
+.electManyMenuX100 > .ui-selectlistbox-listcontainer{
+    height: 89% !important;
+}
+
+
+/*Css para los links dentro de una tabla*/
+tbody td a:link{
+    text-decoration: underline !important;
+}
+
+
+/*Inicia Css para el contenedor de las imagenes*/
+.innermenu{
+    background-color: #87CEFA !important;
+    color: #FFF;
+    text-align:right;
+}
+
+.innermenu > .ui-panel-content{
+    margin: 0px !important;
+    border: 0px !important;
+    padding: 0px !important;
+    text-align:right;
+}
+.innermenu > .ui-panel-content > .right{
+    width: 100%;
+    text-align:right;
+}
+
+.innermenu > .ui-panel-content > .right td{
+    text-align:right;
+}
+
+.innermenu > .ui-panel-content > .right .tdimage{
+    width: 40px;
+}
+.innermenu > .ui-panel-content > .right .tdcontrol{
+    width: 80px;
+}
+/*
+.innermenu > .ui-panel-content table.right{
+    text-align:right !important;
+    display:block !important;
+}
+*/
+/*
+.innermenu > .ui-panel-content > .ui-selectonemenu{
+    height: 100%;
+    padding: 0px 0px 0px 0px !important;
+    border: 0px !important;
+}
+*/
+/*Termina Css para el contenedor de las imagenes*/
+
+/*Inicia CSS para los botones con imagenes ON y OFF*/
+.ui-icon-ADAdd{
+    /*background-image: url("#{resource['images/add-off.jpg']}") !important;*/
+}
+.ui-icon-ADAdd:hover{
+    /*background-image: url("#{resource['images/add-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADCalendar{
+    /*background-image: url("#{resource['images/calendar-off.jpg']}") !important;*/
+}
+.ui-icon-ADCalendar:hover{
+    /*background-image: url("#{resource['images/calendar-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADCatalog-copy{
+    /*background-image: url("#{resource['images/catalog-copy-off.jpg']}") !important;*/
+}
+.ui-icon-ADCatalog-copy:hover{
+    /*background-image: url("#{resource['images/catalog-copy-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADCatalog{
+    /*background-image: url("#{resource['images/catalog-off.jpg']}") !important;*/
+}
+.ui-icon-ADCatalog:hover{
+    /*background-image: url("#{resource['images/catalog-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADClean{
+    /*background-image: url("#{resource['images/clean-off.jpg']}") !important;*/
+}
+.ui-icon-ADClean:hover{
+    /*background-image: url("#{resource['images/clean-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADClose{
+    /*background-image: url("#{resource['images/close-off.jpg']}") !important;*/
+}
+.ui-icon-ADClose:hover{
+    /*background-image: url("#{resource['images/close-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADCustom-search{
+    /*background-image: url("#{resource['images/custom-search-off.jpg']}") !important;*/
+}
+.ui-icon-ADCustom-search:hover{
+    /*background-image: url("#{resource['images/custom-search-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADDownload{
+   /* background-image: url("#{resource['images/download-off.jpg']}") !important;*/
+}
+.ui-icon-ADDownload:hover{
+   /* background-image: url("#{resource['images/download-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADEdit{
+    /*background-image: url("#{resource['images/edit-off.jpg']}") !important;*/
+}
+.ui-icon-ADEdit:hover{
+    /*background-image: url("#{resource['images/edit-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADFolder-opened{
+    /*background-image: url("#{resource['images/folder-opened-off.jpg']}") !important;*/
+}
+.ui-icon-ADFolder-opened:hover{
+    /*background-image: url("#{resource['images/folder-opened-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADNavigate-left{
+    /*background-image: url("#{resource['images/navigate-left-off.jpg']}") !important;*/
+}
+.ui-icon-ADNavigate-left:hover{
+    /*background-image: url("#{resource['images/navigate-left-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADNavigate-right{
+    /*background-image: url("#{resource['images/navigate-right-off.jpg']}") !important;*/
+}
+.ui-icon-ADNavigate-right:hover{
+    /*background-image: url("#{resource['images/navigate-right-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADSave{
+    /*background-image: url("#{resource['images/save-off.jpg']}") !important;*/
+}
+.ui-icon-ADSave:hover{
+    /*background-image: url("#{resource['images/save-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADSearch{
+    /*background-image: url("#{resource['images/search-off.jpg']}") !important;*/
+}
+.ui-icon-ADSearch:hover{
+    /*background-image: url("#{resource['images/search-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADTools{
+    /*background-image: url("#{resource['images/tools-off.jpg']}") !important;*/
+}
+.ui-icon-ADTools:hover{
+    /*background-image: url("#{resource['images/tools-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADTrash{
+    /*background-image: url("#{resource['images/trash-off.jpg']}") !important;*/
+}
+.ui-icon-ADTrash:hover{
+    /*background-image: url("#{resource['images/trash-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADView-pdf{
+    /*background-image: url("#{resource['images/view-pdf-off.jpg']}") !important;*/
+}
+.ui-icon-ADView-pdf:hover{
+    /*background-image: url("#{resource['images/view-pdf-on.jpg']}") !important;*/
+}
+
+/*Nuevas clases css para botones*/
+
+.ui-icon-ADDownload-xlsx{
+    /*background-image: url("#{resource['images/download-xlsx-off.jpg']}") !important;*/
+}
+.ui-icon-ADDownload-xlsx:hover{
+    /*background-image: url("#{resource['images/download-xlsx-on.jpg']}") !important;
+}
+
+.ui-icon-ADGo-left{
+    /*background-image: url("#{resource['images/go-left-off.jpg']}") !important;*/
+}
+.ui-icon-ADGo-left:hover{
+    /*background-image: url("#{resource['images/go-left-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADGo-right{
+    /*background-image: url("#{resource['images/go-right-off.jpg']}") !important;*/
+}
+.ui-icon-ADGo-right:hover{
+    /*background-image: url("#{resource['images/go-right-on.jpg']}") !important;*/
+}
+
+.ui-icon-ADSearch-grid{
+    /*background-image: url("#{resource['images/search-grid-off.png']}") !important;*/
+}
+.ui-icon-ADSearch-grid:hover{
+    /*background-image: url("#{resource['images/search-grid-on.png']}") !important;*/
+}
+
+.ui-icon-ADSearch-grid20x20{
+    /*background-image: url("#{resource['images/search-grid-off.png']}") !important;*/
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #FFF inset;
+    border: 1px solid #A8A8A8;
+}
+.ui-icon-ADSearch-grid20x20:hover{
+    /*background-image: url("#{resource['images/search-grid-on.png']}") !important;*/
+}
+
+.ui-icon-ADAgregar-seccion{
+    /*background-image: url("#{resource['images/agregar-seccion-off.png']}") !important;*/
+}
+.ui-icon-ADAgregar-seccion:hover{
+    /*background-image: url("#{resource['images/agregar-seccion-on.png']}") !important;*/
+}
+
+.ui-icon-ADGrupo-tiendas{
+    /*background-image: url("#{resource['images/grupo-tiendas-off.png']}") !important;*/
+}
+.ui-icon-ADGrupo-tiendas:hover{
+    /*background-image: url("#{resource['images/grupo-tiendas-on.png']}") !important;*/
+}
+
+.ui-icon-ADBanco-preguntas{
+    /*background-image: url("#{resource['images/banco-preguntas-off.png']}") !important;*/
+}
+.ui-icon-ADBanco-preguntas:hover{
+    /*background-image: url("#{resource['images/banco-preguntas-on.png']}") !important;*/
+}
+
+.ui-icon-ADAgregar-pregunta{
+    /*background-image: url("#{resource['images/agregar-pregunta-off.png']}") !important;*/
+}
+.ui-icon-ADAgregar-pregunta:hover{
+    /*background-image: url("#{resource['images/agregar-pregunta-on.png']}") !important;*/
+}
+
+
+/*Inicia CSS para los botones con una sola imagen*/
+.ui-icon-ADEditar25x25, .ui-icon-ADEditar30x30{
+    /*background-image: url("#{resource['images/editar.png']}") !important;*/
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #FFF inset;
+    border: 1px solid #A8A8A8;
+}
+
+.ui-icon-ADEliminar25x25, .ui-icon-ADEliminar30x30{
+    /*background-image: url("#{resource['images/eliminar.png']}") !important;*/
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #FFF inset;
+    border: 1px solid #A8A8A8;
+}
+
+.ui-icon-ADFolder-abierto25x25, .ui-icon-ADFolder-abierto30x30{
+    /*background-image: url("#{resource['images/folder-abierto.png']}") !important;*/
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #FFF inset;
+    border: 1px solid #A8A8A8;
+}
+
+.ui-icon-ADAgregar25x25, .ui-icon-ADAgregar30x30{
+    /*background-image: url("#{resource['images/agregar.png']}") !important;*/
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #FFF inset;
+    border: 1px solid #A8A8A8;
+}
+
+/*    ----------         ------------------*/
+
+.ui-icon-ADAgregar-pregunta, .ui-icon-ADBanco-preguntas, .ui-icon-ADGrupo-tiendas, .ui-icon-ADAgregar-seccion,.ui-icon-ADEditar30x30, .ui-icon-ADEliminar30x30, .ui-icon-ADFolder-abierto30x30, .ui-icon-ADAgregar30x30,.ui-icon-ADEditar25x25, .ui-icon-ADEliminar25x25, .ui-icon-ADFolder-abierto25x25, .ui-icon-ADAgregar25x25,.ui-icon-ADSearch-grid20x20,.ui-icon-ADSearch-grid, .ui-icon-ADGo-right,.ui-icon-ADGo-left,.ui-icon-ADDownload-xlsx,.ui-icon-ADView-pdf,.ui-icon-ADTrash,.ui-icon-ADTools,.ui-icon-ADSearch,.ui-icon-ADSave,.ui-icon-ADNavigate-right,.ui-icon-ADNavigate-left,.ui-icon-ADFolder-opened,.ui-icon-ADEdit,.ui-icon-ADDownload,.ui-icon-ADCustom-search,.ui-icon-ADClose,.ui-icon-ADClean,.ui-icon-ADCatalog, .ui-icon-ADCatalog-copy, .ui-icon-ADCalendar, .ui-icon-ADAdd{
+    background-repeat: no-repeat;
+    background-origin: initial;
+    background-size: 99% 99% !important;
+    padding: 0px 0px 0px 0px !important;
+}
+/*ui-button-icon-left ui-icon ui-c ui-icon-ADSearch-grid20x20*/
+.ui-icon-ADAgregar-pregunta > .ui-button-text, .ui-icon-ADBanco-preguntas > .ui-button-text, .ui-icon-ADGrupo-tiendas > .ui-button-text, .ui-icon-ADAgregar-seccion > .ui-button-text, .ui-icon-ADEditar30x30 > .ui-button-text, .ui-icon-ADEliminar30x30 > .ui-button-text, .ui-icon-ADFolder-abierto30x30 > .ui-button-text, .ui-icon-ADAgregar30x30 > .ui-button-text,.ui-icon-ADEditar25x25 > .ui-button-text, .ui-icon-ADEliminar25x25 > .ui-button-text, .ui-icon-ADFolder-abierto25x25 > .ui-button-text, .ui-icon-ADAgregar25x25 > .ui-button-text, .ui-icon-ADSearch-grid20x20 > .ui-button-text,.ui-icon-ADSearch-grid > .ui-button-text, .ui-icon-ADGo-right > .ui-button-text,.ui-icon-ADGo-left > .ui-button-text,.ui-icon-ADDownload-xlsx > .ui-button-text,.ui-icon-ADView-pdf > .ui-button-text,.ui-icon-ADTrash > .ui-button-text,.ui-icon-ADTools > .ui-button-text,.ui-icon-ADSearch > .ui-button-text,.ui-icon-ADSave > .ui-button-text,.ui-icon-ADNavigate-right > .ui-button-text,.ui-icon-ADNavigate-left > .ui-button-text,.ui-icon-ADFolder-opened > .ui-button-text,.ui-icon-ADEdit > .ui-button-text,.ui-icon-ADDownload > .ui-button-text,.ui-icon-ADCustom-search > .ui-button-text,.ui-icon-ADClose > .ui-button-text,.ui-icon-ADClean > .ui-button-text,.ui-icon-ADCatalog > .ui-button-text,.ui-icon-ADCatalog-copy > .ui-button-text,.ui-icon-ADCalendar > .ui-button-text ,.ui-icon-ADAdd > .ui-button-text{
+    display: none;
+}
+
+@media (max-width: 5068px) {
+    .innermenu{
+        height: 36px;
+    }
+    .ui-icon-ADAgregar-pregunta, .ui-icon-ADBanco-preguntas, .ui-icon-ADGrupo-tiendas, .ui-icon-ADAgregar-seccion,.ui-icon-ADSearch-grid,.ui-icon-ADSearch-grid:after, .ui-icon-ADGo-right, .ui-icon-ADGo-left,.ui-icon-ADDownload-xlsx,.ui-icon-ADView-pdf,.ui-icon-ADTrash,.ui-icon-ADTools,.ui-icon-ADSearch,.ui-icon-ADSave,.ui-icon-ADNavigate-right,.ui-icon-ADNavigate-left,.ui-icon-ADFolder-opened,.ui-icon-ADEdit,.ui-icon-ADDownload,.ui-icon-ADCustom-search,.ui-icon-ADClose,.ui-icon-ADClean,.ui-icon-ADCatalog, .ui-icon-ADCatalog-copy, .ui-icon-ADCalendar, .ui-icon-ADAdd{
+        width: 35px;
+        height: 35px;
+        border: 0px !important;
+    }
+    .ui-icon-ADAgregar-pregunta:hover, .ui-icon-ADBanco-preguntas:hover, .ui-icon-ADGrupo-tiendas:hover, .ui-icon-ADAgregar-seccion:hover,.ui-icon-ADSearch-grid:hove,.ui-icon-ADSearch-grid:onclick,.ui-icon-ADSearch-grid:target, .ui-icon-ADGo-right:hover,  .ui-icon-ADGo-left:hover,.ui-icon-ADDownload-xlsx:hover,.ui-icon-ADView-pdf:hover,.ui-icon-ADTrash:hover,.ui-icon-ADTools:hover,.ui-icon-ADSearch:hover,.ui-icon-ADSave:hover,.ui-icon-ADNavigate-right:hover,.ui-icon-ADNavigate-left:hover,.ui-icon-ADFolder-opened:hover,.ui-icon-ADEdit:hover,.ui-icon-ADDownload:hover,.ui-icon-ADCustom-search:hover,.ui-icon-ADClose:hover,.ui-icon-ADClean:hover,.ui-icon-ADCatalog:hover,.ui-icon-ADCatalog-copy:hover,.ui-icon-ADCalendar:hover,.ui-icon-ADAdd:hover{
+        width: 35px;
+        height: 35px;
+        border: 0px !important;
+    }
+    
+    .ui-icon-ADSearch-grid20x20{
+        width: 20px;
+        height: 20px;
+    }
+    
+    .ui-icon-ADSearch-grid20x20:hover{
+        width: 20px;
+        height: 20px;
+    }
+    
+    .ui-icon-ADEditar30x30, .ui-icon-ADEliminar30x30, .ui-icon-ADFolder-abierto30x30, .ui-icon-ADAgregar30x30{
+        width: 30px;
+        height: 30px;
+    }
+    
+    .ui-icon-ADEditar25x25, .ui-icon-ADEliminar25x25, .ui-icon-ADFolder-abierto25x25, .ui-icon-ADAgregar25x25{
+        width: 25px;
+        height: 25px;
+    }
+}
+@media (max-width: 968px) {
+    .innermenu{
+        height: 31px;
+    }
+    .ui-icon-ADAgregar-pregunta, .ui-icon-ADBanco-preguntas, .ui-icon-ADGrupo-tiendas, .ui-icon-ADAgregar-seccion,.ui-icon-ADSearch-grid, .ui-icon-ADGo-right, .ui-icon-ADGo-left,.ui-icon-ADDownload-xlsx,.ui-icon-ADView-pdf,.ui-icon-ADTrash,.ui-icon-ADTools,.ui-icon-ADSearch,.ui-icon-ADSave,.ui-icon-ADNavigate-right,.ui-icon-ADNavigate-left,.ui-icon-ADFolder-opened,.ui-icon-ADEdit,.ui-icon-ADDownload,.ui-icon-ADCustom-search,.ui-icon-ADClose,.ui-icon-ADClean,.ui-icon-ADCatalog,.ui-icon-ADCatalog-copy, .ui-icon-ADCalendar, .ui-icon-ADAdd{
+        width: 30px;
+        height: 30px;
+        border: 0px !important;
+    }
+    .ui-icon-ADAgregar-pregunta:hover, .ui-icon-ADBanco-preguntas:hover, .ui-icon-ADGrupo-tiendas:hover, .ui-icon-ADAgregar-seccion:hover,.ui-icon-ADSearch-grid:hover, .ui-icon-ADGo-right:hover, .ui-icon-ADGo-left:hover,.ui-icon-ADDownload-xlsx:hover,.ui-icon-ADView-pdf:hover,.ui-icon-ADTrash:hover,.ui-icon-ADTools:hover,.ui-icon-ADSearch:hover,.ui-icon-ADSave:hover,.ui-icon-ADNavigate-right:hover,.ui-icon-ADNavigate-left:hover,.ui-icon-ADFolder-opened:hover,.ui-icon-ADEdit:hover,.ui-icon-ADDownload:hover,.ui-icon-ADCustom-search:hover,.ui-icon-ADClose:hover,.ui-icon-ADClean:hover,.ui-icon-ADCatalog:hover,.ui-icon-ADCatalog-copy:hover,.ui-icon-ADCalendar:hover, .ui-icon-ADAdd:hover{
+        width: 30px;
+        height: 30px;
+        border: 0px !important;
+    }
+    
+    .ui-icon-ADSearch-grid20x20{
+        width: 16px;
+        height: 16px;
+    }
+    
+    .ui-icon-ADSearch-grid20x20:hover{
+        width: 16px;
+        height: 16px;
+    }
+    
+    .ui-icon-ADEditar30x30, .ui-icon-ADEliminar30x30, .ui-icon-ADFolder-abierto30x30, .ui-icon-ADAgregar30x30{
+        width: 25px;
+        height: 25px;
+    }
+    
+    .ui-icon-ADEditar25x25, .ui-icon-ADEliminar25x25, .ui-icon-ADFolder-abierto25x25, .ui-icon-ADAgregar25x25{
+        width: 20px;
+        height: 20px;
+    }
+}
+@media (max-width: 768px) {
+    .innermenu{
+        height: 26px;
+    }
+    .ui-icon-ADAgregar-pregunta, .ui-icon-ADBanco-preguntas, .ui-icon-ADGrupo-tiendas, .ui-icon-ADAgregar-seccion,.ui-icon-ADSearch-grid, .ui-icon-ADGo-right, .ui-icon-ADGo-left,.ui-icon-ADDownload-xlsx,.ui-icon-ADView-pdf,.ui-icon-ADTrash,.ui-icon-ADTools,.ui-icon-ADSearch,.ui-icon-ADSave,.ui-icon-ADNavigate-right,.ui-icon-ADNavigate-left,.ui-icon-ADFolder-opened,.ui-icon-ADEdit,.ui-icon-ADDownload,.ui-icon-ADCustom-search,.ui-icon-ADClose,.ui-icon-ADClean,.ui-icon-ADCatalog,.ui-icon-ADCatalog-copy, .ui-icon-ADCalendar, .ui-icon-ADAdd{
+        width: 25px;
+        height: 25px;
+        border: 0px !important;
+    }
+    .ui-icon-ADAgregar-pregunta:hover, .ui-icon-ADBanco-preguntas:hover, .ui-icon-ADGrupo-tiendas:hover, .ui-icon-ADAgregar-seccion:hover,.ui-icon-ADSearch-grid:hover, .ui-icon-ADGo-right:hover, .ui-icon-ADGo-left:hover,.ui-icon-ADDownload-xlsx:hover,.ui-icon-ADView-pdf:hover,.ui-icon-ADTrash:hover,.ui-icon-ADTools:hover,.ui-icon-ADSearch:hover,.ui-icon-ADSave:hover,.ui-icon-ADNavigate-right:hover,.ui-icon-ADNavigate-left:hover,.ui-icon-ADFolder-opened:hover,.ui-icon-ADEdit:hover,.ui-icon-ADDownload:hover,.ui-icon-ADCustom-search:hover,.ui-icon-ADClose:hover,.ui-icon-ADClean:hover,.ui-icon-ADCatalog:hover,.ui-icon-ADCatalog-copy:hover,.ui-icon-ADCalendar:hover, .ui-icon-ADAdd:hover{
+        width: 25px;
+        height: 25px;
+        border: 0px !important;
+    }
+    
+    .ui-icon-ADSearch-grid20x20{
+        width: 12px;
+        height: 12px;
+    }
+    
+    .ui-icon-ADSearch-grid20x20:hover{
+        width: 12px;
+        height: 12px;
+    }
+    
+    .ui-icon-ADEditar30x30, .ui-icon-ADEliminar30x30, .ui-icon-ADFolder-abierto30x30, .ui-icon-ADAgregar30x30{
+        width: 20px;
+        height: 20px;
+    }
+    
+    .ui-icon-ADEditar25x25, .ui-icon-ADEliminar25x25, .ui-icon-ADFolder-abierto25x25, .ui-icon-ADAgregar25x25{
+        width: 15px;
+        height: 15px;
+    }
+    
+}
+
+/*Termina CSS para los botones con imagenes*/
+
+.catalogos-datatable td{
+    vertical-align: top;
+}
+
+.login-dialog td{
+    vertical-align: top;
+    text-align: center;
+}
+
+.bton-dialog-continueLogin {
+    font-family: sans-serif !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    height: 25px;
+}

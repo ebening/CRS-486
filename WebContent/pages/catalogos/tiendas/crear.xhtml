@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <p:panel id="panel-crear" styleClass="innermenu">
+        <p:commandButton id="tiendas-crear-guardar" title="Guardar" icon="ui-icon-plus"
+                         styleClass="ui-icon-ADSave" validateClient="true"
+                         process="@this tiendas-panel-crear-formulario"
+                         ignoreAutoUpdate="true"
+                         update="tiendas-panel-crear-formulario tiendas-tabla mensajes2"
+                         oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-tiendas-crear').hide()"
+                         actionListener="#{tiendasController.crear()}"/>
+    </p:panel>
+
+    <center>
+        <p:panel id="tiendas-panel-crear-formulario" style="border:none;">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel id="tiendas-crear-label" styleClass="text-label" for="tiendas-crear-value" value="Nombre"/>
+                <p:inputText id="tiendas-crear-value" value="#{tiendasController.current.nombre}" required="true">
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Nombre"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                
+                <p:outputLabel id="tiendas-crear-clave-label" styleClass="text-label" for="tiendas-crear-clave-value" value="Clave"/>
+                <p:inputText id="tiendas-crear-clave-value" value="#{tiendasController.current.clave}" required="true">
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Clave"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+
+                <p:outputLabel id="tiendas-crear-cadena-label" styleClass="text-label"
+                               for="regiones-crear-cadena-value" value="Cadena"/>
+                <p:selectOneMenu id="regiones-crear-cadena-value" required="true"
+                                 value="#{tiendasController.current.cadena.id}">
+                    <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}"/>
+                    <f:selectItems value="#{tiendasController.listaCadenas}"
+                                   var="cadena" itemLabel="#{cadena.nombre}"
+                                   itemValue="#{cadena.id}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel id="tiendas-crear-formato-label" styleClass="text-label"
+                               for="tiendas-crear-formato-value" value="Formatos"/>
+                <p:selectOneMenu id="tiendas-crear-formato-value" required="true"
+                                 value="#{tiendasController.current.formato.id}">
+                    <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}"/>
+                    <f:selectItems value="#{tiendasController.listaFormatos}"
+                                   var="formato" itemLabel="#{formato.nombre}"
+                                   itemValue="#{formato.id}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel id="tiendas-crear-direccion-label" styleClass="text-label"
+                               for="tiendas-crear-direccion-value" value="Dirección"/>
+                <p:inputText id="tiendas-crear-direccion-value" value="#{tiendasController.current.direccion}"
+                             required="true">
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Dirección"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+
+                <p:outputLabel id="tiendas-crear-estado-label" styleClass="text-label"
+                               for="tiendas-crear-estado-value" value="Estado"/>
+                <p:selectOneMenu id="tiendas-crear-estado-value" required="true"
+                                 value="#{tiendasController.current.estado.id}">
+                    <f:selectItem itemValue="0" itemLabel="#{msg.combo_default_selection}"/>
+                    <f:selectItems value="#{tiendasController.listaEstados}"
+                                   var="estado" itemLabel="#{estado.nombre}"
+                                   itemValue="#{estado.id}"/>
+                    <p:ajax event="change" listener="#{tiendasController.cambiarListEstado}" update="tiendas-crear-ciudad-value"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel id="tiendas-crear-ciudad-label" styleClass="text-label"
+                               for="tiendas-crear-ciudad-value" value="Ciudad"/>
+                <p:selectOneMenu id="tiendas-crear-ciudad-value" required="true"
+                                 value="#{tiendasController.current.ciudad.id}">
+                    <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}"/>
+                    <f:selectItems value="#{tiendasController.listaCiudades}"
+                                   var="ciudad" itemLabel="#{ciudad.nombre}"
+                                   itemValue="#{ciudad.id}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel id="tiendas-crear-cp-label" styleClass="text-label"
+                               for="tiendas-crear-cp-value" value="C.P."/>
+                <p:inputText id="tiendas-crear-cp-value" widgetVar="cp" value="#{tiendasController.current.cp}"
+                             required="true" maxlength="6">
+                    <pe:keyFilter for="tiendas-crear-cp-value"  mask="num" preventPaste="false"/>
+                    <f:validateLength for="tiendas-crear-cp-value" maximum="6"/>
+                </p:inputText>
+
+
+                <p:outputLabel id="tiendas-crear-latitud-label" styleClass="text-label"
+                               for="tiendas-crear-latitud-value"
+                               value="Latitud"/>
+                <p:inputText id="tiendas-crear-latitud-value" value="#{tiendasController.current.coordenadaX}">
+                    <pe:keyFilter for="tiendas-crear-latitud-value" mask="num" preventPaste="false"/>
+                </p:inputText>
+
+                <p:outputLabel id="tiendas-crear-longitud-label" styleClass="text-label"
+                               for="tiendas-crear-longitud-value"
+                               value="Longitud"/>
+                <p:inputText id="tiendas-crear-longitud-value" value="#{tiendasController.current.coordenadaY}">
+                    <pe:keyFilter for="tiendas-crear-longitud-value" mask="num" preventPaste="false"/>
+                </p:inputText>
+
+
+                <p:outputLabel id="tiendas-crear-territorio-label" styleClass="text-label"
+                               for="tiendas-crear-territorio-value" value="Territorio"/>
+
+                <p:selectOneMenu id="tiendas-crear-territorio-value" required="true"
+                                 value="#{tiendasController.current.territorioNativo.id}">
+                    <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}"/>
+                    <f:selectItems value="#{tiendasController.listaTerritorios}"
+                                   var="territorio" itemLabel="#{territorio.nombre}"
+                                   itemValue="#{territorio.id}"/>
+                </p:selectOneMenu>
+
+            </h:panelGrid>
+
+        </p:panel>
+    </center>
+</h:body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBPromotores.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBPromotores.processUrl()}" />
+    </f:metadata>
+    <h:body>
+        <ui:composition template="../template/templatef.xhtml">          
+            <ui:define name="center" >
+                <div align="right">
+                    <p:remoteCommand autoRun="true" action="#{MBPromotores.recuperarPromotoresByIdTerritorio()}"
+                                     update="nombreTerritorio,tablePromotores" />
+
+                    <p:panel id="panelOpsPromotores" styleClass="innermenu">
+                        <p:commandButton id="bttnBusPromotores" styleClass="ui-icon-ADSearch" icon="ui-icon-search"
+                                         title="Buscar Promotores" onclick="PF('busPromotor').show()" />
+                        <p:tooltip for="bttnBusPromotores" value="Buscar Promotores" trackMouse="true" />
+                        <p:commandButton id="bttnDelPromotores" styleClass="ui-icon-ADTrash" title="Eliminar Promotores" icon="ui-icon-trash"
+                                         action="#{MBPromotores.deletePromotores()}">
+                        </p:commandButton>
+                        <p:tooltip for="bttnDelPromotores" value="Eliminar Promotores" trackMouse="true" />
+
+
+                    </p:panel>
+                    <p:confirmDialog widgetVar="confirmDelete" header="Confirmacion" message="¿Está seguro que desea eliminar el promotor del territorio?" 
+                                     showEffect="fade" hideEffect="explode" severity="alert">
+                        <p:commandButton value="Si" type="button" onclick="confirmDelRemote()" 
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" onclick="PF('confirmDelete').hide()" 
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                    <p:remoteCommand id="confirmDelRemote" name="confirmDelRemote" update="tablePromotores" 
+                                     actionListener="#{MBPromotores.confirmDelete()}" />
+                </div>
+                <br />
+                <h1 class="title">Promotores por territorio</h1>
+                <br /><br /><br  />
+                <p:outputLabel id="nombreTerritorio" value="#{MBPromotores.nombreEquipo} - #{MBPromotores.nombreTerritorio}" 
+                               styleClass="text-label" style="padding-left: 2.5%" />
+                <br /><br />
+                <div align="center" class="page-content">
+                    <p:dataTable id="tablePromotores" paginator="true" paginatorAlwaysVisible="true" selectionMode="multiple" rowKey="#{data.OID}"
+                                 emptyMessage="No existen registros" rowsPerPageTemplate="10,20,50,100" var="data" value="#{MBPromotores.promotores}"
+                                 selection="#{MBPromotores.promotoresToDelete}" style="width: 95%" scrollable="true" rows="10"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                        <p:column headerText="Numero Empleado" width="15%" filterBy="#{data.nroEmpleado}" filterMatchMode="contains">
+                            <h:outputText value="#{data.nroEmpleado}" />
+                        </p:column>
+                        <p:column headerText="Apellido Paterno" width="15%" filterBy="#{data.apellidoPaterno}" filterMatchMode="contains">
+                            <h:outputText value="#{data.apellidoPaterno}" />
+                        </p:column>
+                        <p:column headerText="Apellido Materno" width="15%" filterBy="#{data.apellidoMaterno}" filterMatchMode="contains">
+                            <h:outputText value="#{data.apellidoMaterno}" />
+                        </p:column>
+                        <p:column headerText="Nombres" width="15%" filterBy="#{data.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{data.nombre}" />
+                        </p:column>
+                        <p:column headerText="Estado" width="15%" filterBy="#{data.estado}" filterMatchMode="contains">
+                            <h:outputText value="#{data.estado}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" width="15%" filterBy="#{data.ciudad}" filterMatchMode="contains">
+                            <h:outputText value="#{data.ciudad}" />
+                        </p:column>
+                        <p:column headerText="Proyectos" width="8%">
+                            <p:commandButton styleClass="ui-icon-ADSearch-grid20x20 " id="bttnProyectosView" icon="ui-icon-search"> 
+                                <f:param name="promoName" value="#{data.nombre}" />
+                                <f:param name="promoOID" value="#{data.OID}" />
+                                <f:param name="promoNro" value="#{data.nroEmpleado}" />
+                                <f:param name="promoAp" value="#{data.apellidoPaterno}" />
+                                <p:ajax event="click" oncomplete="PF('proyectosxPromotor').show()"
+                                        listener="#{MBPromotores.showProjectDialog()}" />
+                            </p:commandButton>
+                            <p:tooltip for="bttnProyectosView" value="Ver Proyectos" trackMouse="true" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <ui:include src="dialog/BuscarPromotorDialog.xhtml" />
+                <ui:include src="dialog/ProyectosPorPromotorDialog.xhtml" /> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

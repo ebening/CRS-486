@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <!--
+    <f:metadata>
+        <f:viewParam name="region" value="{MBReportesCumplimientoDetalle.region}"  />
+        <f:viewParam name="territorio" value="{MBReportesCumplimientoDetalle.territorio}"  />
+        <f:viewParam name="equipo" value="{MBReportesCumplimientoDetalle.equipo}" />
+        <f:viewParam name="fechai" value="{MBReportesCumplimientoDetalle.fechai}"  />
+        <f:viewParam name="fechaf" value="{MBReportesCumplimientoDetalle.fechaf}" />
+        <f:viewParam name="format" value="{MBReportesCumplimientoDetalle.format}"/>
+        <f:event type="preRenderView" listener="{MBReportesCumplimientoDetalle.getStringHtmlCumplimientoDetalle(param.region, param.territorio,param.equipo,param.fechai,param.fechaf, param.format)}"/>
+    </f:metadata>
+    -->
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBReportesCumplimientoDetalle.query}"  />
+        <f:event type="preRenderView" listener="#{MBReportesCumplimientoDetalle.getStringHtmlCumplimientoDetalle()}"/>
+    </f:metadata>
+     <h:body>
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >
+                        
+                        <p:remoteCommand process="@this" autoRun="true" name="initBeanSession" action="#{MBSession.init()}"/>
+                        <p:panel id="panel" styleClass="innermenu">
+                            <!-- param.region, param.territorio,param.equipo,param.fechai,param.fechaf, -->
+                            <p:commandButton ajax="false"  id="downloadExcelCumplimientoDet" styleClass="ui-icon-ADDownload" icon="ui-icon-arrowthickstop-1-s"
+                                             actionListener="#{MBReportesCumplimientoDetalle.navigateToRepRepCumplDetalleExcel}" title="Descargar excel">
+                                <p:fileDownload value="#{MBReportesCumplimientoDetalle.file}" />
+                            </p:commandButton>
+                            <p:tooltip for="downloadExcelCumplimientoDet" value="Exportar a excel" trackMouse="true" />
+                            
+                            <p:commandButton id="regresarElement" action="#{MBReportesOperativos.navigateToRepCumplimiento()}" icon="ui-icon-arrowthickstop-1-w" styleClass="ui-icon-ADGo-left" title="Regresar" immediate="true"/>
+                            <p:tooltip for="regresarElement" value="Regresar a reporte de cumplimiento" trackMouse="true" />
+                            
+                        </p:panel>
+                        
+                        <h1 class="title">Detalle de cumplimiento</h1>
+                        
+                        <div class="page-content">
+                            <div class="report-content" style="width: 100%;height: 480px;overflow: auto !important;"> 
+                                <h:outputText id="mostrarhtmlcumplimiento" value="#{MBReportesCumplimientoDetalle.reportCumplDet}" escape="false" />
+                            </div>
+                        </div>
+                        
+                    </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

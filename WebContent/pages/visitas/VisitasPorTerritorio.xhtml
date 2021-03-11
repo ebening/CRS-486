@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBVisitas.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBVisitas.processUrl()}" />
+    </f:metadata>
+    <style type="text/css">
+        .rowColor {
+            background-color: #CF0A2C !important;
+            background-image: none !important;
+            color: #000000 !important;
+        }
+    </style>
+    <h:body>
+        <ui:composition template="../template/templatef.xhtml">          
+            <ui:define name="center" >
+        <p:remoteCommand autoRun="true" name="initVisitas" actionListener="#{MBVisitas.visitasByTerritorioId()}" update="tableVXT,nombreTerritorio" /> 
+        
+        <div align="right">
+            <p:panel styleClass="innermenu">
+                <p:commandButton id="bttnAddVisita" styleClass="ui-icon-ADAdd" actionListener="#{MBVisitas.resetVisitaSelected()}" icon="ui-icon-plus"
+                                 title="Nueva Visita" update="tableVXT,comboRuta,txtVisitaNombre,dateFV,comboPromotor,tableProyectosNV" />
+                <p:tooltip for="bttnAddVisita" value="Nueva Visita" trackMouse="true" />
+                
+                <p:commandButton id="bttnEditar" styleClass="ui-icon-ADEdit" title="Editar Ruta" icon="ui-icon-pencil"
+                                 update="comboRuta,txtVisitaNombre,dateFV,comboPromotor,tableProyectosNV"  
+                                 actionListener="#{MBVisitas.showEditDialog()}"  />
+                <p:tooltip for="bttnEditar" value="Editar Visita" trackMouse="true" />
+                
+                <p:commandButton id="bttnDelVisita" styleClass="ui-icon-ADTrash" title="Eliminar Visita" icon="ui-icon-trash"
+                                 actionListener="#{MBVisitas.eliminaVisita()}" update="tableVXT" >
+                </p:commandButton>
+                <p:tooltip for="bttnDelVisita" value="Eliminar Visita" trackMouse="true" />
+                
+                
+            </p:panel>
+            <p:confirmDialog showEffect="fade" hideEffect="explode" widgetVar="confirmDelete"
+                                 header="Confirmacion" message="¿Está seguro que desea eliminar las visitas seleccionadas?">
+                <p:commandButton value="Si" type="button" onclick="confirmDelRemote()" 
+                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" onclick="PF('confirmDelete').hide()" 
+                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            <p:remoteCommand id="confirmDelRemote" name="confirmDelRemote" update="tableVXT" 
+                             actionListener="#{MBVisitas.confirmDelete()}" />
+        </div><br />
+        <h1 class="title">Visitas por territorio</h1>
+            <br /><br /><br />
+            <p:outputLabel id="nombreTerritorio" value="#{MBVisitas.nombreEquipo} - #{MBVisitas.nombreTerritorio}" 
+                           styleClass="text-label" style="padding-left: 2.5%" />
+            <div align="center" class="page-content">
+            <p:dataTable id="tableVXT" emptyMessage="No existen registros" paginator="true" selectionMode="single" rows="10"
+                         var="data" value="#{MBVisitas.visitas}" selection="#{MBVisitas.visitaSelected}" style="width: 95%"
+                         rowKey="#{data.visitasId}" filteredValue="#{MBVisitas.visitasFiltered}" >
+                <p:column headerText="Nombre Visita" filterBy="#{data.visitas}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.visitas}" />
+                </p:column>
+                <p:column headerText="Ruta" filterBy="#{data.ruta}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.ruta}" />
+                </p:column>
+                <p:column headerText="Tiendas" filterBy="#{data.tiendas}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.tiendas}" />
+                </p:column>
+                <p:column headerText="Proyecto" filterBy="#{data.proyectos}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.proyectos}" />
+                </p:column>
+                <p:column headerText="Promotor" filterBy="#{data.promotor}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.promotor}" />
+                </p:column>
+                <p:column headerText="Fecha Visita" filterBy="#{data.fechaIniFormated}" filterMatchMode="contains">
+                    <h:outputLabel value="#{data.fechaIniFormated}" />
+                </p:column>
+            </p:dataTable>
+            </div>
+         <!--   <ui:include src="dialog/NuevaVisitaDialog.xhtml" /> -->
+         <ui:include src="dialog/EditarCrearVisita.xhtml" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

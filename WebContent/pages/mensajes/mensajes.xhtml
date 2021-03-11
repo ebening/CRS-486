@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="../template/templatef.xhtml">
+        <ui:define name="center">
+            <p:panel id="panel" styleClass="innermenu">
+
+            </p:panel>
+
+            <h1 class="title">Mensajes recibidos</h1>
+
+            <center>
+                <div class="page-content">
+            <p:dataTable id="regiones-tabla" var="o"
+                         widgetVar="mensajes"
+                         value="#{mensajesController.list}"
+                         emptyMessage="#{msg.emptyMessage}"
+                         rowKey="#{o.oid}"
+                         filteredValue="#{mensajesController.filtered}"
+                         rows="15"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Buscar:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('mensajes').filter()" style="width:150px" placeholder="Todos"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Promotor"
+                          filterMatchMode="contains"
+                          sortBy="#{mensajesController.nombreCompleto(o.usuario)}"
+                          filterBy="#{mensajesController.nombreCompleto(o.usuario)}">
+                    <h:outputText value="#{mensajesController.nombreCompleto(o.usuario)}"/>
+                </p:column>
+
+                <p:column headerText="Fecha"
+                          sortBy="#{o.fecha}"
+                          filterMatchMode="contains"
+                          filterBy="#{o.fecha}" >
+                    <h:outputText value="#{o.fecha}"/>
+                </p:column>
+
+                <p:column headerText="Tipo mensaje"
+                          sortBy="#{o.tipoMensaje.nombre}"
+                          filterMatchMode="contains"
+                          filterBy="#{o.tipoMensaje.nombre}">
+
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('mensajes').filter()" >
+                            <f:selectItem itemLabel="#{msg.combo_default_selection}"
+                                          itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{mensajesController.comboTipoMensaje}"
+                                           var="u" itemLabel="#{u.nombre}" itemValue="#{u.nombre}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+
+                    <h:outputText value="#{o.tipoMensaje.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Mensaje"
+                          filterMatchMode="contains"
+                          sortBy="#{o.mensaje}"
+                          filterBy="#{o.mensaje}">
+                    <h:outputText value="#{o.mensaje}"/>
+                </p:column>
+
+            </p:dataTable>
+                </div>
+            </center>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

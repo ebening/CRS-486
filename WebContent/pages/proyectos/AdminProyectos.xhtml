@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBProyectos.query}"  />
+        <!--
+        <f:viewParam name="RegionesId" value="{MBProyectos.regionesId}"  />
+        <f:viewParam name="TerritorioId" value="{MBProyectos.territorioId}" />
+        <f:viewParam name="EquiposId" value="{MBProyectos.equipoId}" />
+        <f:viewParam name="UnidadesNegocios" value="{MBProyectos.unidadesNegocioId}" />
+        <f:viewParam name="ClienteId" value="{MBProyectos.clienteId}" />
+        -->
+        <f:event type="preRenderView" listener="#{MBProyectos.procesaQuery()}"/>
+    </f:metadata>
+
+    <h:body>
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >                
+                <p:remoteCommand process="@this" autoRun="true" name="initProyectos" action="#{MBProyectos.listaProyectos()}" update="singleDT" />
+                
+                <p:growl id="growl" life="20000" />
+                <p:panel id="panel" styleClass="innermenu">
+                    <p:commandButton id="proyectos-agregar" icon="ui-icon-plus"
+                                     process="@this,singleDT" 
+                                     update="panelFiltros,singleDT" 
+                                     action="#{MBProyectos.limpiaCamposProyecto()}" 
+                                     styleClass="ui-icon-ADAdd" title="Agregar proyecto" resetValues="true"/>
+                    
+                    <p:commandButton id="proyectos-copiar" icon="ui-icon-copy"
+                                     process="@this,singleDT" 
+                                     update="copiarProyecto,singleDT,growl" ignoreAutoUpdate="true" 
+                                     action="#{MBProyectos.buscaProyectoCopiar()}" 
+                                     styleClass="ui-icon-ADCatalog-copy" title="Copiar proyecto" />
+                    
+                    <p:commandButton id="proyectos-editar" icon="ui-icon-pencil"
+                                     process="@this,singleDT" 
+                                     actionListener="#{MBProyectos.buscaProyectoEditar()}" 
+                                     styleClass="ui-icon-ADEdit" title="Editar proyecto" ignoreAutoUpdate="true" 
+                                     update="editarProyecto,edicionProyecto,agregadoDialog,singleDT,growl" />
+
+                    <p:commandButton id="proyectos-vista-previa" process="@this" icon="ui-icon-document"
+                                 actionListener="#{MBProyectos.showPreview()}" 
+                                 styleClass="ui-icon-ADView-pdf" title="Vista previa"
+                                 oncomplete="window.open('../../resources/preview/VistaPreviaProyectos.pdf')" />
+                    
+                    <p:commandButton id="proyectos-archivos"  icon="ui-icon-folder-open"
+                                     process="@this,singleDT" 
+                                     actionListener="#{MBProyectos.buscaArchivosProyecto()}" 
+                                     styleClass="ui-icon-ADFolder-opened" title="Subir archivos" ignoreAutoUpdate="true" 
+                                     update="archivosProyectoDialog,contenedorArchivosProyecto,singleDT,growl" />
+                    
+                    <p:commandButton id="proyectos-eliminar" icon="ui-icon-trash" 
+                                     process="@this,singleDT" ignoreAutoUpdate="true" 
+                                     update="editarProyecto,agregadoDialog,agregarProyecto,singleDT,growl" 
+                                     actionListener="#{MBProyectos.eliminaProyectos()}" 
+                                     styleClass="ui-icon-ADTrash" title="Eliminar proyectos" 
+                                     >
+                        <p:confirm header="Confirmaci&oacute;n" message="#{msg.confirm_proyectos}" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    
+                </p:panel>
+                
+                <h1 class="title">Proyectos</h1>
+                <br/>
+                <p:outputLabel id="nombreCliente" value="Cliente: #{MBProyectos.nombreCliente}" 
+                               styleClass="text-label" style="padding-left: 2.5%" />
+                
+                <div class="page-content">
+                    <!--<p:panel id="panelListasProyecto">-->
+                        <p:dataTable var="proyecto" 
+                                     id="singleDT"
+                                     widgetVar="listadoProyectos" 
+                                     value="#{MBProyectos.listaProyectos}"
+                                     emptyMessage="No existen registros"
+                                     paginator="true" rows="10" 
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,20,50,100" 
+                                     selectionMode="multiple"
+                                     selection="#{MBProyectos.proyectosSeleccionados}"
+                                     rowKey="#{proyecto.proyectoId}" 
+                                     filteredValue="#{MBProyectos.proyectosFiltrados}" 
+                                     rendered="#{not empty MBProyectos.regionesId}">
+                            <!--<f:facet name="header">
+                                
+                            </f:facet>
+                            -->
+                            <p:column filterBy="#{proyecto.proyectoId}" headerText="N&uacute;mero proyecto" filterMatchMode="contains" sortBy="#{proyecto.proyectoId}">
+                                <h:outputText value="#{proyecto.proyectoId}" />
+                            </p:column>
+                            <p:column filterBy="#{proyecto.claveProyecto}" headerText="Clave" filterMatchMode="contains">
+                                <h:outputText value="#{proyecto.claveProyecto}" />
+                            </p:column>
+                            <p:column filterBy="#{proyecto.nombreProyecto}" headerText="Nombre">
+                                <h:outputText value="#{proyecto.nombreProyecto}" />
+                            </p:column>
+                            <p:column   filterBy="#{proyecto.fechaVisibleFilter}" headerText="Fecha visible"
+                                      filterMatchMode="contains">
+                                <h:outputLabel  value="#{proyecto.fechaVisibleFilter}">
+                                    <!--<f:convertDateTime pattern="dd/MM/yyyy" />-->
+                                </h:outputLabel>
+                            </p:column>
+                            <p:column filterBy="#{proyecto.fechaInicioFilter}" headerText="Fecha inicio vigencia"
+                                      filterMatchMode="contains">
+                                <h:outputText value="#{proyecto.fechaInicioFilter}" >
+                                    <!--<f:convertDateTime pattern="dd/MM/yyyy" />-->
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{proyecto.fechaFinFilter}" headerText="Fecha fin vigencia"
+                                      filterMatchMode="contains">
+                                <h:outputText value="#{proyecto.fechaFinFilter}">
+                                    <!--<f:convertDateTime pattern="dd/MM/yyyy" />-->
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{proyecto.cantidadTiendas}" 
+                                        headerText="N&uacute;mero tiendas" 
+                                        filterMatchMode="contains">
+                                
+                                <p:commandLink id="iraTiendas" action="#{MBProyectos.getStringUrlTiendas}" value="#{proyecto.cantidadTiendas}" ajax="false" immediate="true">
+                                    <f:param  name="ProyectoId" value="#{proyecto.proyectoId}" />
+                                    <f:param name="ProyectoN" value="#{proyecto.nombreProyecto}" />
+                                </p:commandLink>
+                            </p:column>
+                            
+                            <p:ajax event="rowSelect" listener="#{MBProyectos.seleccionarProyecto}"  />
+                            <p:ajax event="rowUnselect" listener="#{MBProyectos.quitarSeleccion}" />
+                        </p:dataTable>
+                    <!--</p:panel>-->
+
+
+                </div>
+                
+                <!-- FINALIZA - Panel resultado configuraciones-->
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si" type="button"
+                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button"
+                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+                <ui:include src="dialog/EdicionProyecto.xhtml" />
+                <ui:include src="dialog/AgregaProyecto.xhtml" />
+                <ui:include src="dialog/AgregaEncuesta.xhtml" />
+                <ui:include src="dialog/CopiarProyecto.xhtml" />
+                <ui:include src="dialog/Archivos.xhtml" />
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </h:body>
+
+
+
+</html>

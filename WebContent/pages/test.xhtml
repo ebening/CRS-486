@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+
+    <h:body> 
+        <h:form  id="formLogin" >
+            <div id="principal">
+
+                <p:messages   id="messages" autoUpdate="true" closable="true"   /> 
+                <div id="div_Info_Login">
+                    <table id="tbl_login">
+                        <tr>
+
+                            <td><strong><h:outputLabel for="userName"
+                                                       value="Perfil Id:" /></strong>&#160;&#160;&#160;&#160; <p:inputText
+                                    id="id"   value="#{MBPrueba.perfilId}" 
+                                    >
+
+                                </p:inputText><br></br> <h:message for="userName" errorClass="error" /> 
+                            </td>
+                            <td> Perfil nombre:
+                                <strong><h:outputText   value="#{MBPrueba.perfilName}" /></strong>
+                            </td>
+                            <td><h:commandButton id="btn_Entrar"
+                                                 action="#{MBPrueba.test}"    value="Entrar"  /></td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+            </div>
+        </h:form>
+        <h:messages style="float:left;clear:both" />
+    </h:body> 
+</html>

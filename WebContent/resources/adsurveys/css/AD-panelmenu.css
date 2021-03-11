@@ -1,0 +1,105 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 3/11/2014, 03:29:08 PM
+    Author     : christian
+*/
+
+/**
+azulfondo rgb(0,96,169);
+rojofondo rgb(207,10,44);
+rojoElement rgb(188,28,52);
+rojoFondo nuevo rgb(182,3,3);
+rojoElement nuevo rgb(148,3,3);
+**/
+
+
+.AD-menu{
+    background: rgb(207,10,44);
+    border:none;
+}
+
+.AD-menu .ui-state-active,
+.AD-menu .ui-widget-content 
+.AD-menu .ui-state-active, 
+.AD-menu .ui-widget-header 
+.AD-menu .ui-state-active{
+
+    color: #ffffff;
+}
+
+
+.AD-menu a{
+    color:white;
+}
+
+.ui-state-hover a, .ui-state-hover a:hover {
+    color: red;
+    text-decoration: none;
+}
+
+
+
+
+.AD-menu .ui-state-default a, 
+.AD-menu .ui-state-default a:link, 
+.AD-menu .ui-state-default a:visited {
+    color: white !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+}
+
+/*Padres*/
+.AD-menu .ui-widget,
+.AD-menu .ui-panelmenu-header,
+.AD-menu .ui-state-default,
+.AD-menu .ui-state-active,
+.AD-menu .ui-corner-top{
+    background-color: rgb(207,10,44) !important;
+    color:white !important;
+}
+
+.AD-menu .ui-widget,
+.AD-menu .ui-panelmenu-header,
+.AD-menu .ui-state-default,
+.AD-menu .ui-corner-top{
+    background-color: rgb(207,10,44) !important;
+    color:white !important;
+}
+
+
+.AD-menu .ui-widget,
+.AD-menu .ui-menuitem,
+.AD-menu .ui-corner-all,
+.AD-menu .ui-menu-parent{
+    background-color: rgb(207,10,44) !important;
+    border:none !important;
+}
+
+.AD-menu  a.ui-menuitem-link{
+    background-color: rgb(188,28,52) !important;
+    color: white !important;
+}
+
+.AD-menu  a.ui-menuitem-link:hover{
+    background-color: white !important;
+    color: rgb(188,28,52) !important;
+}
+
+.AD-menu  .ui-panelmenu-content, 
+.AD-menu .ui-widget-content{
+    background-color: rgb(207,10,44) !important;
+
+}
+
+.AD-menu .ui-panelmenu-content, 
+.AD-menu .ui-widget-content,
+.AD-menu .ui-helper-hiden{
+    border:none !important;
+}
+
+
+

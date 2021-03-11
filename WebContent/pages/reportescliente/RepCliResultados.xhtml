@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <!-- onload="fillRegiones()"-->
+    <h:body >
+        
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >
+            
+            <!--<h:outputStylesheet library="css" name="catalogos/RepCliResultados.css"/>-->
+            <p:remoteCommand process="@this" autoRun="true" name="initBeanSession" action="#{MBSession.init()}"/>
+            <p:remoteCommand id="initListas" process="@this" autoRun="true" name="initListas" action="#{MBRepCliResultados.inicializaListas()}" 
+                             update="comboRegion,comboEquipo,comboTerritorio,comboResPromotor,comboCliente,comboResProyecto,comboResDocumento" />
+            
+            <p:growl id="growl" life="20000" showDetail="true" />
+                <p:panel id="panel" styleClass="innermenu">
+                    <table class="right">
+                        <tr>
+                            <td></td>
+                            <td class="tdcontrol">
+                            
+                                <p:selectOneMenu label="Exportar a:" id="comboFormato" value="#{MBRepCliResultados.formato}" >
+                                    <f:selectItem itemLabel="Seleccione un formato" itemValue="HTML4.0" />
+                                    <f:selectItem itemLabel="EXCEL" itemValue="EXCEL"/>
+                                    <f:selectItem itemLabel="WORD" itemValue="WORD"/>
+                                    <f:selectItem itemLabel="PDF" itemValue="PDF"/>
+                                    <f:selectItem itemLabel="CSV" itemValue="CSV"/>
+                                    <f:selectItem itemLabel="XML" itemValue="XML"/>
+                                </p:selectOneMenu>
+                                
+                            </td>
+                            <td class="tdimage">
+                                <p:commandButton id="downloadReporte" process="@this,:center-form:panel,contentRepResultados" icon="ui-icon-arrowthickstop-1-s"
+                                                 actionListener="#{MBRepCliResultados.dowloadReporte()}" 
+                                                 styleClass="ui-icon-ADDownload" title="Descargar reporte" ignoreAutoUpdate="true" ajax="false" 
+                                                 update="contentRepResultados,:center-form:panel,growl">
+                                    <p:fileDownload value="#{MBRepCliResultados.file}" />
+                                </p:commandButton>
+                                <p:tooltip for="downloadReporte" value="Exportar" trackMouse="true" />
+                            </td>
+                            <td class="tdimage">
+                                <p:commandButton id="limpiarFiltrosReporte" immediate="true" resetValues="true" icon="ui-icon-refresh"
+                                                 action="#{MBRepCliResultados.cleanFilters()}"  
+                                                 styleClass="ui-icon-ADClean" title="Limpiar filtros." 
+                                                 update="initListas,contentRepResultados" oncomplete="initListas();" >
+                                </p:commandButton>
+                                <p:tooltip for="limpiarFiltrosReporte" value="Limpiar filtros." trackMouse="true" />
+                            </td>
+                        </tr>
+                    </table>
+                </p:panel>
+                
+                <h1 class="title">Reporte de resultados</h1>
+                
+                <div id="page-search" class="page-search">
+                    <p:panelGrid id="contentRepResultados" styleClass="panelGridNoBorde" >
+                        <p:row>
+                            <p:column >
+                                <p:outputLabel for="comboRegion" value="Regi&oacute;n: "  styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboRegion" value="#{MBRepCliResultados.regionId}" rendered="true" 
+                                                 filter="true" filterMatchMode="startsWith" 
+                                                 required="true" requiredMessage="Regi&oacute;n: Seleccione una opci&oacute;n." ><!--  -->
+                                    <f:selectItem itemLabel="Seccione una Regi&oacute;n" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaRegiones}" var="region" itemLabel="#{region.nombre}" itemValue="#{region.regionesId}" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangeProyectos()}" update="comboEquipo comboTerritorio comboCliente comboResPromotor comboResProyecto comboResDocumento comboResSeccion" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.equiposByRegion()}" update="comboEquipo"  />
+                                    <p:ajax listener="#{MBRepCliResultados.getEquiposTerritoriosByEqAndTerr()}" update="comboTerritorio"  />
+                                    <p:ajax listener="#{MBRepCliResultados.clientesList()}" update="comboCliente" />
+                                    <p:ajax listener="#{MBRepCliResultados.promotoresListReporte()}" update="comboResPromotor" />
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" update="comboResProyecto" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboEquipo" value="Equipo: " styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboEquipo" value="#{MBRepCliResultados.equipoId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                    ><!--  -->
+                                    <f:selectItem itemLabel="Todos" itemValue="0" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaEquipos}" var="equipo" itemLabel="#{equipo.nombre}" itemValue="#{equipo.equiposId}" />
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangeEquipos()}" update="comboTerritorio comboCliente comboResPromotor comboResProyecto comboResDocumento comboResSeccion" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.getEquiposTerritoriosByEqAndTerr()}" update="comboTerritorio"  />
+                                    <p:ajax listener="#{MBRepCliResultados.clientesList()}" update="comboCliente" />
+                                    <p:ajax listener="#{MBRepCliResultados.promotoresListReporte()}" update="comboResPromotor" />
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" update="comboResProyecto" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                    
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboTerritorio" value="Territorio: " styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboTerritorio" value="#{MBRepCliResultados.territorioId}" filter="true" filterMatchMode="startsWith" 
+                                                ><!--   -->
+                                    <f:selectItem itemLabel="Todos" itemValue="0" />
+                                    <f:selectItems value="#{MBRepCliResultados.equiposTerritorios}" var="equipoTerritorio" itemLabel="#{equipoTerritorio.nombre}" itemValue="#{equipoTerritorio.territoriosId}" />
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangeEquiposTerritorios()}" update="comboCliente comboResPromotor comboResProyecto comboResDocumento comboResSeccion" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.clientesList()}" update="comboCliente" />
+                                    <p:ajax listener="#{MBRepCliResultados.promotoresListReporte()}" update="comboResPromotor" />
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" update="comboResProyecto" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                    
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                
+                            </p:column>
+                            <p:column >
+                                
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column >
+                                <p:outputLabel for="comboCliente" value="Cliente: " styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboCliente" value="#{MBRepCliResultados.clienteId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                                 required="true" requiredMessage="Cliente: Seleccione una opci&oacute;n."><!--  -->
+                                    <f:selectItem itemLabel="Seleccione un cliente" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaClientes}" var="cliente" itemLabel="#{cliente.nombreCliente}" itemValue="#{cliente.clienteId}" />
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangeClientes()}" update="comboResProyecto comboResDocumento comboResSeccion" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.promotoresListReporte()}" update="comboResPromotor" />
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" update="comboResProyecto" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                    
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboResPromotor" value="Promotor: "  styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboResPromotor" value="#{MBRepCliResultados.usuariosOID}" filter="true" filterMatchMode="startsWith" 
+                                                >
+                                    <f:selectItem itemLabel="Todos" itemValue="0" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaPromotores}" var="promotor" itemLabel="#{promotor.nombre} #{promotor.apellidoPaterno}" itemValue="#{promotor.usuariosOID}" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangePromotor()}" update="comboResDocumento comboResSeccion" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" update="comboResProyecto" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboResProyecto" value="Proyecto: "  styleClass="text-label"/><br/>
+                                <p:selectOneMenu id="comboResProyecto" value="#{MBRepCliResultados.proyectoId}" filter="true" filterMatchMode="startsWith" 
+                                                 required="true" requiredMessage="Proyecto: Seleccione una opci&oacute;n.">
+                                    <f:selectItem itemLabel="Seleccione un proyecto" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaProyectos}" var="proyecto" itemLabel="#{proyecto.nombre}" itemValue="#{proyecto.proyectosId}" />
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangueProyectos()}" update="comboResDocumento comboResSeccion" />
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.encuestasList()}" update="comboResDocumento" />
+                                    
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboResDocumento" value="Encuesta: " styleClass="text-label" /><br/>
+                                <p:selectOneMenu id="comboResDocumento"  value="#{MBRepCliResultados.idEncuesta}" filter="true" filterMatchMode="startsWith" 
+                                                 required="true" requiredMessage="Encuesta: Seleccione una opci&oacute;n.">
+                                    <f:selectItem itemLabel="Seleccione una encuesta" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaEncuestas}" var="encuesta" itemLabel="#{encuesta.encuestaNombre}" itemValue="#{encuesta.encuestasId}"/>
+                                    <p:ajax listener="#{MBRepCliResultados.resetChangueEncuestas()}" update="comboResSeccion" />
+                                    <p:ajax listener="#{MBRepCliResultados.seccionesList()}" update="comboResSeccion" />
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="comboResSeccion" value="Secci&oacute;n: "  styleClass="text-label"/><br/><!-- seccionesOID -->
+                                <p:selectOneMenu id="comboResSeccion" value="#{MBRepCliResultados.seccionesOID}" filter="true" filterMatchMode="startsWith" 
+                                                 required="true" requiredMessage="Secci&oacute;n: Seleccione una opci&oacute;n.">
+                                    <f:selectItem itemLabel="Seleccione una Sección" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBRepCliResultados.listaSecciones}" var="seccion" itemLabel="#{seccion.nombre}" itemValue="#{seccion.seccionesOID}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2" >
+                                <p:outputLabel for="calendarFechaIni" value="Fecha de ejecuci&oacute;n:" styleClass="text-label"/><br/>
+                                <p:calendar id="calendarFechaIni" size="10" 
+                                    title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+                                    showButtonPanel="true" navigator="true" 
+                                    value="#{MBRepCliResultados.fechaIni}" showOn="button" readonlyInput="true" 
+                                    required="true" requiredMessage="Seleccione una fecha de inicio." binding="#{startDate}" />
+                                
+                                &nbsp;&nbsp;
+                                <p:calendar id="calendarFechaFin" size="10" 
+                                    title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+                                    showButtonPanel="true" navigator="true" 
+                                    value="#{MBRepCliResultados.fechaFin}" showOn="button" readonlyInput="true" 
+                                    required="true" requiredMessage="Seleccione una fecha final.">
+                                    <f:attribute name="fechaIni" value="#{startDate}"/>
+                                    <f:validator validatorId="DateRange" /> 
+                                    
+                                    <p:ajax listener="#{MBRepCliResultados.proyectosList()}" 
+                                            update="comboResProyecto" />
+                                </p:calendar>
+                            </p:column>
+                            <p:column colspan="3" >
+                                <br/>
+                                <p:commandButton process="@this,:center-form:contentRepResultados" value="Generar reporte" id="genererInformacion" 
+                                                 actionListener="#{MBRepCliResultados.getStringHtmlResultados}" styleClass="ui-priority-primary" 
+                                                 ignoreAutoUpdate="true" update="mostrarReporteResultados,growl,:center-form:contentRepResultados"  />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </div>
+                
+                <div class="page-content">
+                    <div class="report-content" style="width: 100%;height: 480px;overflow: auto !important;"> 
+                        <h:outputText id="mostrarReporteResultados" value="#{MBRepCliResultados.reportResultados}" escape="false" />
+                    </div>
+                </div>
+                
+                <!--<ui:include src="dialog/CliResultados.xhtml" />-->
+                <!--
+                <h:outputScript name="js/scroll/jquery.tinyscrollbar.js" />
+                <h:outputScript name="js/catalogos/RepCliResultados.js" />
+                -->
+        </ui:define>
+        </ui:composition>
+        
+        
+    </h:body>
+</html>

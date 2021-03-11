@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog widgetVar="grupoDialog" header="Grupos de Tiendas" showEffect="explode" hideEffect="fade"
+                  width="80%" resizable="false" onShow="initComboGrupo(),initTableTiendas()">
+
+            <p:remoteCommand id="initgComboGrupo" name="initComboGrupo" actionListener="#{MBProyectosTiendas.listaGruposTiendas()}"
+                             update="comboGrupos" /> 
+            <p:remoteCommand id="initTableTiendas" name="initTableTiendas" actionListener="#{MBProyectosTiendas.initTiendasGruposAll()}"
+                             update="tableGrupos" /> 
+            <p:remoteCommand id="updateNombre" name="updateNombre" update="txtGrupoNuevo" />
+
+            <p:panel styleClass="innermenu">
+                <p:commandButton id="bttnSaveGpr" styleClass="ui-icon-ADSave" update="tableGrupos" icon="ui-icon-disk"
+                                 actionListener="#{MBProyectosTiendas.guardarEstadoGrupo()}" />
+                <p:tooltip for="bttnSaveGpr" value="Guardar" trackMouse="true" />
+
+                <p:commandButton id="bttnClose" styleClass="ui-icon-ADClose" onclick="PF('grupoDialog').hide()" icon="ui-icon-closethick"/>
+                <p:tooltip for="bttnClose" value="Cerrar" trackMouse="true" />
+
+                <p:confirmDialog id="confirmDel"
+                                 showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:panel>
+            <div class="page-content">
+                <div class="ui-grid">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:selectOneMenu id="comboGrupos" value="#{MBProyectosTiendas.grupoSelected}"
+                                             filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                                <f:selectItem itemLabel="Selecciona Grupo" itemValue="0" />
+                                <f:selectItems value="#{MBProyectosTiendas.grupos}" var="grupo"
+                                               itemLabel="#{grupo.nombre}" itemValue="#{grupo.id}" /> 
+                                <p:ajax update="tableGrupos" listener="#{MBProyectosTiendas.fillTableByGrupo(false)}" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="ui-grid-col-6" align="right">
+                            <h:panelGrid columns="3" cellpadding="3" border="2">
+                                <p:outputLabel value="Nuevo Grupo:" for="txtGrupoNuevo" styleClass="text-label" />
+                                <p:inputText id="txtGrupoNuevo" value="#{MBProyectosTiendas.nuevoGrupo}" onchange="updateNombre()" />
+                                <p:column>
+                                    <p:commandButton id="bttnSaveNewGrp" styleClass="ui-icon-ADAdd" actionListener="#{MBProyectosTiendas.crearGrupo()}" icon="ui-icon-plus"
+                                                     update="comboGrupos,txtGrupoNuevo,tableGrupos" />
+                                    <p:tooltip for="bttnSaveNewGrp" value="Crear Grupo" trackMouse="true" />
+                                </p:column>       
+                            </h:panelGrid>
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <p:dataTable id="tableGrupos" paginator="true" rows="10" value="#{MBProyectosTiendas.tiendasGruposAll}" var="data"
+                             selection="#{MBProyectosTiendas.tiendasGruposSelected}" rowKey="#{data.id}"
+                             rowsPerPageTemplate="10,20,50,100" emptyMessage="No existen registros"> 
+                    <p:column headerText="" width="5%" selectionMode="multiple" style="text-align:center" />
+                    <p:column headerText="N&uacute;mero tienda" width="10%" filterBy="#{data.clave}" filterMatchMode="contains">
+                        <h:outputText value="#{data.clave}" />
+                    </p:column>
+                    <p:column headerText="Cadena" filterBy="#{data.cadena}" filterMatchMode="contains">
+                        <h:outputText value="#{data.cadena}" />
+                    </p:column>
+                    <p:column headerText="Nombre Tienda" width="30%" filterBy="#{data.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{data.nombre}" />
+                    </p:column>
+                    <p:column headerText="Estado" filterBy="#{data.estados}" filterMatchMode="contains">
+                        <h:outputText value="#{data.estados}" />
+                    </p:column>
+                    <p:column headerText="Ciudad" filterBy="#{data.ciudades}" filterMatchMode="contains">
+                        <h:outputText value="#{data.ciudades}" />
+                    </p:column>
+                </p:dataTable> 
+            </div>    
+        </p:dialog>
+    </ui:composition>
+</html>
+

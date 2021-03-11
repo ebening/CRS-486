@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h1>#{msg.users}</h1>
+
+        <table>
+            <h:inputText id="search-users" styleClass="login-formulario-texto" 
+                         value="#{MBSeguridad.usuarioController.buscar}">                    
+            </h:inputText>
+        </table>
+
+
+
+
+
+        <script>
+            document.getElementById("center-form:search-users").setAttribute("placeholder", "#{msg.search}");
+        </script>
+    </h:body>
+
+</html>
+

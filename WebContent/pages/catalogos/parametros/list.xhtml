@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <div class="page-content">
+    <p:accordionPanel value="#{parametrosController.list}" multiple="true"  var="o">
+        <p:tab title="#{o.nombre}">
+
+            <pe:dynaForm  id="dynaForm" value="#{o.parametros}"
+                          var="data"
+                          styleClass="catalogos-datatable"
+                          widgetVar="dynaFormWdgt">
+
+                <pe:dynaFormControl for="txt" type="input">
+                    <p:inputText id="txt" value="#{data.value.valor}" style="width: 300px;" >
+                        <p:ajax event="change" listener="#{parametrosController.nvosValores(data.value)}" />
+                    </p:inputText>
+                </pe:dynaFormControl >
+
+
+
+
+                <pe:dynaFormControl for="number" type="num">
+                    <p:inputText id="number"  value="#{data.value.valor}">
+                        <p:ajax event="change" listener="#{parametrosController.nvosValores(data.value)}" />
+                        <pe:keyFilter for="number" mask="num"/>
+                    </p:inputText>
+                </pe:dynaFormControl>
+
+                <pe:dynaFormControl for="area" type="textarea" >
+                    <p:inputTextarea id="area" value="#{data.value.valor}"
+                                     style="width: 300px; height: 150px;"
+                                     immediate="true">
+                        <p:ajax event="keyup" listener="#{parametrosController.nvosValores(data.value)}" />
+                    </p:inputTextarea>
+                </pe:dynaFormControl>
+
+
+                <pe:dynaFormControl for="radio" type="radio">
+                    <p:selectOneRadio id="radio" value="#{data.value.valor}">
+                        <f:selectItem itemLabel="Si" itemValue="true"/>
+                        <f:selectItem itemLabel="No" itemValue="false"/>
+                        <p:ajax event="change" listener="#{parametrosController.nvosValores(data.value)}" />
+                    </p:selectOneRadio>
+                </pe:dynaFormControl>
+
+
+            </pe:dynaForm>
+        </p:tab>
+    </p:accordionPanel>
+    </div>
+</h:body>
+</html>

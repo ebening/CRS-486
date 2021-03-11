@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:tree id="treemenu" styleClass="AD-treemenu" style=" border: none; color:#BC1C34" value="#{MBAplicacion.menuPrincipal.treeMenu.root}"
+                    var="node"
+                    selectionMode="single"
+                    selection="#{MBAplicacion.menuPrincipal.treeMenu.selectedNode}"
+                    dynamic="true">
+
+            <p:ajax event="select" update=":center-form"
+                    listener="#{MBAplicacion.menuPrincipal.treeMenu.onNodeSelectV2}"/>
+                
+
+                <p:treeNode styleClass="treeElement" >
+                         <h:outputText value="#{node}" />      
+                </p:treeNode>
+            </p:tree>
+
+
+        <!--style>
+/*color rojo element #BC1C34;*/
+
+            .ui-tree-container{
+                background-color: rgb(207,10,44);
+                color: #ffffff;
+            }
+
+.ui-treenode-label .ui-corner-all{
+    height: 4px;
+
+}
+
+.ui-treenode .ui-treenode-leaf .ui-treenode-unselected .treeElement{
+    background-color: blue;
+}
+
+
+        </style-->
+    </h:body>
+</html>
+

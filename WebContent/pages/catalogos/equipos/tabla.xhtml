@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+        >
+
+<h:body>
+    <center>
+        <div class="page-content">
+        <p:dataTable id="equipos-tabla" var="o"
+                     value="#{equiposController.list}"
+                     selection="#{equiposController.selected}"
+                     filteredValue="#{equiposController.filtered}"
+                     rowKey="#{o.id}"
+                     selectionMode="multiple"
+                     rows="10"
+                     paginator="true"
+                     emptyMessage="#{msg.emptyMessage}"
+                     paginatorTemplate="#{msg.paginatorTemplate}"
+                     rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+
+            <p:column headerText="Nombre de Equipo"
+                      filterBy="#{o.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{o.nombre}"/>
+            </p:column>
+
+            <p:column headerText="Regi&oacute;n"
+                      filterBy="#{o.region.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{o.region.nombre}"/>
+            </p:column>
+
+            <p:column headerText="Unidad de Negocio"
+                      filterBy="#{o.region.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{o.unidadesNegocio.nombreUnidad}"/>
+            </p:column>
+
+            <p:column headerText="Territorios">
+                <p:row>
+                    <ui:repeat value="#{o.listaTerritorios}" var="u">
+                        <h:outputText value="#{u.nombre}"/>
+                        <br/>
+                    </ui:repeat>
+                </p:row>
+            </p:column>
+            <p:ajax event="rowSelect" listener="#{equiposController.seleccionar}"
+                    update=":center-form:equipos-dialog-editar"/>
+            <p:ajax event="rowUnselect" listener="#{equiposController.quitarSeleccion}"
+                    update=":center-form:equipos-dialog-editar"/>
+        </p:dataTable>
+        </div>
+    </center>
+
+</h:body>
+</html>

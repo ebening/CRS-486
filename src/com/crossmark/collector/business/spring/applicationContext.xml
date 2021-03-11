@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- XML declarativo de archivos de mapeo y configuración de Hibernate -->
+
+    <import resource="configuracion.xml"/>
+
+
+    <!-- XML declarativo de archivos de mapeo y configuración de Hibernate -->
+    <import resource="jdbc.xml"/>
+
+    <!-- XML declarativo de SP's -->
+    <import resource="sp.xml"/>
+
+    <!-- XML declarativo de Dao's -->
+    <import resource="dao.xml"/>
+
+    <!-- XML declarativo de Servicios -->
+    <import resource="service.xml"/>
+
+    <!-- XML declarativo de Beans para la parte de securityContext -->
+    <import resource="security.xml"/>
+
+    <!-- XML declarativo de Beans para la parte de securityContext -->
+    <import resource="beans.xml"/>
+    
+    <!-- XML declarativo de Beans para la parte de quartz -->
+    <import resource="jobs.xml"/>
+    
+</beans>
+

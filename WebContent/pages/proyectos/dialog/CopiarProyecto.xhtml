@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition>
+	<p:dialog id="copiarProyecto" header="Copia de Proyecto"
+		widgetVar="copiarProyecto" hideEffect="fade" width="40%" modal="true" >
+                <p:ajax event="close" update="singleDT" listener="#{MBProyectos.handleCloseCopy}"/>
+                        
+                <p:panel styleClass="innermenu" >
+                    <p:commandButton id="btnGuardaCopia" styleClass="ui-icon-ADSave" icon="ui-icon-disk" 
+                                     actionListener="#{MBProyectos.proyectoCopiar()}"
+                                     validateClient="true" 
+                                     process="@this,copiadoProyecto"
+                                     update="copiadoProyecto,singleDT,growl" ignoreAutoUpdate="true" 
+                                     oncomplete="if(args &amp;&amp; !args.validationFailed) PF('copiarProyecto').hide()" />
+                    <!--
+                    <p:commandButton id="btnCierraCopia" title="Regresar" 
+                            process="@this"
+                            styleClass="ui-icon-ADGo-left"
+                            oncomplete="PF('copiarProyecto').hide()" update="singleDT" ignoreAutoUpdate="true" />
+                    -->
+                </p:panel>
+                
+                
+		<!--	</div>-->
+                    
+			<br />
+			<br />
+                        
+                        <div class="page-content">
+                            
+                            <p:panelGrid id="copiadoProyecto" styleClass="panelGridNoBorde">
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaClave" value="Clave: " styleClass="text-label"  />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText id="copiaClave" value="#{MBProyectos.proyectoSeleccionado.claveProyecto}" required="true" 
+                                                     requiredMessage="Capture la clave del proyecto." maxlength="10" validator="codigoCadena" />
+                                        <p:message for="copiaClave" display="tooltip"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaNombre" value="T&iacute;tulo: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText id="copiaNombre" value="#{MBProyectos.proyectoSeleccionado.nombreProyecto}" required="true" 
+                                                    requiredMessage="Capture el t&iacute;tulo del proyecto." maxlength="50" validator="tituloCadena"/>
+                                        <p:message for="copiaNombre" display="tooltip"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="descripcionProyectoCopia" value="Descripci&oacute;n del proyecto: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputTextarea id="descripcionProyectoCopia" rows="6" cols="33"  required="true" requiredMessage="Capture la descripci&oacute;n del proyecto."  
+                                                         value="#{MBProyectos.proyectoSeleccionado.descripcionProyecto}" maxlength="200" validator="tituloCadena" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaVisible" value="Fecha visible " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="copiaVisible"   size="10" readonlyInput="true" required="true" requiredMessage="Fecha fin: Campo requerido." 
+                                            title="Fecha Visible." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaVisible}" showOn="button" validator="dateGtNow" 
+                                            widgetVar="bus_cnf_inv_det_fecFinWV"  mindate="#{MBProyectos.nowDate()}"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaInicio" value="Fecha inicio vigencia: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="copiaInicio" readonlyInput="true"   size="10" required="true" requiredMessage="Fecha inicio: Campo requerido." 
+                                            title="Fecha inicio." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaInicio}" showOn="button"
+                                            widgetVar="bus_cnf_inv_det_fecIniWV" binding="#{startCopyDate}"  mindate="#{MBProyectos.nowDate()}"  validator="dateGtNow"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaFin" value="Fecha fin vigencia: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="copiaFin" readonlyInput="true"   size="10"  required="true" requiredMessage="Fecha fin: Campo requerido." 
+                                            title="Fecha fin." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaFin}" showOn="button"
+                                            widgetVar="bus_cnf_inv_det_fecFinWV"  validator="dateGtNow" mindate="#{MBProyectos.nowDate()}">
+                                            <f:attribute name="fechaIni" value="#{startCopyDate}" />
+                                            <f:validator validatorId="DateRange"  /> 
+                                        </p:calendar>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaDiasAdicionales" value="D&iacute;as adicionales: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText value="#{MBProyectos.proyectoSeleccionado.diasVigencias}" id="copiaDiasAdicionales"  
+                                                     required="true" 
+                                                     requiredMessage="Capture los d&iacute;as adicionales." 
+                                                     maxlength="15" validator="intPos" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="copiaPreguntaDiaria" value="Preguntar diariamente mientras dure la vigencia" styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:selectBooleanCheckbox id="copiaPreguntaDiaria" value="#{MBProyectos.proyectoSeleccionado.visitaAutomatica}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:remoteCommand autoRun="true" process="@this" name="loadLogoCopy" update="logoCopia" actionListener="#{MBProyectos.getInputStreamLogo('copy')}"/>
+                                        <p:graphicImage id="logoCopia" value="#{MBProyectos.logo}" width="120" height="80" cache="false" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                        <br/>
+                        <br/>
+                        <p:outputLabel value="Para editar las encuestas, primer debe guardar lacopia." styleClass="text-label"/>
+                        <p:dataTable id="tablaEncuestasProyectoCopia" var="encuesta" widgetVar="listadoEncuestasProyecto"
+                                     value="#{MBProyectos.listaEncuestasProyecto}"
+                                    emptyMessage="No hay encuestas relacionadas al proyecto"
+                                    paginator="false" rows="25" 
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="5" selectionMode="single"
+                                    selection="#{MBProyectos.encuestaSeleccionada}"
+                                    rowKey="#{encuesta.encuestasId}" >
+                            <f:facet name="header">
+                                Encuestas del Proyecto
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">  
+                                    ID Encuesta
+                                </f:facet>
+                                <h:outputText value="#{encuesta.encuestasId}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    Nombre Encuesta
+                                </f:facet>
+                                <h:outputText value="#{encuesta.nombreEncuesta}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+
+
+	</p:dialog>
+
+</ui:composition>
+</html>
+
+
+

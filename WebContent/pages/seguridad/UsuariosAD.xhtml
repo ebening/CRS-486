@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <body>
+        <h:dataTable style="width:100%;"
+                     value="#{MBAplicacion.login.listaAD}"
+                     var="reg" >
+            <h:column>
+                <f:facet name="header">User Name</f:facet>
+                <h:outputText value="#{reg.nombre}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">BMR</f:facet>
+                <h:outputText value="#{reg.bmr}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombre&lt;Nick&gt;</f:facet>
+                <h:outputText value="#{reg.nick}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Login</f:facet>
+                <h:outputText value="#{reg.login}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Numero de Empleado</f:facet>
+                <h:outputText value="#{reg.numeroEmpleado}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Correo</f:facet>
+                <h:outputText value="#{reg.email}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fecha Alta</f:facet>
+                <h:outputText value="#{reg.fecha_alta}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Titulo</f:facet>
+                <h:outputText value="#{reg.titulo}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estatus</f:facet>
+                <h:outputText value="#{reg.status}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Password</f:facet>
+                <h:outputText value="#{reg.password}" />
+            </h:column>
+        </h:dataTable>
+    </body>
+</html>

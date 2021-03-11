@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+        
+    
+
+<!-- *************************** Dialog Nueva Visita *********************************** -->
+<ui:composition>
+<p:dialog id="nvDialog" header="Crear / Editar Visita" widgetVar="nvDialog" showEffect="explode" hideEffect="fade"
+          width="50%"  modal="true">
+    
+    <p:remoteCommand id="initRutasSel" name="initRutasSel" actionListener="#{MBVisitas.listaRutasSel()}" update="comboRuta" />
+    <p:remoteCommand id="resetVisitaData" name="resetVisitaData" action="#{MBVisitas.resetView()}" 
+                     update="comboRuta,comboPromotor,tableProyectosNV,txtVisitaNombre,dateFV" />
+    
+    
+    <div align="right">
+            <p:panel styleClass="innermenu">
+                
+                <p:commandButton id="bttnSave" styleClass="ui-icon-ADSave" update="dateFV,comboPromotor,tableVXT" 
+                                 action="#{MBVisitas.checkSaveData()}" icon="ui-icon-disk"/>
+                <p:tooltip for="bttnSave" trackMouse="true" value="Guardar" />
+                
+                <p:commandButton id="bttnClose" styleClass="ui-icon-ADClose" onclick="PF('nvDialog').hide();initVisitas();" icon="ui-icon-closethick"/>
+                <p:tooltip for="bttnClose" trackMouse="true" value="Cerrar" />
+                
+            </p:panel>
+        </div>
+ 
+    <br />
+     <p:remoteCommand name="updateData" update="panelData" />
+     <h:panelGrid columns="2" cellpadding="5" id="panelData">
+         <h:outputLabel value="Visita: " for="txtVisitaNombre" styleClass="text-label" />
+                <p:inputText id="txtVisitaNombre"  label="Nombre Visita" value="#{MBVisitas.nombreVisita}"
+                             onchange="updateData()"  />
+
+                
+                <h:outputLabel value="Ruta: " for="comboRuta" styleClass="text-label" />
+             <p:selectOneMenu id="comboRuta" value="#{MBVisitas.rutaSelected}" onchange="updateData()" >
+                    <f:selectItem itemLabel="Selecciona Ruta" itemValue="" />
+                    <f:selectItems value="#{MBVisitas.rutas}" var="data"
+                                   itemLabel="#{data.nombre}" itemValue="#{data.id}"/>
+                    <p:ajax update="comboPromotor tableProyectosNV" listener="#{MBVisitas.initListaPromotores()}" />
+                </p:selectOneMenu>
+
+                
+                <h:outputLabel value="Fecha Visita: " for="dateFV" styleClass="text-label" />
+                <p:calendar showOn="button" id="dateFV" style="width: 30px" locale="sp" 
+                            onchange="updateData()" value="#{MBVisitas.fechaVisita}" mindate="#{MBVisitas.today}" 
+                            readonlyInput="true" />
+
+                
+                <h:outputLabel value="Promotor: " for="comboPromotor" styleClass="text-label" />
+                <p:selectOneMenu id="comboPromotor" value="#{MBVisitas.promotorSelected}" onchange="updateData()" >
+                    <f:selectItem itemLabel="Selecciona Promotor" itemValue="" />
+                    <f:selectItems value="#{MBVisitas.promotores}" var="data"
+                                   itemLabel="#{data.nombre} #{data.apellidoPaterno}" itemValue="#{data.OID}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+    <br />
+            <p:dataTable id="tableProyectosNV" emptyMessage="No existen registros" value="#{MBVisitas.visitasTiendas}"
+                         var="x" paginator="true" rowKey="#{x}"  rows="5"
+                         selection="#{MBVisitas.visitasTiendasSelected}"
+                         styleClass="#{x.numEncuestas le 1 ? 'rowColor' : null}" >
+                
+                <p:column headerText="" selectionMode="multiple" style="width: 5%;text-align:center"/>
+                
+                <p:column headerText="Clave proyecto" width="10%">
+                    <h:outputText value="#{x.proyectosId}" />
+                </p:column>
+                <p:column headerText="Proyecto" width="25%">
+                    <h:outputText value="#{x.descripcion}" />
+                </p:column>
+                <p:column headerText="Clave tienda" width="10%">
+                    <h:outputText value="#{x.tiendasId}" />
+                </p:column>
+                <p:column headerText="Tienda" width="15%">
+                    <h:outputText value="#{x.nombre}" />
+                </p:column>
+                <p:column headerText="Nombre cliente" width="25%">
+                    <h:outputText value="#{x.nombreCliente}" />
+                </p:column>
+                <p:column headerText="Número de encuestas" width="10%">
+                    <h:outputText value="#{x.numEncuestas}" />
+                </p:column>
+            </p:dataTable>
+
+</p:dialog>
+</ui:composition>
+</html>
+

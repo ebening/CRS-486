@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition>
+	<p:dialog id="editarProyecto" header="Edición del Proyecto"
+		widgetVar="editarProyecto" hideEffect="fade" style="font-size: 10px;" width="40%" modal="true" 
+                height="500" resizable="false">
+			<!--<div align="right">-->
+                        
+                        <p:panel styleClass="innermenu" >
+                            <p:commandButton id="btnEdita" styleClass="ui-icon-ADSave" icon="ui-icon-disk" 
+                                             actionListener="#{MBProyectos.proyectoEditar('editar')}"
+                                             validateClient="true" 
+                                             process="@this,edicionProyecto"
+                                             update="edicionProyecto,singleDT,growl" 
+                                             ignoreAutoUpdate="true"
+                                    oncomplete="if(args &amp;&amp; !args.validationFailed) PF('editarProyecto').hide()"/>
+                            
+                        </p:panel>
+                        
+		<!--	</div>-->
+
+			<br />
+			<br />
+                        
+                            <p:panelGrid id="edicionProyecto" styleClass="panelGridNoBorde">
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaClave" value="Clave: " styleClass="text-label"  />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText id="editaClave" value="#{MBProyectos.proyectoSeleccionado.claveProyecto}" required="true" 
+                                                     requiredMessage="Capture la clave del proyecto."  maxlength="10" validator="codigoCadena" />
+                                        <p:message for="editaClave" display="tooltip"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaNombre" value="T&iacute;tulo: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText id="editaNombre" value="#{MBProyectos.proyectoSeleccionado.nombreProyecto}" required="true" 
+                                                     requiredMessage="Capture el t&iacute;tulo del proyecto."  maxlength="50" validator="tituloCadena"/>
+                                        <p:message for="editaNombre" display="tooltip"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="descripcionProyectoEditar" value="Descripci&oacute;n del proyecto: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputTextarea id="descripcionProyectoEditar" rows="6" cols="33"  required="true" requiredMessage="Capture la descripci&oacute;n del proyecto."  
+                                                         value="#{MBProyectos.proyectoSeleccionado.descripcionProyecto}" maxlength="200" validator="descripcionCadena" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaVisible" value="Fecha visible " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="editaVisible"   size="10" readonlyInput="true" required="true" requiredMessage="Fecha fin: Campo requerido." 
+                                            title="Fecha Visible." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            disabled="#{MBProyectos.fechaVisibleHabilitada}"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaVisible}" showOn="button"
+                                            widgetVar="bus_cnf_inv_det_fecFinWV" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaInicio" value="Fecha inicio vigencia: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="editaInicio" readonlyInput="true"   size="10" 
+                                                    required="true" requiredMessage="Fecha inicio: Campo requerido." 
+                                            title="Fecha inicio." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            disabled="#{MBProyectos.fechaInicioHabilitada}"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaInicio}" showOn="button"
+                                            widgetVar="bus_cnf_inv_det_fecIniWV" binding="#{startEditDate}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaFin" value="Fecha fin vigencia: " styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="editaFin" readonlyInput="true"   size="10"  required="true" requiredMessage="Fecha fin: Campo requerido." 
+                                            title="Fecha fin." locale="es" pattern="dd/MM/yyyy"
+                                            showButtonPanel="true" navigator="true" styleClass="text-label"
+                                            disabled="#{MBProyectos.fechaFinHabilitada}"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaFin}" showOn="button"
+                                            widgetVar="bus_cnf_inv_det_fecFinWV" >
+                                            <f:attribute name="fechaIni" value="#{startEditDate}"/>
+                                            <f:validator validatorId="DateRange" /> 
+                                        </p:calendar>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editaDiasAdicionales" value="D&iacute;as adicionales: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText value="#{MBProyectos.proyectoSeleccionado.diasVigencias}" id="editaDiasAdicionales"  
+                                                     required="true" 
+                                                     requiredMessage="Capture los d&iacute;as adicionales." 
+                                                     maxlength="15" validator="intPos" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="editPreguntaDiaria" value="Preguntar diariamente mientras dure la vigencia" styleClass="text-label"/>
+                                    </p:column>
+                                    <p:column >
+                                        <p:selectBooleanCheckbox id="editPreguntaDiaria" value="#{MBProyectos.proyectoSeleccionado.visitaAutomatica}" disabled="true" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <!--advanced advanced -->
+                                        <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                      allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="2000000" 
+                                                      process="@this"
+                                                      label="Seleccione una imagen" 
+                                                      uploadLabel="Subir" 
+                                                      cancelLabel="Cancelar"
+                                                      fileLimitMessage="Solo puede haber una imagen." 
+                                                      invalidFileMessage="Tipo de archivo no valido." 
+                                                      invalidSizeMessage="Tamaño de archivo no valido."
+                                                       style="width:50% !important;" oncomplete="loadLogoEdit();"  />
+                                    </p:column>
+                                    <p:column >
+                                        <p:remoteCommand autoRun="true" name="loadLogoEdit" process="@this" update="logoEdit" actionListener="#{MBProyectos.getInputStreamLogo('edit')}"/>
+                                        <p:graphicImage id="logoEdit" value="#{MBProyectos.logo}" width="120" height="80" cache="false" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                        <br/>
+                        <br/>
+                            <div align="right">
+                                <p:commandButton id="addEncuesta" icon="ui-icon-folder-open" 
+                                    process="@this,tablaEncuestasProyecto,growl" 
+                                    actionListener="#{MBProyectos.obtieneEncuestas()}"
+                                    update="agregadoDialog,panelEncProy,growl"
+                                     styleClass="ui-icon-ADFolder-abierto30x30"  
+                                     title="Agregar Encuesta" 
+                                     ignoreAutoUpdate="true" 
+                                     />
+                                <p:commandButton  title="Eliminar encuesta" icon="ui-icon-trash"
+                                        process="@this,tablaEncuestasProyecto" 
+                                        actionListener="#{MBProyectos.eliminaEncuestaProyecto()}"
+                                        update="tablaEncuestasProyecto,growl"
+                                        styleClass="ui-icon-ADEliminar30x30" ignoreAutoUpdate="true"  >
+                                    <p:confirm header="Confirmaci&oacute;n"
+                                            message="Desea eliminar la encuesta del proyecto?"
+                                            icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </div>
+                            <p:dataTable id="tablaEncuestasProyecto" var="encuesta" widgetVar="listadoEncuestasProyecto"
+                                         value="#{MBProyectos.listaEncuestasProyecto}"
+                                        emptyMessage="No hay encuestas relacionadas al proyecto"
+                                        paginator="false" rows="25" 
+                                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                        rowsPerPageTemplate="5" selectionMode="single"
+                                        selection="#{MBProyectos.encuestaSeleccionada}" 
+                                        rowKey="#{encuesta.encuestasId}" >
+                                <f:facet name="header">
+                                    Encuestas del Proyecto
+                                </f:facet>
+                                <p:column>
+                                        <f:facet name="header">  
+                                            ID Encuesta
+                                        </f:facet>
+                                        <h:outputText value="#{encuesta.encuestasId}" />
+                                </p:column>
+                                <p:column>
+                                        <f:facet name="header">  
+                                            Nombre Encuesta
+                                        </f:facet>
+                                        <h:outputText value="#{encuesta.nombreEncuesta}" />
+                                </p:column>
+                            </p:dataTable>
+                    <!--</div>-->
+                    <br/>
+                        <br/>
+
+	</p:dialog>
+
+</ui:composition>
+</html>
+
+
+

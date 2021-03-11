@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+        >
+
+<h:body>
+    <center>
+        <div class="page-content">
+        <p:dataTable id="unidadesNegocios-tabla" var="o"
+                     value="#{unidadesNegociosController.list}"
+                     selection="#{unidadesNegociosController.selected}"
+                     filteredValue="#{unidadesNegociosController.filtered}"
+                     rowKey="#{o.idUnidadNegocio}"
+                     selectionMode="multiple"
+                     rows="10"
+                     paginator="true"
+                     emptyMessage="#{msg.emptyMessage}"
+                     paginatorTemplate="#{msg.paginatorTemplate}"
+                     rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+
+            <p:column headerText="Unidad de negocio"
+                      filterBy="#{o.nombreUnidad}"
+                      sortBy="#{o.nombreUnidad}">
+                <h:outputText value="#{o.nombreUnidad}"/>
+            </p:column>
+
+            <p:column headerText="Horario">
+                <h:outputText value="#{o.horaIni}"/> -
+                <h:outputText value="#{o.horaFin}"/>
+            </p:column>
+
+
+            <p:ajax event="rowSelect" listener="#{unidadesNegociosController.seleccionar}" update=":center-form"/>
+            <p:ajax event="rowUnselect" listener="#{unidadesNegociosController.quitarSeleccion}" update=":center-form"/>
+        </p:dataTable>
+        </div>
+    </center>
+</h:body>
+</html>

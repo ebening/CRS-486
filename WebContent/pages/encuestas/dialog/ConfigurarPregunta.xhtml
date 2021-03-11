@@ -1,0 +1,545 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+	<p:dialog id="configuraPregunta" header="Configura pregunta"
+		widgetVar="configurarPreguntas" resizable="false"
+		showEffect="explode" hideEffect="fade" 
+                width="750" height="500" onHide="limpiarDatosPregunta()" modal="true"
+                style="position: absolute;">
+            <p:ajax event="close" listener="#{MBEncuestas.limpiarDatosPregunta()}" ignoreAutoUpdate="true" update="tabDinamico" />
+                
+		<p:remoteCommand name="limpiarDatosPregunta"
+			action="#{MBEncuestas.limpiarDatosPregunta()}"
+			update="panelConfiguraPregunta" />
+                
+		<div align="right">
+                    <p:panel styleClass="innermenu">
+                        <p:commandButton id="btnGuardaPregunta"  icon="ui-icon-disk"
+                                actionListener="#{MBEncuestas.preguntaAgregada()}" 
+                                validateClient="true" 
+                                styleClass="ui-icon-ADSave" 
+                                process="@this,panelConfiguraPregunta" 
+                                ignoreAutoUpdate="true"
+                                update="tabDinamico,panelConfiguraPregunta,mensajes2"  
+                                >
+                        </p:commandButton>
+                        <p:tooltip for="btnGuardaPregunta" trackMouse="true" value="Guardar" />
+                    </p:panel>
+		</div>
+                <h1 class="title">Pregunta</h1>
+                
+                <p:scrollPanel id="panelConfiguraPregunta" style="height: 950px;"  >
+                    
+                    <!--<h:panelGrid columns="2" id="panelDatosGenerales">-->
+                    <p:panelGrid id="panelDatosGenerales" styleClass="panelGridNoBorde">
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="seccionesXencuesta" value="Secci&oacute;n" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectOneMenu id="seccionesXencuesta"  required="true" requiredMessage="Secci&oacute;n requerido." 
+                                                value="#{MBEncuestas.miSeccionOIDPregunta}" >
+                                    <f:selectItem itemLabel="Selecciona una Secci&oacute;n" itemValue="#{null}"/>
+                                    <f:selectItems value="#{MBEncuestas.seccionesPorEncuesta}"
+                                           var="seccionSeccionE"
+                                           itemLabel="#{seccionSeccionE.orden} - #{seccionSeccionE.nombreSeccion}"
+                                           itemValue="#{seccionSeccionE.seccionOID}">
+                                    </f:selectItems>
+                                    <p:ajax listener="#{MBEncuestas.changeSeccionPregunta()}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="ordenPregunta" value="Orden " styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:inputText id="ordenPregunta" value="#{MBEncuestas.ordenPregunta}"  required="true" requiredMessage="Orden requerido." >
+                                    <p:ajax event="keyup" listener="#{MBEncuestas.guardaOrdenPregunta}" />
+                                    <pe:keyFilter regEx="#{msg.pnum}"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="textoPregunta" value="Texto de la pregunta " styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:inputText id="textoPregunta" value="#{MBEncuestas.textoPregunta}"  required="true" requiredMessage="Texto de la pregunta requerido." >
+                                    <p:ajax event="blur"  listener="#{MBEncuestas.guardaTextoPregunta}"  />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="selectCategoria" value="Categor&iacute;a" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectOneMenu id="selectCategoria" value="#{MBEncuestas.idCategoria}" required="true" requiredMessage="Categoria requerido." >
+                                    <f:selectItem itemLabel="Selecciona una categor&iacute;a" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBCategorias.listaCategorias()}"
+                                            var="categoriaPregunta"
+                                            itemLabel="#{categoriaPregunta.nombreCategoria}"
+                                            itemValue="#{categoriaPregunta.idCategoria}" />
+                                    <p:ajax update="subcategoriaPregunta" listener="#{MBEncuestas.traeSubCategorias()}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="subcategoriaPregunta" value="Subcategor&iacute;a" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectOneMenu id="subcategoriaPregunta" required="true" requiredMessage="Subcategoria requerida." 
+                                        value="#{MBEncuestas.subCategoriaPregunta}">
+                                    <f:selectItem itemLabel="Selecciona una subcategor&iacute;a" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBEncuestas.listaSubCategorias}"
+                                            var="subCategoriaPregunta"
+                                            itemLabel="#{subCategoriaPregunta.nombreSubCategoria}"
+                                            itemValue="#{subCategoriaPregunta.idSubCategoria}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="mensajePregunta" value="Mensaje " styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:inputText id="mensajePregunta" value="#{MBEncuestas.mensajePregunta}"  />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel value="Variable " styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:inputText id="variablePregunta" value="#{MBEncuestas.variablePregunta}" />
+                            </p:column>
+                        </p:row>
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel value="Alerta " styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:inputText id="alertaPregunta" value="#{MBEncuestas.alertaPregunta}" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel for="tipoRespuesta" value="Tipo de respuesta" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectOneMenu id="tipoRespuesta" value="#{MBEncuestas.idTipoRespuesta}" required="true" requiredMessage="Tipo respuesta requerida.">
+                                    <f:selectItem itemLabel="Seleccione un tipo de respuesta" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBEncuestas.traerListaTipoRespuesta()}"
+                                            var="tipoRespuestaPregunta"
+                                            itemLabel="#{tipoRespuestaPregunta.nombreTipoRespuesta}"
+                                            itemValue="#{tipoRespuestaPregunta.idTipoRespuesta}" />
+                                    <p:ajax update="panelTipoRespuesta" listener="#{MBEncuestas.configuraPregunta}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel value="Requerida" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectBooleanCheckbox value="#{MBEncuestas.requeridaPregunta}" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row >
+                            <p:column style="width: 100px;">
+                                <p:outputLabel value="Banco de preguntas" styleClass="text-label"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectBooleanCheckbox value="#{MBEncuestas.bancoPreguntas}" />
+                            </p:column>
+                        </p:row>
+                        
+                    </p:panelGrid>
+                    
+                    <p:outputPanel id="panelTipoRespuesta">
+                        
+                        <!--<p:panelGrid id="panelDatosGenerales" styleClass="panelGridNoBorde">
+                        
+                        <p:row >
+                            <p:column style="width: 100px;"> -->
+                        
+                        <!-- PANEL DE TEXTO -->
+                        <p:panelGrid styleClass="panelGridNoBorde">
+                            <p:row >
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verTexto}" value="Logitud m&aacute;xima" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verTexto}" value="#{MBEncuestas.longitudMaxima}" required="true" requiredMessage="Longitud m&aacute;xima requerida." maxlength="4">
+                                        <pe:keyFilter regEx="#{msg.pint}"/>
+                                    </p:inputText>
+                                </p:column>
+                            </p:row>
+                            <!--
+                            <p:outputLabel rendered="#{MBEncuestas.verTexto}" value="" styleClass="text-label"/>
+                            <p:outputLabel rendered="#{MBEncuestas.verTexto}" value="" styleClass="text-label"/>
+                            -->
+                        </p:panelGrid>
+                        
+                        
+                        <!-- PANEL ENTERO -->
+                        <p:panelGrid styleClass="panelGridNoBorde">
+                            <p:row >
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verEntero}" value="M&iacute;nimo" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verEntero}" value="#{MBEncuestas.valorMinimo}"  required="true" requiredMessage="Longitud minima requerida." maxlength="5" validator="#{MBEncuestas.validarRangoNP}">
+                                        <pe:keyFilter regEx="#{msg.rint}"/>
+                                    </p:inputText>
+                                </p:column>
+                                <p:column style="width: 70px !important;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verEntero}" value="M&aacute;ximo" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verEntero}" value="#{MBEncuestas.valorMaximo}" required="true" requiredMessage="Longitud maxima requerida." maxlength="5" validator="#{MBEncuestas.validarRangoNP}">
+                                        <pe:keyFilter regEx="#{msg.rint}"/>
+                                    </p:inputText>
+                                </p:column>
+                            </p:row>
+                            <p:row >
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verEntero}" value="Valor alerta" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verEntero}" value="#{MBEncuestas.valorAlertaPregunta}" maxlength="50"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        
+                        <!-- PANEL VER DECIMAL -->
+                        <p:panelGrid styleClass="panelGridNoBorde">
+                            <p:row >
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verDecimal}" value="N&uacute;mero de decimales" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verDecimal}" value="#{MBEncuestas.numeroDecimales}"  maxlength="4">
+                                        <pe:keyFilter regEx="#{msg.rint}"/>
+                                    </p:inputText>
+                                </p:column>
+                            </p:row>
+                            <p:row >
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verDecimal}" value="Valor alerta" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:inputText rendered="#{MBEncuestas.verDecimal}" value="#{MBEncuestas.valorAlertaPregunta}" maxlength="50"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        
+                        
+                        <!-- PANEL VER INSTRUCCION -->
+                        <h:panelGrid columns="4" >
+                            <p:remoteCommand rendered="#{MBEncuestas.verInstruccion}" autoRun="true" name="loadLogonew" process="@this" update="logoNew" 
+                                             actionListener="#{MBEncuestas.getInputStreamInstr()}"/>
+                            <p:fileUpload rendered="#{MBEncuestas.verInstruccion}" fileUploadListener="#{MBEncuestas.upload}"
+                                    mode="advanced" fileLimit="1"
+                                    allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000"
+                                    process="@this" 
+                                    label="Seleccione una imagen." uploadLabel="Subir"
+                                    cancelLabel="Cancelar"
+                                    fileLimitMessage="Solo puede haber una imagen."
+                                    invalidFileMessage="Tipo de archivo no valido."
+                                    invalidSizeMessage="Tama&ntilde;o de archivo no valido." oncomplete="loadLogonew();" />
+                            <!-- rendered="{MBEncuestas.verInstruccion}" -->
+                            <p:graphicImage rendered="#{MBEncuestas.verInstruccion}" id="logoNew" value="#{MBEncuestas.logo}" width="120" height="80" cache="false" />
+                            <p:outputLabel rendered="#{MBEncuestas.verInstruccion}" value="" styleClass="text-label"/>
+                            <p:outputLabel rendered="#{MBEncuestas.verInstruccion}" value="" styleClass="text-label"/>
+                        </h:panelGrid>
+                        
+                        
+                        <!-- PANEL VER CHECK -->
+                        <h:panelGrid columns="4" >
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="Opciones " styleClass="text-label"/>
+                            <p:inputTextarea rendered="#{MBEncuestas.verCheck}" rows="6" cols="33" value="#{MBProyectos.descripcionProyecto}" />
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                            
+                            
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="Orientaci&oacute;n " styleClass="text-label"/>
+                            <p:selectOneRadio rendered="#{MBEncuestas.verCheck}" value="#{MBEncuestas.tipoEncuesta}" style="">
+                                    <f:selectItem itemLabel="Vertical" itemValue="1" />
+                                    <f:selectItem itemLabel="Horizontal" itemValue="0" />
+                            </p:selectOneRadio>
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                            
+                            
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="Valor alerta " styleClass="text-label"/>
+                            <p:selectOneMenu rendered="#{MBEncuestas.verCheck}" value="#{MBEncuestas.idSeccionEncuesta}" required="true" requiredMessage="Valor alerta requerido.">
+                                <f:selectItem itemLabel="Seleccione un valor" itemValue="#{null}" />
+                                    <f:selectItems value="#{MBEncuestas.listaSeccion}"
+                                            var="valorAlerta" itemLabel="#{seccionEncuesta.nombreSeccion}"
+                                            itemValue="#{seccionEncuesta.idSeccion}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                            <p:outputLabel rendered="#{MBEncuestas.verCheck}" value="" styleClass="text-label"/>
+                        </h:panelGrid>
+                        
+                        
+                        <!-- VER PANEL OPCION MULTIPLE -->
+                        <p:panelGrid styleClass="panelGridNoBorde">
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verLosMultiples}" value="Tipo de lista " styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneMenu rendered="#{MBEncuestas.verLosMultiples}" required="true" requiredMessage="Tipo de lista requerido."
+                                            value="#{MBEncuestas.idTipoListaConfiguraPregunta}">
+                                            <f:selectItem itemLabel="Seleccione tipo de lista" itemValue="#{null}" />
+                                            <f:selectItems value="#{MBTipoListaOpciones.comboTipoListaPreguntas()}"
+                                                    var="tipoLista" itemLabel="#{tipoLista.nombreTipoListaOpciones}"
+                                                    itemValue="#{tipoLista.tipoListasPreguntasId}" />
+                                            <p:ajax update="catalogo,preguntasOrigen,tblOpcionMultiple,selectFiltro,comboFiltro,labelVariable,variableFiltro,inputOpciones,btnOpciones,seleccionadasPregunta,opcionOtrosSelMul,configOpcionesSelMul,codigoBarrasSelMul,valorMinimoSelMul,condicionadaSelMul"
+                                                    listener="#{MBEncuestas.changeTipoListaPregunta()}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel for="catalogo" rendered="#{MBEncuestas.verLosMultiples}" value="Cat&aacute;logo " styleClass="text-label" />
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneMenu id="catalogo"
+                                            disabled="#{MBEncuestas.deshabilitaCatalogos}"
+                                            rendered="#{MBEncuestas.verLosMultiples}"
+                                            value="#{MBEncuestas.catalogosOIDOpciones}" required="true" requiredMessage="Catalogo requerido.">
+                                            <f:selectItem itemLabel="Seleccione un catalogo" itemValue="#{null}" />
+                                            <f:selectItems value="#{MBEncuestas.listaCatalogos}"
+                                                    var="catalogos" itemLabel="#{catalogos.nombreCatalogo}"
+                                                    itemValue="#{catalogos.listasOID}" />
+                                            <p:ajax update="tblOpcionMultiple"
+                                                    listener="#{MBEncuestas.traerListaOpciones()}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel for="preguntasOrigen" rendered="#{MBEncuestas.verLosMultiples}" value="Pregunta" styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneMenu id="preguntasOrigen"
+                                            disabled="#{MBEncuestas.deshabilitaPreguntas}"
+                                            rendered="#{MBEncuestas.verLosMultiples}"
+                                            value="#{MBEncuestas.preguntasOIDOpciones}"
+                                            required="true" requiredMessage="Pregunta requerida.">
+                                            <f:selectItem itemLabel="Seleccione una pregunta." itemValue="#{null}" />
+                                            <f:selectItems value="#{MBEncuestas.listaPreguntaOrigen}"
+                                                    var="miPreguntaOrigen"
+                                                    itemLabel="#{miPreguntaOrigen.descripcionPregunta}"
+                                                    itemValue="#{miPreguntaOrigen.preguntaOID}" />
+
+                                            <p:ajax update="tblOpcionMultiple"
+                                                    listener="#{MBEncuestas.traerListaPreguntas()}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="{MBEncuestas.verLosMultiples}" styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneRadio rendered="#{MBEncuestas.verLosMultiples}" id="seleccionadasPregunta" value="#{MBEncuestas.seleccionadaInt}" disabled="#{MBEncuestas.deshabilitaPreguntas}">
+                                        <f:selectItem itemLabel="Seleccionadas" itemValue="1"/>
+                                        <f:selectItem itemLabel="No seleccionadas" itemValue="0" />
+                                    </p:selectOneRadio>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:selectBooleanCheckbox id="selectFiltro" itemLabel="Habilitar filtros" styleClass="text-label"
+                                            rendered="#{MBEncuestas.verLosMultiples}"
+                                            disabled="#{MBEncuestas.deshabilitaSeleccionFiltro}"
+                                            value="#{MBEncuestas.seleccionFiltro}">
+                                            <p:ajax update="variableFiltro,comboFiltro"
+                                                    listener="#{MBEncuestas.addMessage}" />
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                                <p:column colspan="3" >
+                                    <p:outputLabel rendered="#{MBEncuestas.verLosMultiples}" value="Filtrar por" styleClass="text-label" />
+                                    &nbsp;&nbsp;
+                                    <p:selectOneMenu id="comboFiltro" style="width: 130px;"
+                                            disabled="#{MBEncuestas.mostrarCampos}"
+                                            rendered="#{MBEncuestas.verLosMultiples}"
+                                            value="#{MBEncuestas.listasOIDFiltro}">
+                                            <f:selectItem itemLabel="Selecciona un Filtro." itemValue="#{null}" />
+                                            <f:selectItems value="#{MBEncuestas.filtrarPor()}" var="filtro"
+                                                    itemLabel="#{filtro.nombreCatalogo}"
+                                                    itemValue="#{filtro.listasOID}" />
+                                    </p:selectOneMenu>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p:outputLabel id="labelVariable" rendered="#{MBEncuestas.verLosMultiples}" value="Variable " styleClass="text-label"/>
+                                    <p:selectOneMenu id="variableFiltro" style="width: 110px;"
+                                            disabled="#{MBEncuestas.mostrarCampos}"
+                                            rendered="#{MBEncuestas.verLosMultiples}"
+                                            value="#{MBEncuestas.variablePreguntaOpcionMultiple}">
+                                            <f:selectItem itemLabel="Selecciona una variable." itemValue="#{null}" />
+                                            <f:selectItems value="#{MBEncuestas.listaVariablesFiltro}" var="variable"
+                                                           itemLabel="#{variable.nombre}"
+                                                           itemValue="#{variable.variablesId}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="4" rendered="#{MBEncuestas.verLosMultiples}">
+                                    <p:outputLabel rendered="#{MBEncuestas.verLosMultiples}" value="Opciones " styleClass="text-label"/>
+                                    &nbsp;&nbsp;
+                                    <p:inputText id="inputOpciones"
+                                    value="#{MBEncuestas.opcionAgregada}"
+                                    disabled="#{MBEncuestas.deshabilitaInputOpcion}"
+                                    rendered="#{MBEncuestas.verLosMultiples}" />
+                                    &nbsp;&nbsp;
+                                    <p:commandButton id="btnOpciones" value="Agregar" process="@this,inputOpciones"
+                                    disabled="#{MBEncuestas.deshabilitaBotonOpcion}"
+                                    rendered="#{MBEncuestas.verLosMultiples}"
+                                    actionListener="#{MBEncuestas.agregarOpciones()}"
+                                    title="Agregar Opciones"
+                                    update="tblOpcionMultiple,inputOpciones" />
+                                    
+                                    <p:dataTable id="tblOpcionMultiple" var="opcion" 
+                                                disabledSelection="#{MBEncuestas.deshabilitaSeleccion}"
+                                                value="#{MBEncuestas.listaOpciones}" scrollable="true"
+                                                rendered="#{MBEncuestas.verLosMultiples}" draggableRows="true"
+                                                scrollHeight="150" style="width: 70%;" emptyMessage="No existen opciones"
+                                                editable="#{MBEncuestas.sePuedeEditar}">
+                                                        <p:ajax event="rowReorder" listener="#{MBEncuestas.onRowReorder}" />
+                                        <f:facet name="header">
+                                            Opciones
+                                        </f:facet>
+                                        <p:ajax event="rowEdit" listener="#{MBEncuestas.onRowEdit}" />
+                                        <p:ajax event="rowEditCancel" listener="#{MBEncuestas.onRowCancel}" />
+                                        <p:column headerText="" >
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{opcion.textoOpcion}" />
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="modelInput" value="#{opcion.textoOpcion}" style="width:100%" />
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <p:column style="width: 15px;" >
+                                            <p:commandLink update="tblOpcionMultiple" 
+                                                process="@this" 
+                                                rendered="#{MBEncuestas.sePuedeEditar}"
+                                                actionListener="#{MBEncuestas.onRowDelete(opcion)}" >
+                                                <span class="ui-icon ui-icon-trash"></span>
+                                                <p:confirm header="Confirmación"
+                                                           message="¿Est&aacute; seguro que desea eliminar la opci&oacute;n?" icon="ui-icon-alert" />
+                                            </p:commandLink>
+                                        </p:column>
+                                        <p:column style="width: 40px;">
+                                            <p:rowEditor />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verAgregarOpcionOtro}" >
+                                
+                                <p:column colspan="2" >
+                                    <p:outputLabel rendered="#{MBEncuestas.verAgregarOpcionOtro}" value="" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:selectBooleanCheckbox id="opcionOtrosSelMul" rendered="#{MBEncuestas.verAgregarOpcionOtro}" value="#{MBEncuestas.opcionOtros}" disabled="#{MBEncuestas.deshabilitaOpcionOtros}"/>
+                                    &nbsp;&nbsp;
+                                    <p:outputLabel for="opcionOtrosSelMul" rendered="#{MBEncuestas.verAgregarOpcionOtro}" value="Agregar 'Otros'" styleClass="text-label"/>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verOpcionMultiple}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verOpcionMultiple}" value="Condicionada" styleClass="text-label"/>
+                                </p:column>
+                                <p:column >
+                                    <p:selectBooleanCheckbox id="condicionadaSelMul" rendered="#{MBEncuestas.verOpcionMultiple}" 
+                                                     value="#{MBEncuestas.condicionada}" disabled="#{MBEncuestas.deshabilitaCondicionada}">
+                                        <p:ajax update="configOpcionesSelMul" listener="#{MBEncuestas.condicionadaChecked}" />
+                                    </p:selectBooleanCheckbox>
+                                    &nbsp;&nbsp;
+                                    <p:commandLink id="configOpcionesSelMul" rendered="#{MBEncuestas.verOpcionMultiple}" 
+                                                   resetValues="true"
+                                                    process="@this"
+                                                    actionListener="#{MBEncuestas.eventLinkConfigurarOpciones()}"
+                                                    disabled="#{MBEncuestas.deshabilitaConfigOpciones}"
+                                                    update=":center-form:tblOpcionesConfigurar,:center-form:labelOpcionConf,seleccionadasOpcConf,tblOpcionesConfiguracion,labelPreguntaTexto" 
+                                                    value="Configurar opciones" 
+                                                    >
+                                    </p:commandLink>
+                                </p:column>
+                                
+                                <p:column colspan="2">
+                                    <p:outputLabel rendered="{MBEncuestas.verOpcionMultiple}" value="" styleClass="text-label"/>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verCodigoBarras}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verCodigoBarras}" value="C&oacute;digo de barras" styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectBooleanCheckbox id="codigoBarrasSelMul" rendered="#{MBEncuestas.verCodigoBarras}" value="#{MBEncuestas.codigoBarras}" disabled="#{MBEncuestas.deshabilitaCodigoBarras}"/>
+                                </p:column>
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verSeleccionMultiple}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verSeleccionMultiple}" value="Seleccionar m&iacute;nimo"  styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:inputText id="valorMinimoSelMul" rendered="#{MBEncuestas.verSeleccionMultiple}" value="#{MBEncuestas.valorMinimo}" disabled="#{MBEncuestas.deshabilitaSeleccionMinima}">
+                                        <pe:keyFilter regEx="#{msg.pnum}"/>
+                                    </p:inputText>
+                                </p:column>
+                                
+                            </p:row>
+                            <p:row rendered="#{MBEncuestas.verLosMultiples}">
+                                <p:column style="width: 100px;">
+                                    <p:outputLabel rendered="#{MBEncuestas.verLosMultiples}" value="Valor alerta " styleClass="text-label"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:inputText value="#{MBEncuestas.valorAlertaPregunta}" rendered="#{MBEncuestas.verLosMultiples}" maxlength="50" />
+                                </p:column>
+                                
+                            </p:row>
+                            
+                        </p:panelGrid>
+                        <!-- PANEL VER SELECCION MULTIPLE -->
+                        
+                    </p:outputPanel>
+
+		</p:scrollPanel>
+		<br />
+	</p:dialog>
+
+    </ui:composition>
+</html>
+
+
+
+
+

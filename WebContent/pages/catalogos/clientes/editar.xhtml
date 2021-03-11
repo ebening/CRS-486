@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <p:panel id="panel-editar" styleClass="innermenu" >
+        <p:commandButton id="clientes-editar-guardar" title="Guardar" icon="ui-icon-disk"
+                         styleClass="ui-icon-ADSave" validateClient="true"
+                         process="@this clientes-panel-editar-formulario"
+                         ignoreAutoUpdate="true"
+                         update="clientes-panel-editar-formulario clientes-tabla mensajes2"
+                         oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-clientes-editar').hide()"
+                         actionListener="#{clientesController.editar}"/>
+
+    </p:panel>
+    <center>
+        <p:panel id="clientes-panel-editar-formulario" style="border:none;">
+            <h:panelGrid columns="2" styleClass="catalogos-datatable" cellpadding="5" >
+
+                <p:outputLabel id="clientes-editar-nombre-Label" styleClass="text-label"
+                               for="clientes-editar-nombre-value" value="Nombre"/>
+                <p:inputText id="clientes-editar-nombre-value" value="#{clientesController.current.nombre}" required="true" >
+                    <pe:keyFilter regEx="#{msg.alpha}"/>
+                </p:inputText>
+
+
+                <p:outputLabel id="clientes-editar-unidadNegocio-label" styleClass="text-label"
+                               for="clientes-editar-unidadNegocio-value" value="Unidad de negocio"/>
+                <p:selectManyMenu id="clientes-editar-unidadNegocio-value" required="true"
+                                  value="#{clientesController.listaUnidadesNegociosSeleccionadas}" >
+                    <f:selectItems value="#{clientesController.listaUnidadesNegocios}"
+                                   var="unidad" itemLabel="#{unidad.nombreUnidad}"
+                                   itemValue="#{unidad.idUnidadNegocio}"/>
+                </p:selectManyMenu>
+
+
+                <p:outputLabel id="clientes-editar-contacto-Label" styleClass="text-label"
+                               for="clientes-editar-contacto-value" value="Nombre de contacto"/>
+                <p:inputText id="clientes-editar-contacto-value" value="#{clientesController.current.encargado}" required="true" >
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters0}"/>
+                </p:inputText>
+
+                <p:outputLabel id="clientes-editar-email-Label" styleClass="text-label"
+                               for="clientes-editar-email-value" value="Correo Electrónico"/>
+                <p:inputText id="clientes-editar-email-value" value="#{clientesController.current.email}">
+                    <f:validator validatorId="emailValidator"/>
+                </p:inputText>
+                
+                <p:outputLabel id="clientes-editar-notificaciones-Label" styleClass="text-label"
+                               for="clientes-editar-notificaciones-value" value="Notificaciones"/>
+                <p:selectBooleanCheckbox  id="clientes-editar-notificaciones-value" 
+                             value="#{clientesController.current.notificaciones}"  />
+
+            </h:panelGrid>
+        </p:panel>
+    </center>
+</h:body>
+</html>
+

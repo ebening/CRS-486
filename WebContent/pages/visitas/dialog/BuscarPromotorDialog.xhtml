@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog  styleClass="ui-dialog" id="dialogContent" header="Buscar Promotor" widgetVar="busPromotor"
+                   showEffect="explode" hideEffect="fade" width="80%" onShow="remoteOnShow(),resetBus()" appendTo="center-form">
+                #{MBEstados.estadosList()}
+                <p:remoteCommand name="resetBus" action="#{MBPromotores.resetBusqueda()}" update="tableBusquedaProm" />
+                <p:remoteCommand name="updateFiltros" update="panelFiltros" />
+                
+                <div align="right">
+                    <p:panel styleClass="innermenu">
+                        <p:commandButton id="bttnSearchPromos" styleClass="ui-icon-ADSearch" icon="ui-icon-search">
+                            <p:ajax event="click" listener="#{MBPromotores.buscarPromotores()}" update="tableBusquedaProm" />
+                        </p:commandButton>
+                        <p:tooltip for="bttnSearchPromos" value="Buscar" trackMouse="true" />
+                        <p:commandButton id="bttnAddPromos" styleClass="ui-icon-ADAdd" icon="ui-icon-plus" action="#{MBPromotores.addPromotoresToMainTable()}"
+                                         update="tablePromotores"/>
+                        <p:tooltip for="bttnAddPromos" value="Agregar Promotores" trackMouse="true" />
+                    </p:panel>  
+                </div>
+                <br /><br />
+                <h:panelGrid columns="6" cellpadding="3" id="panelFiltros">
+                    <p:outputLabel for="nempleado" value="Núm. Empleado" styleClass="text-label" />
+                    <p:outputLabel for="nombre" value="Nombre" styleClass="text-label" />
+                    <p:outputLabel for="apellidop" value="Apellido Paterno" styleClass="text-label" />
+                    <p:outputLabel for="apellidom" value="Apellido Materno" styleClass="text-label" />
+                    <p:outputLabel for="comboEstado" value="Estado" styleClass="text-label" />
+                    <p:outputLabel for="comboCiudad" value="Ciudad" styleClass="text-label" />
+                    
+                    <p:inputText id="nempleado" value="#{MBPromotores.nroEmpleado}" onchange="updateFiltros()" /> 
+                    <p:inputText id="nombre" value="#{MBPromotores.nombre}" onchange="updateFiltros()" />    
+                    <p:inputText id="apellidop" value="#{MBPromotores.apellidoPaterno}" onchange="updateFiltros()" />
+                    <p:inputText id="apellidom" value="#{MBPromotores.apellidoMaterno}" onchange="updateFiltros()" />
+                    <p:selectOneMenu id="comboEstado" label="Estado" value="#{MBPromotores.estadosId}" onchange="updateFiltros()" 
+                                             filter="true" filterMatchMode="startsWith" panelStyle="width:100px; 
+                                             font-size: 10px;">
+                        <f:selectItem itemLabel="Selecciona Estado" itemValue="0" />
+                        <f:selectItems value="#{MBEstados.estados}" var="estado" 
+                                               itemLabel="#{estado.nombre}" itemValue="#{estado.id}" />
+                        <p:ajax update="comboCiudad" listener="#{MBPromotores.ciudadeByEstadoId()}" />
+                    </p:selectOneMenu>
+                          
+                    <p:selectOneMenu id="comboCiudad" label="Ciudad" value="#{MBPromotores.ciudadesId}"  onchange="updateFiltros()" 
+                                             filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                        <f:selectItem itemLabel="Selecciona Ciudad" itemValue="0" />
+                        <f:selectItems value="#{MBPromotores.ciudades}" var="ciudad"
+                                               itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
+                    </p:selectOneMenu>    
+                 <!--   <p:blockUI block="dialogContent" trigger="bttnSearchPromos">
+                                <h:graphicImage name="images/loading.gif" />
+                    </p:blockUI> -->
+                </h:panelGrid>
+                <br />
+                <p:dataTable id="tableBusquedaProm" var="data" selection="#{MBPromotores.busPromotoresSelection}" rowKey="#{data.OID}" 
+                             paginator="true" selectionMode="multiple" emptyMessage="No existen registros" 
+                             value="#{MBPromotores.busPromotores}" rows="10">
+                    <p:column headerText="Numero Empleado">
+                        <h:outputText value="#{data.nroEmpleado}" />
+                    </p:column>
+                    <p:column headerText="Apellido Paterno">
+                        <h:outputText value="#{data.apellidoPaterno}" />
+                    </p:column>
+                    <p:column headerText="Apellido Materno">
+                        <h:outputText value="#{data.apellidoMaterno}" />
+                    </p:column>
+                    <p:column headerText="Nombres">
+                        <h:outputText value="#{data.nombre}" />
+                    </p:column>
+                    <p:column headerText="Ciudad">
+                        <h:outputText value="#{data.ciudad}" />
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{data.estado}" />
+                    </p:column>
+                    <p:ajax event="rowSelect" listener="#{MBPromotores.isSelectable()}" />
+                </p:dataTable>
+        </p:dialog>
+    </ui:composition>
+</html>
+

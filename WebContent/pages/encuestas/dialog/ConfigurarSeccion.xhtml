@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog header="Configurar Sección" widgetVar="configuraSeccion"
+                  showEffect="explode" hideEffect="fade" resizable="false"
+                  width="400" onHide="limpiarDatosSeccion()" modal="true"
+                  style="position: absolute;">
+
+            <p:remoteCommand name="limpiarDatosSeccion" 
+                             action="#{MBEncuestas.limpiarDatosSeccion()}" 
+                             update="panelConfigSeccion" />
+            <div align="right">
+                
+                <p:panel styleClass="innermenu">
+                    
+                    <p:commandButton id="btnGuardaSeccion"  styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                                     actionListener="#{MBEncuestas.guardaSeccion()}" 
+                                     process="@this,panelConfigSeccion" 
+                                     ignoreAutoUpdate="true" 
+                                     update="panelPlantillaDinamica,seccionesXencuesta,tabDinamico,miBanco,panelConfigSeccion,mensajes2" 
+                                     >
+                    </p:commandButton>
+                    <p:tooltip for="btnGuardaSeccion" trackMouse="true" value="Guardar" />
+                    
+                    <!--
+                    <p:commandButton id="bttnCloseSeccion" title="Regresar"
+                                     styleClass="ui-icon-ADClose"
+                                     onclick="PF('configuraSeccion').hide();" />
+                    <p:tooltip for="bttnCloseSeccion" trackMouse="true" value="Cerrar" />
+                    -->
+                </p:panel>
+            </div>
+            <h1 class="title">Secci&oacute;n</h1>
+            <br />
+            <p:panelGrid columns="2" id="panelConfigSeccion" styleClass="panelGridNoBorde">
+                
+                <p:outputLabel for="miSeccionPadre" value="Seccion padre " styleClass="text-label" rendered="#{MBEncuestas.miSeccionPadre != null}"/>
+                <p:inputText value="#{MBEncuestas.miSeccionPadre.nombreSeccion}"
+                             disabled="true"
+                             id="miSeccionPadre"
+                             rendered="#{MBEncuestas.miSeccionPadre != null}"/>
+                
+                <p:outputLabel for="miNombreSeccion" value="Nombre " styleClass="text-label"/>
+                <p:inputText value="#{MBEncuestas.nombreSeccionConfigurar}" required="true"  requiredMessage="Capture el nombre de la secci&oacute;n." validator="tituloCadena" 
+                             id="miNombreSeccion" />
+
+                <p:outputLabel for="ordenSeccion" value="Orden " styleClass="text-label"/>
+                <p:inputText id="ordenSeccion" value="#{MBEncuestas.ordenSeccionConfigurar}" required="true"  requiredMessage="Orden requerido.">
+                    <p:ajax event="keyup"  listener="#{MBEncuestas.guardaOrden}" />
+                    <pe:keyFilter regEx="#{msg.pnum}"/>
+                </p:inputText>
+
+                <p:outputLabel for="miClaveSeccion" value="Clave " styleClass="text-label"/>
+                <p:inputText value="#{MBEncuestas.claveSeccionConfigurar}" required="true" requiredMessage="Capture la clave de la secci&oacute;n." validator="codigoCadena" 
+                             id="miClaveSeccion" maxlength="5"/>
+
+                <p:outputLabel for="selectCiclicaSeccion" value="Recursiva" styleClass="text-label"/>
+                <p:selectBooleanCheckbox id="selectCiclicaSeccion" value="#{MBEncuestas.ciclicaSeccionConfigurar}" >
+                    <p:ajax update="labelCtrlUsuarios,ctrlUsuarios,labeltipoLista,tipoLista,labelcatalogoOrigen,catalogoOrigen,seleccionadas,labelpreguntaOrigen,preguntaOrigen,ctrlUsuarios,preguntaInicioCU"
+                            listener="#{MBEncuestas.busquedaRecursiva}" />
+                </p:selectBooleanCheckbox>
+                
+                <p:outputLabel id="labelCtrlUsuarios" value="Control usuario" styleClass="text-label"/>
+                <p:selectBooleanCheckbox id="ctrlUsuarios" 
+                                         value="#{MBEncuestas.controlUsuarioSeccionConfigurar}" 
+                                         disabled="#{MBEncuestas.disableContorlUsuario}" >
+                    <p:ajax update="labelCtrlUsuarios,ctrlUsuarios,labeltipoLista,tipoLista,labelcatalogoOrigen,catalogoOrigen,seleccionadas,labelpreguntaOrigen,preguntaOrigen,preguntaInicioCU"
+                            listener="#{MBEncuestas.checkedControlUsuario}" />
+                </p:selectBooleanCheckbox>
+                
+                <p:outputLabel for="preguntaInicioCU" value="Pregunta inicial" styleClass="text-label"/>
+                <p:selectOneMenu id="preguntaInicioCU" value="#{MBEncuestas.preguntaOIDSeccionConfigurar}" disabled="#{MBEncuestas.deshabilitaPreguntaInicioCU}" 
+                                 required="true" requiredMessage="Pregunta inicial requerida." >
+                    <f:selectItems value="#{MBEncuestas.listaPreguntasCU}"
+                                   var="tLista" itemLabel="#{tLista.orden}-#{tLista.descripcionPregunta}"
+                                   itemValue="#{tLista.preguntaOID}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel id="labeltipoLista" for="tipoLista" value="Tipo de lista" styleClass="text-label"/>
+                <p:selectOneMenu id="tipoLista" value="#{MBEncuestas.idTipoListaSeccionConfigurar}" disabled="#{MBEncuestas.disableTipoLista}" 
+                                 required="true" requiredMessage="Tipo de lista requerida." >
+                    <f:selectItem itemLabel="Seleccione un tipo de lista" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{MBTipoListaOpciones.comboTipoListaSecciones()}" 
+                                   var="tLista" itemLabel="#{tLista.nombreTipoListaOpciones}" 
+                                   itemValue="#{tLista.tipoListasPreguntasId}" />
+                    <p:ajax update=":center-form:labelcatalogoOrigen,:center-form:catalogoOrigen,:center-form:labelpreguntaOrigen,:center-form:preguntaOrigen,:center-form:seleccionadas,"
+                            listener="#{MBEncuestas.tipoDeLista()}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel id="labelcatalogoOrigen" for="catalogoOrigen" value="Cat&aacute;logo origen"  styleClass="text-label"/>
+                <p:selectOneMenu id="catalogoOrigen" disabled="#{MBEncuestas.apareceCatalogoOrigen}" 
+                                 value="#{MBEncuestas.catalogoOIDSC}" required="true" requiredMessage="Catalogo de origen requerido." >
+                    <f:selectItem itemLabel="Seleccione un cat&aacute;logo." itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{MBEncuestas.listaCatalogos}" var="catalogos"
+                                   itemLabel="#{catalogos.nombreCatalogo}"
+                                   itemValue="#{catalogos.listasOID}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel id="labelpreguntaOrigen" for="preguntaOrigen" value="Pregunta origen" styleClass="text-label"/>
+                <p:selectOneMenu id="preguntaOrigen" disabled="#{MBEncuestas.aparecePreguntaOrigen}" 
+                                 value="#{MBEncuestas.preguntaOIDSeccionConfigurar}" 
+                                 required="true" requiredMessage="Pregunta de origen requerido." >
+                    <f:selectItem itemLabel="Seleccione una pregunta." itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{MBEncuestas.listaPreguntaOrigen}" var="lpo"
+                                   itemLabel="#{lpo.orden}-#{lpo.descripcionPregunta}"
+                                   itemValue="#{lpo.preguntaOID}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel styleClass="text-label"/>
+                <p:selectOneRadio id="seleccionadas" value="#{MBEncuestas.seleccionadaIntSeccionConfigurar}" disabled="#{MBEncuestas.aparecePreguntaOrigen}">
+                    <f:selectItem itemLabel="Seleccionadas" itemValue="1"/>
+                    <f:selectItem itemLabel="No seleccionadas" itemValue="0" />
+                </p:selectOneRadio>
+                
+            </p:panelGrid>
+            
+            <br />
+        </p:dialog>
+
+        <p:confirmDialog widgetVar="eliminaS" id="eliminaSecc" global="true" showEffect="fade" hideEffect="explode">
+            <p:commandButton value="Si" type="button" update="panelPlantillaDinamica" oncomplete="eliminaSecc.hide()"  
+                             actionListener="#{MBEncuestas.eliminaSeccion}"
+                             styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button"
+                             styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+
+
+
+
+
+
+    </ui:composition>
+</html>
+
+
+

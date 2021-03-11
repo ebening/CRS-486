@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- ************************************** Proyectos por Promotor Dialog ****************************** -->
+   <ui:composition>    
+    <p:dialog header="Proyectos por Promotor" widgetVar="proyectosxPromotor" showEffect="explode" hideEffect="fade"
+              width="70%" onShow="remoteOnShow()" onHide="remoteOnHide()" appendTo="center-form" >
+        <p:outputPanel id="panelProyectos">
+            <p:outputLabel id="nombrePromo" value="#{MBPromotores.nombrePromo}" 
+                           styleClass="text-label" style="padding-left: 15px" />
+            <br /><br /><br />
+         <div align="center">
+            <p:dataTable id="tableProyectos" paginator="true" var="proyectos" style="width: 95%" rows="10" 
+                         emptyMessage="No existen Registros" rowsPerPageTemplate="10,20,50,100" value="#{MBPromotores.proyectosByPromotores}" >
+            <p:column headerText="Clave Proyecto" width="10%" filterBy="#{proyectos.clave}" filterMatchMode="contains">
+                <h:outputText value="#{proyectos.clave}" />
+            </p:column>
+            <p:column headerText="Proyecto" width="15%" filterBy="#{proyectos.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{proyectos.nombre}" />
+            </p:column>
+            <p:column headerText="Tienda" width="15%" filterBy="#{proyectos.tienda}" filterMatchMode="contains">
+                <h:outputText value="#{proyectos.tienda}" />
+            </p:column>
+                <p:column headerText="Fecha Inicio" width="10%" filterBy="#{proyectos.formatedFechaIni}" filterMatchMode="contains">
+                <h:outputText value="#{proyectos.formatedFechaIni}" />
+            </p:column>
+                <p:column headerText="Fecha Fin" width="10%" filterBy="#{proyectos.formatedFechaFin}" filterMatchMode="contains">
+                <h:outputText value="#{proyectos.formatedFechaFin}" />
+            </p:column>
+                <p:column headerText="Visita Programada" width="10%" style="center" filterBy="#{proyectos.visitaProgramada}" filterMatchMode="contains">
+                    <h:outputText value="#{proyectos.visitaProgramada}" />
+                </p:column>
+            <p:column headerText="" width="5%">
+                <p:commandButton styleClass="ui-icon-ADSearch-grid20x20" actionListener="#{MBPromotores.proyectoPDF(proyectos.id)}" icon="ui-icon-search"
+                                     id="bttnPrelView"
+                                     oncomplete="window.open('../../resources/preview/VistaPreviaProyectos.pdf')" /> 
+                    <p:tooltip for="bttnPrelView" value="Vista Preliminar" trackMouse="true" />
+                
+            </p:column>
+            </p:dataTable>
+         </div>
+        <p:remoteCommand id="remoteOnShow" name="remoteOnShow" update="panelProyectos,nombrePromo"/>
+        <p:remoteCommand id="remoteOnHide" name="remoteOnHide" update="panelProyectos"
+                         action="#{MBPromotores.resetProjectDialog()}" />
+        </p:outputPanel>
+    </p:dialog>
+ </ui:composition> 
+</html>
+

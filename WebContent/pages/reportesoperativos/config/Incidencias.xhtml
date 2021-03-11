@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition>
+
+        <h2 class="subtitle">Configuración de Captura de Incidencias</h2>
+
+        <div class="page-search">
+            <p:dataTable id="tablaEncuestasCaptura" 
+                         paginator="true"
+                         rows="10"
+                         var="encuesta" 
+                         emptyMessage="#{msg.emptyMessage}"
+                         paginatorTemplate="#{msg.paginatorTemplate}"
+                         rowsPerPageTemplate="#{msg.rowsPerPageTemplate}"
+                         value="#{MBConfiguracionReporte.encuestasIncidencias}">
+                <p:column>
+                    <f:facet name="header">
+                        Encuesta
+                    </f:facet>
+                    <p:selectBooleanCheckbox value="#{encuesta.activo}"
+                                             style="margin-right: 10px;">
+                        <p:ajax update="tablaEncuestasCaptura" />
+                    </p:selectBooleanCheckbox>
+                    <p:commandLink value="#{encuesta.nombre}"
+                                   rendered="#{encuesta.activo}"
+                                   immediate="true"
+                                   update=":center-form:dlgPreguntasCaptura"
+                                   actionListener="#{MBConfiguracionReporte.abrirEncuestaCaptura(encuesta)}"
+                                   oncomplete="PF('dlgPreguntasCaptura').show()" />
+                    <h:outputText value="#{encuesta.nombre}" 
+                                  rendered="#{encuesta.activo == false}" />
+                </p:column>
+
+            </p:dataTable>
+        </div>
+
+        <p:dialog id="dlgPreguntasCaptura" 
+                  widgetVar="dlgPreguntasCaptura" 
+                  closeOnEscape="true"
+                  modal="true">
+            <p:panelGrid id="panelPreguntasCaptura"
+                         style="max-width: 600px; min-height: 200px;"
+                         columns="2">
+                <p:dataTable rows="10"
+                             var="pregunta" 
+                             emptyMessage="#{msg.emptyMessage}"
+                             paginatorTemplate="#{msg.paginatorTemplate}"
+                             rowsPerPageTemplate="#{msg.rowsPerPageTemplate}"
+                             style="width: 200px;"
+                             value="#{MBConfiguracionReporte.encuestaEditada.preguntas}" >
+                    <f:facet name="header">
+                        Preguntas
+                    </f:facet>
+                    <p:column>
+                        <p:commandLink value="#{pregunta.pregunta}" 
+                                       update=":center-form:panelPreguntasCaptura"
+                                       resetValues="true"
+                                       actionListener="#{MBConfiguracionReporte.editarPregunta(pregunta)}"
+                                       immediate="true" />
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable id="tablaOpcionesCaptura"
+                             rows="10"
+                             var="opcion" 
+                             emptyMessage="#{msg.emptyMessage}"
+                             paginatorTemplate="#{msg.paginatorTemplate}"
+                             rowsPerPageTemplate="#{msg.rowsPerPageTemplate}"
+                             value="#{MBConfiguracionReporte.preguntaEditada eq null ? null : MBConfiguracionReporte.preguntaEditada.opciones}" >
+                    <f:facet name="header">
+                        <h:outputText value="#{MBConfiguracionReporte.preguntaEditada.pregunta}" />
+                    </f:facet>
+                    <p:column>
+                        <h:outputText value="#{opcion.opcion}" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu value="#{opcion.agrupadorSeleccionado}"
+                                         converter="#{MBConfiguracionReporte.agrupadorConverter}" >
+                            <p:ajax event="change" process="tablaOpcionesCaptura" partialSubmit="true"/>
+                            <f:selectItem itemLabel="" 
+                                          noSelectionOption="true" />
+                            <f:selectItems value="#{MBConfiguracionReporte.agrupadores}"
+                                           var="agrupador"
+                                           itemLabel="#{agrupador.nombre}"
+                                           itemValue="#{agrupador}" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:dataTable>
+            </p:panelGrid>
+        </p:dialog>
+    </ui:composition>
+
+
+</html>

@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<!-- *************************************************** DIALOG BUSCAR **************************************************************** -->
+<ui:composition>
+	<p:dialog header="Alta de Proyectos" widgetVar="agregarProyecto"
+                  showEffect="explode" hideEffect="fade"
+                width="40%" id="agregarProyecto" modal="true">
+                
+                <p:ajax event="close" ignoreAutoUpdate="true" 
+                        update="singleDT" listener="#{MBProyectos.handleCloseNew}"/>
+		<!--<div align="right">-->
+			<p:panel styleClass="innermenu">
+                            <p:commandButton id="proyectos-limpiar" icon="ui-icon-refresh"
+                                     process="@this" 
+                                     update="panelFiltros" 
+                                     action="#{MBProyectos.limpiaCamposProyecto()}" 
+                                     styleClass="ui-icon-ADClean" title="Limpiar" resetValues="true" ignoreAutoUpdate="true" />
+                            
+                            <p:commandButton id="btnGuarda" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                                                     actionListener="#{MBProyectos.altaProyectos()}" 
+                                                     process="@this,panelFiltros" 
+                                                     update="panelFiltros,singleDT,growl"  
+                                                     ignoreAutoUpdate="true"
+                                            oncomplete="if(args &amp;&amp; !args.validationFailed) PF('agregarProyecto').hide()"/>
+                            <p:tooltip for="btnGuarda" trackMouse="true" value="Guardar" />
+                            
+			</p:panel>
+                
+		<!--</div>-->
+                <div class="page-content">
+                    <p:panelGrid id="panelFiltros" styleClass="panelGridNoBorde">
+                                
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="altaClaveProyX" value="Clave: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText value="#{MBProyectos.proyectoSeleccionado.claveProyecto}" id="altaClaveProyX" 
+                                                     required="true" 
+                                                     requiredMessage="Capture la clave del proyecto." 
+                                                     maxlength="50" validator="codigoCadena" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="altaNombre" value="T&iacute;tulo: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText value="#{MBProyectos.proyectoSeleccionado.nombreProyecto}" id="altaNombre"  
+                                                     required="true" 
+                                                     requiredMessage="Capture el t&iacute;tulo del proyecto." 
+                                                     maxlength="50" validator="tituloCadena" />
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="altaDescripcion" value="Descripci&oacute;n del proyecto: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputTextarea rows="6" cols="33" required="true"  
+                                                         requiredMessage="Capture la descripci&oacute;n del proyecto."  
+                                                         value="#{MBProyectos.proyectoSeleccionado.descripcionProyecto}" 
+                                                         id="altaDescripcion" maxlength="200" validator="tituloCadena" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="agregaVisible" value="Fecha visible " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="agregaVisible" size="10" 
+                                            title="Fecha Visible." locale="es" pattern="dd/MM/yyyy" readonlyInput="true" 
+                                            required="true" requiredMessage="Fecha visible: Campo requerido." 
+                                            showButtonPanel="true" navigator="true" widgetVar="agregaVisible"
+                                            value="#{MBProyectos.proyectoSeleccionado.fechaVisible}" showOn="button" mindate="#{MBProyectos.nowDate()}"
+                                            validator="dateGtNow" >
+                                        </p:calendar>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="agregaInicio" value="Fecha inicio vigencia: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="agregaInicio" size="10"  
+                                                title="Fecha inicio." locale="es" pattern="dd/MM/yyyy" readonlyInput="true" 
+                                                required="true" requiredMessage="Fecha inicio: Campo requerido." 
+                                                showButtonPanel="true" navigator="true" widgetVar="agregaInicio" 
+                                                value="#{MBProyectos.proyectoSeleccionado.fechaInicio}" showOn="button" mindate="#{MBProyectos.nowDate()}" 
+                                                binding="#{addFechaIni}" validator="dateGtNow">
+                                        </p:calendar>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="agregaFin" value="Fecha fin vigencia: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:calendar id="agregaFin" size="10" required="true" requiredMessage="Fecha fin: Campo requerido." 
+                                                    title="Fecha fin." locale="es" pattern="dd/MM/yyyy" readonlyInput="true" 
+                                                showButtonPanel="true" navigator="true"
+                                                value="#{MBProyectos.proyectoSeleccionado.fechaFin}" showOn="button"
+                                                validator="dateGtNow" widgetVar="agregaFin" mindate="#{MBProyectos.nowDate()}">
+                                            <f:attribute name="fechaIni" value="#{addFechaIni}"/>
+                                            <f:validator validatorId="DateRange" />
+                                        </p:calendar>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="altaDiasAdicionales" value="D&iacute;as adicionales: " styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:inputText value="#{MBProyectos.proyectoSeleccionado.diasVigencias}" id="altaDiasAdicionales"  
+                                                     required="true" 
+                                                     requiredMessage="Capture los d&iacute;as adicionales." 
+                                                     maxlength="15" validator="intPos" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:outputLabel for="preguntaDiaria" value="Preguntar diariamente mientras dure la vigencia" styleClass="text-label" />
+                                    </p:column>
+                                    <p:column >
+                                        <p:selectBooleanCheckbox id="preguntaDiaria" value="#{MBProyectos.proyectoSeleccionado.visitaAutomatica}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column >
+                                        <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                      allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="2000000" 
+                                                      process="@this"
+                                                      label="Seleccione una imagen" 
+                                                      uploadLabel="Subir" 
+                                                      cancelLabel="Cancelar"
+                                                      fileLimitMessage="Solo puede haber una imagen." 
+                                                      invalidFileMessage="Tipo de archivo no valido." 
+                                                      invalidSizeMessage="Tamaño de archivo no valido."
+                                                       style="width:50% !important;" oncomplete="loadLogonew();"  />
+                                                      
+                                    </p:column>
+                                    <p:column >
+                                        <p:remoteCommand name="loadLogonew" process="@this" update="logoNew" actionListener="#{MBProyectos.getInputStreamLogo('new')}"/>
+                                        <p:graphicImage id="logoNew" value="#{MBProyectos.logo}" width="120" height="80" cache="false" />
+                                    </p:column>
+                                    
+                                </p:row>
+                            </p:panelGrid>
+                    </div>
+                
+	</p:dialog>
+</ui:composition>
+</html>
+
+

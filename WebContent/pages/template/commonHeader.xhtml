@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        
+        <h:form id="form-header" styleClass="form-header">
+            <div class="template-columns column1-header"><h:graphicImage library="#{MBLogin.theme.theme}/images" name="logo-left.png" width="100%" height="100%" /></div>
+            <div class="template-columns column2-header">
+                <br/><br/>
+                <p:outputLabel for="outputUser" value="Usuario:" styleClass="text-label" />&nbsp;
+                <p:outputLabel id="outputUser" value="#{MBLogin.getUserName()}" styleClass="text-label"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <h:commandLink id="logout" actionListener="#{MBLogin.logout()}" value="Salir"></h:commandLink>
+            </div>
+            <div class="template-columns column3-header">
+                <h:graphicImage library="#{MBLogin.theme.theme}/images" name="logo-right.png" width="100%" height="100%" />
+            </div>
+        </h:form>
+        
+    </h:body>
+</html>
+

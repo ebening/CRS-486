@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <p:panel id="panel-editar" styleClass="innermenu">
+            <p:commandButton id="territorios-editar-guardar"   title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             process="@this territorios-panel-editar-formulario"
+                             ignoreAutoUpdate="true"
+                             update="territorios-panel-editar-formulario territorios-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-territorios-editar').hide()"
+                             actionListener="#{territoriosController.editar}" />
+        </p:panel>
+        <center>
+            <p:panel id="territorios-panel-editar-formulario"  style="border:none;">
+                <h:panelGrid columns="2" cellpadding="5" >
+                    <p:outputLabel for="territorios-editar-value" styleClass="text-label"
+                                   id="territorios-editar-label" 
+                                   value="#{msg.nombre_territorio}"/>
+                    <p:inputText id="territorios-editar-value"  required="true"
+                                 value="#{territoriosController.current.nombre}">
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                        <f:attribute name="label" value="#{msg.nombre_territorio}"/>
+                        <f:validator validatorId="whiteSpaces" />
+                    </p:inputText>
+                </h:panelGrid>   
+            </p:panel>
+        </center>   
+    </h:body>
+</html>
+

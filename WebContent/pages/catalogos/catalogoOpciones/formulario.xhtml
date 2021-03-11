@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+
+    <p:panel id="opciones-panel-formulario" rendered="#{not opcionesController.principal}" style="border:none;">
+        <h:panelGroup>
+            <h:panelGrid columns="2" cellpadding="5" >
+                <p:outputLabel id="opciones-formulario-clave-label" for="opciones-formulario-clave-value"
+                               styleClass="text-label" value="Clave"/>
+                <p:inputText id="opciones-formulario-clave-value" value="#{opcionesController.current.clave}"
+                             required="true">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Clave"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                <p:outputLabel id="opciones-formulario-catalogo-label" for="opciones-formulario-catalogo-value"
+                               styleClass="text-label" value="Nombre de Catálogo"/>
+                <p:inputText id="opciones-formulario-catalogo-value" value="#{opcionesController.current.nombre}"
+                             required="true">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Nombre de cátalogo"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                <p:outputLabel id="opciones-formulario-tipo-label" styleClass="text-label" for="opciones-formulario-tipo-value" value="Tipo"/>
+                <p:selectOneMenu id="opciones-formulario-tipo-value" required="true" styleClass="text-label"
+                                 disabled="#{not opcionesController.saveAdd}"
+                                 value="#{opcionesController.current.tipoLista.id}">
+                    <f:selectItems value="#{opcionesController.tipoListaCombo}"
+                                   var="o" itemLabel="#{o.nombre}"
+                                   itemValue="#{o.id}"/>
+                    <p:ajax event="change" listener="#{opcionesController.cambiarTabla}" update="panel tablas"/>
+                </p:selectOneMenu>
+
+            </h:panelGrid>
+            <h:panelGroup id="tablas">
+                <ui:include src="plano.xhtml"/>
+                <ui:include src="cruzado.xhtml"/>
+            </h:panelGroup>
+        </h:panelGroup>
+        </p:panel>
+
+</h:body>
+</html>
+

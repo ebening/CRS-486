@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- ******************************************************************* -->
+    <!-- Declaración de clases Dao -->
+    <!-- ******************************************************************* -->
+
+    <bean id="ldapProperties" class="com.crossmark.security.ad.LDAPProperties">
+        <property name="admin" value="${ldap.admin}"/>
+        <property name="password" value="${ldap.password}"/>
+        <property name="host" value="${ldap.host}"/>
+        <property name="domain" value="${ldap.domain}"/>
+        <property name="searchBase" value="${ldap.searchBase}"/>
+        <property name="prefijo" value="${ldap.prefijo}"/>
+    </bean>
+
+    <bean id="ldapAuthenticator" class="com.crossmark.security.ad.LDAPAuthenticatorImpl">
+        <property name="ldapProperties" ref="ldapProperties"/>
+    </bean>
+    
+    <bean id="theme" class="com.crossmark.collector.presentation.views.utils.Theme">
+        <property name="theme" value="${jdbc.theme}" />
+    </bean>
+    <!--bean scope="session" id="MBLogin" name="MBLogin" class="com.crossmark.collector.presentation.views.security.MBLogin">
+        <property name="usuarioLogin" ref="usuarioLogin" />
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="serviceLogin" ref="serviceLogin" />
+    </bean-->
+
+
+</beans>

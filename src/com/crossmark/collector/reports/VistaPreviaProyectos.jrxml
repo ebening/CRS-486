@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VistaPreviaProyectos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="590" leftMargin="11" rightMargin="11" topMargin="7" bottomMargin="11" uuid="d14c807d-aa6b-4dd8-8021-f2560bf21567">
+	<property name="ireport.zoom" value="1.815000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" fontName="SansSerif">
+		<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)]]></conditionExpression>
+			<style backcolor="#DFECFF" fill="Solid"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="NOMBRE_SUC" class="java.lang.String"/>
+	<parameter name="NOMBRE_USR" class="java.lang.String"/>
+	<parameter name="pdf" class="java.lang.Boolean"/>
+	<field name="idConcepto" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="impuestoDisponible" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="203" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="98" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="f501a1bd-e4db-4010-b1ad-67d10281349e"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Proyecto]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="99" width="187" height="15" uuid="b6240a88-edc7-4600-8776-854cd90c6771"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_SUC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="209" y="50" width="47" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="04d3f1ae-d38a-4ee3-acb8-c1bee8c712fd"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="256" y="50" width="143" height="15" uuid="77ca924c-5167-4bd4-a0f1-900abed27a8a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="2" y="196" width="559" height="1" forecolor="#CCCCCC" uuid="df96dcb5-4987-4fb8-8947-54a21b48bd06">
+					<printWhenExpression><![CDATA[$P{pdf}.booleanValue()==true]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="116" y="118" width="83" height="15" uuid="b763f428-559d-4a2f-8e6a-d08415f51123"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="118" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="f87f4215-742a-4f2c-adc2-bb6d084c2b19"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proyecto ID]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="134" width="463" height="15" uuid="dddcfd6f-8c1d-475f-9fbb-6890ba10ceb3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="134" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="e5a3351d-5327-4c85-9ca3-c04e705a89e0"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="150" width="83" height="15" uuid="d201ccfb-bf6f-4cb1-bccd-2e5a8f9792fb"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="149" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="e96c3250-9ead-4084-add9-6d6290d15a55"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Inicio]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="166" width="83" height="15" uuid="20ce6db8-5f4f-40b5-a8c9-9667ac9339a3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="165" width="105" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="0d78f143-1646-4f15-93d1-28aa410a7e31"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="74" width="576" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="f5db4654-2c92-4bb9-ae74-fd09958e70f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vista Previa Proyecto]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="0" width="196" height="65" uuid="69cc846a-9e55-472f-a916-793c7c1d41a0"/>
+				<imageExpression><![CDATA["/Users/jdominguez/Documents/Netbeans/CRS-486/WebContent/resources/images/logo.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="459" y="50" width="120" height="20" uuid="70bfe86e-e832-4e9f-98fb-f30e4b4e527e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="108" y="49" width="99" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="a21bd4dd-9986-4cd9-8a34-221b5456fb74"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2" y="49" width="114" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="fd8cfddb-233a-434c-8575-0b4f9a1fc6de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[( )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2" y="3" width="104" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="501efaf8-50b3-4566-a011-e8b4ad42253a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Execution Window:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="199" y="49" width="360" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="9c336d64-4886-41fd-b77a-85f875462f4b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="4" width="99" height="15" uuid="d2e0cb7a-166b-4e70-9266-d0c9cfa1f36f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="5" width="99" height="15" uuid="0732d30a-d64c-45a3-873f-67609fd525db"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="229" y="4" width="15" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="94aa64f9-fe55-4357-a20b-bf5bbaeb0ce1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[To:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="350" y="3" width="22" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="3b1dd66c-4ac1-422c-95eb-6dbdeb452292"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cycle:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="387" y="4" width="99" height="15" uuid="a3c1759d-c6f6-4e04-9139-db2b4b64d511"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="37" width="559" height="1" forecolor="#CCCCCC" uuid="d39431b5-aa98-44ab-bc69-e7d6e46bf30d">
+					<printWhenExpression><![CDATA[$P{pdf}.booleanValue()==true]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="2" y="20" width="104" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="5a2264d8-4142-42e1-b623-31a9dbd86391"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENRIQUE ROCHA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="21" width="99" height="15" uuid="f2ffbcdc-6cb5-4ddf-b89d-0afb3f523a73"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOMBRE_USR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="108" y="0" width="99" height="10" uuid="d2b0ee6e-920b-4990-a553-33c1110f3908"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="3" y="0" width="103" height="10" uuid="112fc1ce-b1b7-41ea-b3a3-b665ea80f54c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idConcepto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement style="style1" mode="Opaque" x="209" y="0" width="99" height="10" uuid="268b3e65-6294-483f-9eb5-ad7b34078f4b"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{impuestoDisponible}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<line>
+				<reportElement x="-1" y="3" width="560" height="1" forecolor="#CCCCCC" uuid="3ea41db3-b5e3-44ae-ad32-2d36fef72cad">
+					<printWhenExpression><![CDATA[$P{pdf}.booleanValue()==true]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="439" y="4" width="80" height="10" uuid="7bc02db0-65c4-4440-9c2d-372413c46715"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="519" y="4" width="40" height="10" uuid="7c77d13c-ff08-4b4c-8cc3-c1b6fd7ab8f3"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="11" splitType="Stretch"/>
+	</summary>
+</jasperReport>

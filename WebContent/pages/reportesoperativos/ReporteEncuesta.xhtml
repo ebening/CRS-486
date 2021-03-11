@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body >
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >
+                        <p:remoteCommand process="@this" autoRun="true" name="initBeanSession" action="#{MBSession.init()}"/>
+                        <p:remoteCommand process="@this" autoRun="true" name="initListaPromotores" action="#{MBReportesOperativos.promotoresListReporte()}" update="comboResPromotor" />
+                        <p:remoteCommand process="@this" autoRun="true" name="initListaProyectos" action="#{MBReportesOperativos.proyectosList()}" update="comboResProyecto" />
+                        
+                        <p:growl id="growl" life="20000" />
+                        <p:panel id="panel" styleClass="innermenu">
+                            <table class="right">
+                                <tr>
+                                    <td></td>
+                                    <td class="tdcontrol">
+                                        <p:selectOneMenu label="Exportar a:" id="comboFormato" value="#{MBReportesOperativos.formato}" rendered="true" >
+                                            <f:selectItem itemLabel="Seleccione un formato" itemValue="HTML4.0"/>
+                                            <f:selectItem itemLabel="EXCEL" itemValue="EXCEL"/>
+                                            <f:selectItem itemLabel="WORD" itemValue="WORD"/>
+                                            <f:selectItem itemLabel="PDF" itemValue="PDF"/>
+                                            <f:selectItem itemLabel="CSV" itemValue="CSV"/>
+                                            <f:selectItem itemLabel="XML" itemValue="XML"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td class="tdimage">
+                                        <p:commandButton ajax="false" id="downloadExcelResultados" action="#{MBReportesOperativos.dowloadResultadosEncuestaExcel()}" styleClass="ui-icon-ADDownload" icon="ui-icon-arrowthickstop-1-s" title="Exportar"  ignoreAutoUpdate="true" update="growl"/>
+                                        <p:tooltip for="downloadExcelResultados" value="Exportar" trackMouse="true" />
+                                    </td>
+                                    <td class="tdimage">
+                                        <p:commandButton id="regresarElement" action="#{MBReportesOperativos.navigateToRepOperativos()}" styleClass="ui-icon-ADGo-left" title="Regresar" icon="ui-icon-arrowthickstop-1-w" immediate="true"/>
+                                        <p:tooltip for="regresarElement" value="Regresar al dashboard" trackMouse="true" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:panel>
+                        
+                        <h1 class="title">Reporte de resultados (Base de datos)</h1>
+                        
+                        <div class="page-search">
+                            <table border="0">
+                                <tr>
+                                    <td><p:outputLabel for="outputRegion" value="Región:"  styleClass="text-label"/></td>
+                                    <td><p:outputLabel id="outputRegion" value="#{MBReportesOperativos.region.nombre}"/></td>
+                                </tr>
+                                <tr>
+                                    <td><p:outputLabel for="outputEquipo" value="Equipo:" styleClass="text-label" /></td>
+                                    <td><p:outputLabel id="outputEquipo" value="#{MBReportesOperativos.equipo.nombre}"/></td>
+                                </tr>
+                                <tr>
+                                    <td><p:outputLabel for="outputTerritorio" value="Territorio:" styleClass="text-label"/></td>
+                                    <td> <p:outputLabel id="outputTerritorio" value="#{MBReportesOperativos.nombreTerritorio}"/></td>
+                                </tr>
+                                <tr>
+                                    <td><p:outputLabel for="outputPeriodoInicio" value="Periodo:" styleClass="text-label"/></td>
+                                    <td><p:outputLabel id="outputPeriodoInicio" value="#{MBReportesOperativos.fechaIni}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </p:outputLabel>
+                                        <p:outputLabel value=" - "/>
+                                        <p:outputLabel id="outputPeriodoFin" value="#{MBReportesOperativos.fechaFin}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </p:outputLabel></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            
+                            <table border="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <p:outputLabel for="comboResCliente" value="Cliente: "   styleClass="text-label"/><br/>
+                                        <p:selectOneMenu id="comboResCliente" value="#{MBReportesOperativos.clienteId}" required="true" filter="true" filterMatchMode="startsWith" 
+                                                         requiredMessage="Cliente: Seleccione una opci&oacute;n.">
+                                            <f:selectItem itemLabel="Seleccione un cliente" itemValue="#{null}"/>
+                                            <f:selectItems value="#{MBReportesOperativos.listaClientes}" var="cliente" itemLabel="#{cliente.nombreCliente}" itemValue="#{cliente.clienteId}" />
+                                            <p:ajax listener="#{MBReportesOperativos.resetProyectosList()}" update="comboResProyecto comboResDocumento" />
+                                            <p:ajax listener="#{MBReportesOperativos.proyectosList()}" update="comboResProyecto" />
+                                            <p:ajax listener="#{MBReportesOperativos.promotoresListReporte()}" update="comboResPromotor" />
+                                            
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel for="comboResPromotor" value="Promotor: "  styleClass="text-label" /><br/>
+                                        <p:selectOneMenu id="comboResPromotor" value="#{MBReportesOperativos.usuariosOID}" filter="true" filterMatchMode="startsWith" 
+                                                         >
+                                            <f:selectItem itemLabel="Seleccione un promotor" itemValue="#{null}" />
+                                            <f:selectItems value="#{MBReportesOperativos.listaPromotores}" var="promotor" itemLabel="#{promotor.nombre} #{promotor.apellidoPaterno}" itemValue="#{promotor.usuariosOID}" />
+                                            <p:ajax listener="#{MBReportesOperativos.resetProyectosList()}" update="comboResProyecto comboResDocumento" />
+                                            <p:ajax listener="#{MBReportesOperativos.proyectosList()}" update="comboResProyecto" />
+                                            
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel for="comboResProyecto" value="Proyecto: "  styleClass="text-label" /><br/>
+                                        <p:selectOneMenu id="comboResProyecto" value="#{MBReportesOperativos.proyectoId}" filter="true" filterMatchMode="startsWith" 
+                                                         required="true" requiredMessage="Proyecto: Seleccione una opci&oacute;n.">
+                                            <f:selectItem itemLabel="Seleccione un proyecto" itemValue="#{null}"/>
+                                            <f:selectItems value="#{MBReportesOperativos.listaProyectos}" var="proyecto" itemLabel="#{proyecto.nombreProyecto}" itemValue="#{proyecto.proyectoId}" />
+                                            <p:ajax listener="#{MBReportesOperativos.resetEncuestasList()}" update="comboResDocumento" />
+                                            <p:ajax listener="#{MBReportesOperativos.encuestasList()}" update="comboResDocumento" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel value="Encuesta: "  styleClass="text-label" /><br/>
+                                        <p:selectCheckboxMenu id="comboResDocumento"
+                                                              value="#{MBReportesOperativos.listaEncuestasSeleccionadas}"
+                                                              filter="true"
+                                                              filterMatchMode="startsWith"
+                                                              required="true"
+                                                              requiredMessage="Encuesta: Seleccione una opci&oacute;n."
+                                                              label="Seleccione una encuesta">
+                                            <f:selectItems value="#{MBReportesOperativos.listaEncuestas}" var="encuesta" itemLabel="#{encuesta.nombre}" itemValue="#{encuesta.encuestasId}"/>
+                                        </p:selectCheckboxMenu>
+                                    </td>
+                                    <td colspan="3">
+                                        <br/>
+                                        <p:commandButton value="Generar reporte" ajax="false" id="genererReporteResultados" action="#{MBReportesOperativos.getStringHtmlEncuestas()}" styleClass="ui-priority-primary" ignoreAutoUpdate="true" update="mostrarhtmlresultados,growl" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="page-content">
+                            <div class="report-content" style="width: 100%;height: 480px;overflow: auto !important;"> 
+                                <h:outputText id="mostrarhtmlresultados" value="#{MBReportesOperativos.reportEncuestas}" escape="false" />
+                            </div>
+                        </div>
+                
+             </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <!-- *************************************************** DIALOG BUSCAR **************************************************************** -->
+    
+    <!-- onload="fillRegiones()"-->
+    
+    <h:body >
+        
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center" >
+            
+            <p:growl id="growl" showDetail="true" life="20000" />
+            <!--<p:panel id="divDashboard" widgetVar="WVdivDashboard" toggleable="true"  style="border:0px">-->
+            <p:remoteCommand process="@this" autoRun="true" name="initBeanSession" action="#{MBSession.init()}"/>
+            <p:remoteCommand process="@this" autoRun="true" name="initListaRegiones" action="#{MBReportesOperativos.getListaRegionesFind()}" update="comboRegion" />
+            <!--<div class="innermenu">-->
+            
+            
+            <p:panel id="panel" styleClass="innermenu">
+            </p:panel>
+            <!--</div>-->
+            
+            <h1 class="title">Dashboard operativo</h1>
+            
+            <!--<p:messages id="messageValidate" />-->
+            <div class="page-search">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <p:outputLabel for="comboRegion" value="Regi&oacute;n: " styleClass="text-label" /><br/>
+                            <p:selectOneMenu id="comboRegion" value="#{MBReportesOperativos.regionId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Regi&oacute;n: Seleccione una opci&oacute;n." ><!--  -->
+                                <f:selectItem itemLabel="Seleccione una regi&oacute;n" itemValue="#{null}" />
+                                <f:selectItems value="#{MBReportesOperativos.listaRegiones}" var="region" itemLabel="#{region.nombre}" itemValue="#{region.id}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetEquipos()}" update="comboEquipo" />
+                                <p:ajax listener="#{MBReportesOperativos.equiposByRegion()}" update="comboEquipo"  />
+                                <p:ajax listener="#{MBReportesOperativos.resetEquiposTerritorios()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboEquipo" value="Equipo: "  styleClass="text-label"/><br/>
+                            <p:selectOneMenu id="comboEquipo" value="#{MBReportesOperativos.equipoId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                required="true" requiredMessage="Equipo: Seleccione una opci&oacute;n."><!--  -->
+                                <f:selectItem itemLabel="Seleccione un equipo" itemValue="#{null}" />
+                                <f:selectItems value="#{MBReportesOperativos.listaEquipos}" var="equipo" itemLabel="#{equipo.nombre}" itemValue="#{equipo.id}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetEquiposTerritorios()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.getEquiposTerritoriosByEqAndTerr()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                                
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboTerritorio" value="Territorio: " styleClass="text-label"/><br/>
+                            <p:selectOneMenu id="comboTerritorio" value="#{MBReportesOperativos.territorioId}" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Territorio: Seleccione una opci&oacute;n."  styleClass="text-label"><!--   -->
+                                <f:selectItem itemLabel="Seleccione un territorio" itemValue="#{null}"/>
+                                <f:selectItems value="#{MBReportesOperativos.equiposTerritorios}" var="equipoTerritorio" itemLabel="#{equipoTerritorio.nombre}" itemValue="#{equipoTerritorio.territorioId}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                                <p:ajax listener="#{MBReportesOperativos.clientesList()}" update="comboCliente" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboCliente" value="Cliente: "  styleClass="text-label"/><br/>
+                            <p:selectOneMenu id="comboCliente" value="#{MBReportesOperativos.clienteId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Cliente: Seleccione una opci&oacute;n."><!--  -->
+                                <f:selectItem itemLabel="Seleccione un cliente" itemValue="#{null}" />
+                                <f:selectItems value="#{MBReportesOperativos.listaClientes}" var="cliente" itemLabel="#{cliente.nombreCliente}" itemValue="#{cliente.clienteId}" />
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p:outputLabel for="calendarFechaIni" value="Fechas de visitas:"  styleClass="text-label"/><br/>
+                            <p:calendar id="calendarFechaIni" size="10" 
+				title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+				showButtonPanel="true" navigator="true" 
+                                value="#{MBReportesOperativos.fechaIni}" showOn="button" readonlyInput="true" 
+                                required="true" requiredMessage="Seleccione una fecha de inicio." binding="#{startDate}" />
+                            
+                            &nbsp;&nbsp;
+                            <p:calendar id="calendarFechaFin" size="10" 
+				title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+                                showButtonPanel="true" navigator="true" 
+                                value="#{MBReportesOperativos.fechaFin}" showOn="button" readonlyInput="true" 
+                                required="true" requiredMessage="Seleccione una fecha final.">
+                                <f:attribute name="fechaIni" value="#{startDate}"/>
+                                <f:validator validatorId="DateRange" /> 
+                            </p:calendar>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <br/>
+                            <p:commandButton value="Generar informaci&oacute;n" 
+                                             id="genererInformacion" action="#{MBReportesOperativos.getDashboard()}" 
+                                             ignoreAutoUpdate="true" update="mostrarDashboard,getReporteCumplimiento,getReporteVisitas,getReporteResultados,growl" >
+                                <!--<h:graphicImage name="images/off-06.jpg" />-->
+                            </p:commandButton>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <table border="0" width="100%">
+                    <tr>
+                        <td>
+                            <p:commandLink id="getReporteCumplimiento" action="#{MBReportesOperativos.getStringHtmlCumplimiento()}"
+                                           ignoreAutoUpdate="true" update="growl" >
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de cumplimiento" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteVisitas" action="#{MBReportesOperativos.getStringHtmlVisitas()}" 
+                                           ignoreAutoUpdate="true" update="growl" >
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de visitas" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteResultados" action="#{MBReportesOperativos.getInfoResultados()}" 
+                                           ignoreAutoUpdate="true" update="growl" >
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de resultados" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteIncidencias" action="#{MBReportesOperativos.getStringHtmlsolucionIncidencias()}" 
+                                           ignoreAutoUpdate="true" update="growl" >
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de soluci&oacute;n de incidencias" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteEncuestas" action="#{MBReportesOperativos.getInfoEncuestas()}" 
+                                           ignoreAutoUpdate="true" update="growl" >
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de resultados (Base de datos)" />
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+            <div class="page-content">
+                <h:outputText id="mostrarDashboard" value="#{MBReportesOperativos.reportDashboard}" escape="false" />
+            </div>
+            </ui:define>
+        </ui:composition>
+       
+    </h:body>
+</html>

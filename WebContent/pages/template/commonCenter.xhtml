@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:form id="center-form" onkeypress="if (event.keyCode == 13) {return false; }">
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+            <p:growl id="mensajes" autoUpdate="true" showDetail="true"  globalOnly="true" />
+            <p:growl id="mensajes2" showDetail="true" showSummary="false"/>
+            <p:idleMonitor timeout="900000">
+                <p:ajax event="idle" listener="#{MBLogin.onIdle}" update="mensajes" />
+            </p:idleMonitor>
+            <p:dialog widgetVar="sessionExpired" modal="true" appendTo="center-form" draggable="false" closable="false" resizable="false" showHeader="false">
+                <h:panelGrid id="dialog-panel" styleClass="login-dialog" columns="1" cellpadding="5">
+                    <p:outputLabel id="equipos-label"
+                                   styleClass="text-label"
+                                   value="La sesión ha expirado."/>
+
+                    <p:commandButton id="continuar"
+                                     title="Aceptar"
+                                     value="Aceptar" styleClass="bton-dialog-continueLogin"
+                                     icon="ui-icon-circle-check"
+                                     actionListener="#{MBLogin.logout}"
+                                     validateClient="true"
+                                     process="@this dialog-panel"
+                                     update="dialog-panel"
+                                     oncomplete="PF('verificacion').hide()"/>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog widgetVar="statusDialog" modal="true" appendTo="center-form" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage library="images" name="ajax-loader.gif" />
+            </p:dialog>
+            <ui:insert name="center">
+                
+            </ui:insert>
+        </h:form>
+    </h:body>
+</html>
+

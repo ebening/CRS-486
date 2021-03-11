@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <p:panel id="panel-crear" styleClass="innermenu" >
+            <p:commandButton id="tiposMensajes-crear-guardar"   title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             process="@this tiposMensajes-panel-crear-formulario"
+                             update="tiposMensajes-panel-crear-formulario tiposMensajes-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-tiposMensajes-crear').hide()"
+                             actionListener="#{tiposMensajesController.crear}" />
+        </p:panel>  
+        <center>
+            <p:panel id="tiposMensajes-panel-crear-formulario" style="border:none;">
+                <h:panelGrid columns="2" cellpadding="5" >
+                    <p:outputLabel id="tiposMensajes-crear-label" styleClass="text-label"
+                                   for="tiposMensajes-crear-value" value="Nombre"/>
+                    <p:inputText id="tiposMensajes-crear-value" required="true" 
+                                 value="#{tiposMensajesController.current.nombre}" >
+                        <f:attribute name="label" value="Nombre"/>
+                        <f:validator validatorId="whiteSpaces" />
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                    </p:inputText>
+
+                </h:panelGrid>
+            </p:panel>
+        </center>   
+    </h:body>
+</html>
+

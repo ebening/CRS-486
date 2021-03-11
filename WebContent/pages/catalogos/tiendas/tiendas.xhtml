@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="../../template/templatef.xhtml">
+        <ui:define name="center">
+            <p:panel id="panel" styleClass="innermenu">
+                <p:commandButton id="bttnBuscarTiendas" icon="ui-icon-search"
+                                 process="@this,panelFiltrosTiendas"
+                                 update="tiendas-tabla tiendas-dialog-editar" 
+                                 actionListener="#{tiendasController.buscarTiendas()}" 
+                                 styleClass="ui-icon-ADSearch" title="Buscar" >
+                    <p:resetInput target="tiendas-dialog-editar" />
+                </p:commandButton>
+                
+                <p:commandButton id="tiendas-agregar" icon="ui-icon-plus"
+                                 process="@this"
+                                 styleClass="ui-icon-ADAdd" title="Agregar">
+                    <p:ajax event="click"
+                            listener="#{tiendasController.comprobarSeleccionCrear}"
+                            update="tiendas-panel-crear-formulario tiendas-tabla"
+                            resetValues="true"/>
+                </p:commandButton>
+
+
+                <p:commandButton id="tiendas-editar" icon="ui-icon-pencil"
+                                 process="@this"
+                                 actionListener="#{tiendasController.comprobarSeleccionEditar}"
+                                 styleClass="ui-icon-ADEdit" title="Editar">
+                    <p:ajax event="dialogReturn"/>
+                </p:commandButton>
+
+
+                <p:commandButton id="tiendas-eliminar" icon="ui-icon-trash"
+                                 process="@this"
+                                 actionListener="#{tiendasController.comprobarSeleccionEliminar}"
+                                 styleClass="ui-icon-ADTrash" title="Eliminar">
+                    <p:ajax event="dialogReturn"/>
+                </p:commandButton>
+            </p:panel>
+
+            <h1 class="title">#{msg.tiendas_title}</h1>
+
+            <ui:include src="tabla.xhtml"/>
+
+            <p:dialog id="tiendas-dialog-crear" closeOnEscape="true" closable="true"
+                      widgetVar="dialog-tiendas-crear"
+                      modal="true"
+                      appendTo="center-form"
+                      height="500"
+                      width="500"
+                      resizable="false"
+                      minHeight="500"
+                      minWidth="500"
+                      header="Crear Tienda ">
+
+                <ui:include src="crear.xhtml"/>
+                <p:ajax event="close"
+                        resetValues="true"
+                        ignoreAutoUpdate="true"
+                        update="tiendas-panel-crear-formulario tiendas-tabla"
+                        listener="#{tiendasController.cerrarDialogCrear}"/>
+            </p:dialog>
+
+            <p:dialog id="tiendas-dialog-editar" closeOnEscape="true" closable="true"
+                      widgetVar="dialog-tiendas-editar"
+                      modal="true"
+                      appendTo="center-form"
+                      height="500"
+                      width="500"
+                      resizable="false"
+                      minHeight="500"
+                      minWidth="500"
+                      header="Editar Tienda  ">
+
+                <ui:include src="editar.xhtml"/>
+                <p:ajax event="close" ignoreAutoUpdate="true"
+                        resetValues="true"
+                        update="tiendas-panel-editar-formulario tiendas-tabla"
+                        listener="#{tiendasController.cerrarDialogEditar}"/>
+            </p:dialog>
+
+            <p:confirmDialog header="Eliminar Tienda"
+                             appendTo="center-form"
+                             message="#{tiendasController.removeQuestion()}"
+                             widgetVar="dialog-tiendas-eliminar"
+                             showEffect="fade" hideEffect="explode">
+                <p:commandButton value="Si"
+                                 update="tiendas-tabla" process="@this"
+                                 oncomplete="PF('dialog-tiendas-eliminar').hide()"
+                                 styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 actionListener="#{tiendasController.eliminar()}"  />
+                <p:commandButton value="No"
+                                 process="@this"
+                                 oncomplete="PF('dialog-tiendas-eliminar').hide()"
+                                 styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

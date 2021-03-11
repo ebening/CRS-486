@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <p:dialog id="opciones-dialog-cruzada" closeOnEscape="true" closable="true"
+              widgetVar="dialog-cruzada" modal="true" appendTo="center-form"
+              height="150" width="400" resizable="false"
+              minHeight="150" minWidth="400" header="Crear Cruzada">
+
+        <p:panel id="panel-cruzada" styleClass="innermenu">
+            <p:commandButton id="cruzada-agregar" title="Guardar" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                             validateClient="true" actionListener="#{opcionesController.agregarRowCruzada()}"
+                             process="@this cruzada-formulario" update="cruzada-formulario opciones-cruzado-tabla"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-cruzada').hide()">
+            </p:commandButton>
+        </p:panel>
+
+        <center>
+            <h:panelGrid id="cruzada-formulario" styleClass="catalogos-datatable" columns="2" cellpadding="5">
+
+                <p:outputLabel id="valor-Label" styleClass="text-label" for="valor-value" value="Valor"/>
+                <p:inputText id="valor-value" required="true"
+                             value="#{opcionesController.currentCruzada.valor}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Codigo de Barras"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                
+                <p:outputLabel id="variable-label" styleClass="text-label" for="variable-value" value="Variable"/>
+                <p:selectOneMenu id="variable-value" 
+                        value="#{opcionesController.currentCruzada.variable}">
+                        <f:selectItem itemLabel="Selecciona una variable." itemValue="#{null}" />
+                        <f:selectItems value="#{opcionesController.listVariable}" var="filtro"
+                                       itemLabel="#{filtro.nombre}"
+                                       itemValue="#{filtro.variablesId}" />
+                        <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                </p:selectOneMenu>
+                
+            </h:panelGrid>
+        </center>
+
+        <p:ajax event="close"
+                resetValues="true"
+                ignoreAutoUpdate="true"
+                update="cruzada-formulario opciones-cruzado-tabla"/>
+    </p:dialog>
+</h:body>
+</html>
+

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+
+    <!-- Agregar Nueva Lista -->
+    <p:commandButton id="opciones-agregar" styleClass="ui-icon-ADAdd" title="Agregar" icon="ui-icon-plus"
+                     process="@this" update="@form" rendered="#{opcionesController.principal}"
+                     actionListener="#{opcionesController.comprobarSeleccionCrear}">
+        <f:param name="accion" value="crear"/>
+    </p:commandButton>
+
+    <!-- Editar Lista Existente -->
+    <p:commandButton id="opciones-editar" styleClass="ui-icon-ADEdit" title="Editar" icon="ui-icon-pencil"
+                     process="@this " update="@form" rendered="#{opcionesController.principal}"
+                     actionListener="#{opcionesController.comprobarSeleccionCrear}">
+        <f:param name="accion" value="editar"/>
+    </p:commandButton>
+
+    <!-- Agregar Nueva Opcion Plana -->
+    <p:commandButton id="opciones-agregar-plana" styleClass="ui-icon-ADAdd" title="Agregar" icon="ui-icon-plus"
+                     process="@this opciones-panel-formulario" validateClient="true"
+                     update="opciones-panel-formulario opciones-plano-tabla"
+                     rendered="#{not opcionesController.principal and opcionesController.catalogo}"
+                     actionListener="#{opcionesController.comprobarPlanaCruzada}">
+        <f:param name="tipo" value="1"/>
+    </p:commandButton>
+
+    <!-- Agregar Nueva Opcion Cruzada -->
+    <p:commandButton id="opciones-agregar-cruzado" styleClass="ui-icon-ADAdd" title="Agregar" icon="ui-icon-plus"
+                     process="@this opciones-panel-formulario" validateClient="true"
+                     update="opciones-panel-formulario opciones-cruzado-tabla"
+                     rendered="#{not opcionesController.principal and opcionesController.cruzada}"
+                     actionListener="#{opcionesController.comprobarPlanaCruzada}">
+        <f:param name="tipo" value="2"/>
+    </p:commandButton>
+
+    <!-- Guardar Nueva Lista -->
+    <p:commandButton id="opciones-add-guardar" title="Guardar" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                     rendered="#{not opcionesController.principal}"
+                     update="opciones-cruzado-tabla" actionListener="#{opcionesController.editar}"
+                     process="@this opciones-panel-formulario opciones-cruzado-tabla opciones-plano-tabla">
+    </p:commandButton>
+
+    <!-- Guardar Lista Existente>
+    <p:commandButton id="opciones-edit-guardar" title="Guardar" styleClass="ui-icon-ADSave"
+                     rendered="{not opcionesController.principal and (not opcionesController.saveAdd)}"
+                     update="opciones-plano-tabla" actionListener="{opcionesController.editar}"
+                     process="@this opciones-panel-formulario opciones-cruzado-tabla opciones-plano-tabla">
+    </p:commandButton-->
+
+    <!-- Salir -->
+    <p:commandButton id="opciones-regresar" styleClass="ui-icon-ADGo-left" title="Regresar" icon="ui-icon-arrowthickstop-1-w"
+                     actionListener="#{opcionesController.cerrarDialogCrear}"
+                     update="@form" process="@this"
+                     rendered="#{not opcionesController.principal}">
+        <p:ajax event="dialogReturn"/>
+    </p:commandButton>
+
+</h:body>
+</html>
+

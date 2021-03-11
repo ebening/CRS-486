@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+
+
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+    <!-- ******************************************************************* -->
+    <!-- Declaración de clases Dao -->
+    <!-- ******************************************************************* -->
+
+    <bean id="daoEjemplo" class="com.crossmark.collector.persistence.daos.DAOEjemploImpl">
+        <property name="spPerfiles">
+            <ref bean="storedProc"/>
+        </property>
+    </bean>
+
+    <!-- TRAER OPCIONES************************************************************************************ -->
+
+    <bean id="daoOpciones"
+          class="com.crossmark.collector.persistence.daos.DAOOpcionesImpl">
+        <property name="spTraeOpciones" ref="storedTraeOpciones"/>
+        <property name="daoLista" ref="daoLista"/>
+    </bean>
+
+    <bean id="daoOpcionesAgregadas"
+          class="com.crossmark.collector.persistence.daos.DAOPreguntasImpl">
+
+        <property name="spOpcionesAgregadas">
+            <ref bean="storedOpcionesAgregadas"/>
+        </property>
+        <property name="spOpcionesAgregadasDel">
+            <ref bean="storedEliminaListasPreguntas"/>
+        </property>
+
+    </bean>
+    <bean id="daoGuardaEncuestaComoPlantilla"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spGuardaEncuestaComoPlantilla">
+            <ref bean="storedGuardaEncuestaComoPlantilla"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoGuardaSeccion"
+          class="com.crossmark.collector.persistence.daos.DAOSeccionesImpl">
+        <property name="spGuardaSeccion">
+            <ref bean="storedGuardaSeccion"/>
+        </property>
+    </bean>
+
+    <bean id="daoProyectosTiendasSel"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosTiendasImpl">
+        <property name="spProyectosTiendasSel">
+            <ref bean="spProyectosTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoProyectosTiendasUps"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosTiendasImpl">
+        <property name="spProyectosTiendasUps">
+            <ref bean="spProyectosTiendasUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoProyectosTiendasDel"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosTiendasImpl">
+        <property name="spProyectosTiendasDel">
+            <ref bean="spProyectosTiendasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoFormatosSel"
+          class="com.crossmark.collector.persistence.daos.DAOFormatosImpl">
+        <property name="spFormatosSel">
+            <ref bean="spFormatosSel"/>
+        </property>
+    </bean>
+
+    <!-- ************************************ Grupos Proyectos Tiendas ************************************ -->
+    <bean id="daoGruposProyectosSel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosSel">
+            <ref bean="spGruposProyectosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoGruposProyectosDel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosDel">
+            <ref bean="spGruposProyectosDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoGruposProyectosUps"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosUps">
+            <ref bean="spGruposProyectosUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoGruposProyectosTiendasSel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosTiendasSel">
+            <ref bean="spGruposProyectosTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoGruposProyectosTiendasDel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosTiendasDel">
+            <ref bean="spGruposProyectosTiendasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoGruposProyectosTiendasUps"
+          class="com.crossmark.collector.persistence.daos.DAOGruposProyectosTiendasImpl">
+        <property name="spGruposProyectosTiendasUps">
+            <ref bean="spGruposProyectosTiendasUps"/>
+        </property>
+    </bean>
+
+    <!-- ******************************************* CATALOGOS ********************************************* -->
+    <bean id="daoListaCatClientes"
+          class="com.crossmark.collector.persistence.daos.DAOCatalogosImpl">
+        <property name="spListaCatClientes">
+            <ref bean="storedProcListaCatClientes"/>
+        </property>
+    </bean>
+
+    <bean id="daoGuardaCatClientes"
+          class="com.crossmark.collector.persistence.daos.DAOCatalogosImpl">
+        <property name="spGuardaCatClientes">
+            <ref bean="storedProcGuardaCatClientes"/>
+        </property>
+    </bean>
+
+    <bean id="daoEliminaCatClientes"
+          class="com.crossmark.collector.persistence.daos.DAOCatalogosImpl">
+        <property name="spEliminaCatClientes">
+            <ref bean="storedProcEliminaCatClientes"/>
+        </property>
+    </bean>
+
+    <bean id="daoListaCatalogos"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+        <property name="spListaCatalogos">
+            <ref bean="storedListaCatalogos"/>
+        </property>
+    </bean>
+
+    <bean id="daoListaPreguntaOrigen"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+        <property name="spListaPreguntaOrigen">
+            <ref bean="storedListaPreguntaOrigen"/>
+        </property>
+    </bean>
+
+    <bean id="daoListaPreguntas"
+          class="com.crossmark.collector.persistence.daos.DAOPreguntasImpl">
+
+        <property name="spListaPreguntas">
+            <ref bean="storedMiListaPreguntas"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoListaSecciones"
+          class="com.crossmark.collector.persistence.daos.DAOSeccionesImpl">
+
+        <property name="spListaSecciones">
+            <ref bean="storedListaSecciones"/>
+
+        </property>
+
+    </bean>
+
+    <!-- ELIMINAR PROYECTOS -->
+    <bean id="daoEliminaProyecto"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spEliminaProyecto">
+            <ref bean="storedEliminaProyecto"/>
+        </property>
+    </bean>
+
+
+    <!-- ELIMINAR ENCUESTA -->
+    <bean id="daoEliminaEncuesta"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+        <property name="spEliminaEncuesta">
+            <ref bean="storedEliminaEncuesta"/>
+        </property>
+    </bean>
+    
+    <!-- ELIMINAR PREGUNTAS -->
+
+    <bean id="daoEliminaPregunta"
+              class="com.crossmark.collector.persistence.daos.DAOPreguntasImpl">
+
+        <property name="spEliminaPregunta">
+            <ref bean="storedEliminaPregunta" />
+
+        </property>
+
+    </bean>
+
+    <!-- ELIMINAR Secciones -->
+
+    <bean id="daoEliminaSeccion"
+          class="com.crossmark.collector.persistence.daos.DAOSeccionesImpl">
+
+        <property name="spEliminaSeccion">
+            <ref bean="storedEliminaSeccion"/>
+
+        </property>
+
+    </bean>
+
+    <!-- ELIMINAR ENCUESTA PROYECTOS -->
+    <bean id="daoEliminaEncuestaProyecto"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spEliminaEncuestaProyecto">
+            <ref bean="storedEliminaEncuestaProyecto"/>
+        </property>
+    </bean>
+
+    <!-- ******************************************* UNIDADES DE Clientes ********************************************* -->
+
+    <bean id="daoClientes"
+          class="com.crossmark.collector.persistence.daos.DAOClientesImpl">
+        <property name="spClientesDel" ref="spClientesDel"/>
+        <property name="spClientesSel" ref="spClientesSel"/>
+        <property name="spClientesUps" ref="spClientesUps"/>
+        <property name="spClientesUnidadesNegociosSel" ref="spClientesUnidadesNegociosSel"/>
+        <property name="spClientesUnidadesNegociosUps" ref="spClientesUnidadesNegociosUps"/>
+        <property name="spClientesUnidadesNegociosDel" ref="spClientesUnidadesNegociosDel"/>
+    </bean>
+
+    <!-- ******************************************* UNIDADES DE NEGOCIO ********************************************* -->
+
+    <bean id="daoProyectos"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spProyectos">
+            <ref bean="storedProcProyectos"/>
+        </property>
+        <property name="spProyectosReporte">
+            <ref bean="storedProcProyectosReporte"/>
+        </property>
+    </bean>
+
+    <bean id="daoTrarEncuestas"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spEncuestas">
+            <ref bean="storedEncuestas"/>
+        </property>
+    </bean>
+
+    <bean id="daoTraeProyecto"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spTraeProyecto">
+            <ref bean="storedBuscaProyecto"/>
+        </property>
+        <!-- <property name="spListaEncuestasProyecto"> <ref bean="storedEncuestasProyecto"
+        /> </property> -->
+    </bean>
+
+    <bean id="daoTraeListaEncuestasProyecto"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spTraeListaEncuestasProyecto">
+            <ref bean="storedEncuestasProyecto"/>
+        </property>
+    </bean>
+
+    <bean id="daoGuardaProyectos"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spGuardaProyecto">
+            <ref bean="storedGuardaProyecto"/>
+        </property>
+    </bean>
+
+
+    <bean id="daoCreaEncuesta"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spCreaEncuesta">
+            <ref bean="storedCreaEncuesta"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoGuardaComoPlantilla"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spGuardaComoPlantilla">
+            <ref bean="storedGuardaComoPlanilla"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoTraePlantilla"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spTraePlantilla">
+            <ref bean="storedBuscaPlantilla"/>
+
+        </property>
+    </bean>
+
+    <bean id="daoTraeEncuesta"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spTraeEncuesta">
+            <ref bean="storedBuscaPlantilla"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoUnidadesNegocio"
+          class="com.crossmark.collector.persistence.daos.DAOUnidadesNegocioImpl">
+        <property name="spUnidadesNegocio" ref="storedUnidadesNegocio"/>
+        <property name="spUnidadesNegociosUps" ref="spUnidadesNegociosUps"/>
+        <property name="spUnidadesNegociosDel" ref="spUnidadesNegociosDel"/>
+    </bean>
+
+    <bean id="daoEncuestas"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spEncuestas">
+            <ref bean="storedEncuestas"/>
+        </property>
+
+    </bean>
+
+    <bean id="daoGuardaEncuesta"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+
+        <property name="spGuardaEncuesta">
+            <ref bean="storedGuardaEncuesta"/>
+
+        </property>
+
+    </bean>
+
+    <bean id="daoAgregaEncuesta"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spAgregaEncuestaProyecto">
+            <ref bean="storedAgregaEncuesta"/>
+        </property>
+    </bean>
+
+    <bean id="daoCategorias"
+          class="com.crossmark.collector.persistence.daos.DAOCategoriasImpl">
+
+        <property name="spListaCategorias">
+            <ref bean="storedListaCategorias"/>
+
+        </property>
+    </bean>
+
+    <bean id="daoSubCategorias"
+          class="com.crossmark.collector.persistence.daos.DAOCategoriasImpl">
+
+        <property name="spListaSubCategorias">
+            <ref bean="storedListaSubCategorias"/>
+
+        </property>
+
+
+    </bean>
+
+
+    <bean id="daoPreguntas"
+          class="com.crossmark.collector.persistence.daos.DAOPreguntasImpl">
+
+        <property name="spListaTipoRespuesta">
+            <ref bean="storedListaPreguntas"/>
+
+        </property>
+
+
+    </bean>
+
+
+    <bean id="daoPreguntaAgregada"
+          class="com.crossmark.collector.persistence.daos.DAOPreguntasImpl">
+
+        <property name="spAgregaPregunta">
+            <ref bean="storedPreguntaAgregada"/>
+
+        </property>
+
+
+    </bean>
+
+
+    <!-- ******************************************* TIENDAS EN VISITAS ********************************************* -->
+
+    <bean id="daoTiendasTerritoriosSel" class="com.crossmark.collector.persistence.daos.DAOTiendasImpl">
+        <property name="spTiendasTerritoriosSel">
+            <ref bean="spTiendasTerritoriosSel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoTiendasTerritoriosNumRegSel" class="com.crossmark.collector.persistence.daos.DAOTiendasImpl">
+        <property name="spTiendasTerritoriosNumRegSel">
+            <ref bean="spTiendasTerritoriosNumRegSel" />
+        </property>
+    </bean>
+    
+    <bean id="daoTiendasNumRegSel" class="com.crossmark.collector.persistence.daos.DAOTiendasImpl">
+        <property name="spTiendasNumRegSel">
+            <ref bean="spTiendasNumRegSel" />
+        </property>
+    </bean>
+
+    <bean id="daoTiendas" class="com.crossmark.collector.persistence.daos.DAOTiendasImpl">
+        <property name="spTiendas" ref="spTiendasSel"/>
+        <property name="spTiendasUps" ref="spTiendasUps"/>
+        <property name="spTiendasDel" ref="spTiendasDel"/>
+    </bean>
+
+    <bean id="daoTiendasTerritorios"
+          class="com.crossmark.collector.persistence.daos.DAOTiendasTerritoriosImpl">
+        <property name="spTiendasTerritoriosups">
+            <ref bean="spTiendasTerritoriosups"/>
+        </property>
+    </bean>
+
+    <bean id="daoTiendasTerritoriosDel"
+          class="com.crossmark.collector.persistence.daos.DAOTiendasTerritoriosImpl">
+        <property name="spTiendasTerritoriosDel">
+            <ref bean="spTiendasTerritoriosDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitas" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitas">
+            <ref bean="spVisitaSel"/>
+        </property>
+    </bean>
+    <bean id="daoTerritorios"
+          class="com.crossmark.collector.persistence.daos.DAOTerritoriosImpl">
+        <property name="spTerritoriosSel">
+            <ref bean="spTerritoriosSel"/>
+        </property>
+        <property name="spTerritoriosDel">
+            <ref bean="spTerritoriosDel"/>
+        </property>
+        <property name="spTerritoriosUps">
+            <ref bean="spTerritoriosUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasDel" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasDel">
+            <ref bean="spVisitasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasVal" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasVal">
+            <ref bean="spVisitasVal"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitaUps" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasUps">
+            <ref bean="spVisitaUps"/>
+        </property>
+    </bean>
+    <bean id="daoCiudades"
+          class="com.crossmark.collector.persistence.daos.DAOCiudadesImpl">
+        <property name="spCiudades">
+            <ref bean="spCiudadesSel"/>
+        </property>
+    </bean>
+    <bean id="daoEstados" class="com.crossmark.collector.persistence.daos.DAOEstadosImpl">
+        <property name="spEstados">
+            <ref bean="spEstadosSel"/>
+        </property>
+    </bean>
+    <bean id="daoCadena" class="com.crossmark.collector.persistence.daos.DAOCadenaImpl">
+        <property name="spCadena">
+            <ref bean="spCadenaSel"/>
+        </property>
+    </bean>
+    <!-- *************************************************************************************************************hibernate -->
+
+    <bean id="daoVisitasRutasSel" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spRutasSel">
+            <ref bean="spRutasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasRutasUsuariosSel" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spRutasUsuariosSel">
+            <ref bean="spRutasUsuariosSel"/>
+        </property>
+    </bean>
+
+    <!-- Inicia daos para los reportes -->
+
+    <bean id="daoRegiones"
+          class="com.crossmark.collector.persistence.daos.DAORegionesImpl">
+        <property name="spRegionSel">
+            <ref bean="spRegionSel"/>
+        </property>
+        <property name="spRegionDel">
+            <ref bean="spRegionDel"/>
+        </property>
+        <property name="spRegionUps">
+            <ref bean="spRegionUps"/>
+        </property>
+        <property name="daoUsuarios">
+            <ref bean="daoUsuarios"/>
+        </property>
+    </bean>
+
+    <bean id="daoEquipos" class="com.crossmark.collector.persistence.daos.DAOEquiposImpl">
+        <property name="spEquipos" ref="spEquiposSel"/>
+        <property name="spEquiposUps" ref="spEquiposUps"/>
+        <property name="spEquiposDel" ref="spEquiposDel"/>
+        <property name="spEquiposTerritoriosUps" ref="spEquiposTerritoriosUps"/>
+        <property name="spEquiposTerritoriosDel" ref="spEquiposTerritoriosDel"/>
+
+    </bean>
+
+
+    <bean id="daoEquiposTerritorios"
+          class="com.crossmark.collector.persistence.daos.DAOEquiposTerritoriosImpl">
+        <property name="spEquiposTerritorios">
+            <ref bean="spEquiposTerritoriosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOUsuariosImpl">
+        <property name="storeUsuariosSel">
+            <ref bean="spUsuariosSel"/>
+        </property>
+        <property name="storeUsuariosDel">
+            <ref bean="spUsuariosDel"/>
+        </property>
+        <property name="storeUsuariosUps">
+            <ref bean="spUsuariosUps"/>
+        </property>
+        <property name="storeUsuariosTerritoriosUps">
+            <ref bean="spUsuariosTerritoriosUps"/>
+        </property>
+        <!--
+        <property name="daoEquiposTerritoriosUsuarios">
+            <ref bean="daoEquiposTerritoriosUsuarios" />
+        </property>
+        <property name="daoEquiposTerritorios">
+            <ref bean="daoEquiposTerritorios" />
+        </property>
+        -->
+    </bean>
+
+    <bean id="daoSecciones"
+          class="com.crossmark.collector.persistence.daos.DAOSeccionesImpl">
+        <property name="spSecciones">
+            <ref bean="spSeccionesSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasxTiendas"
+          class="com.crossmark.collector.persistence.daos.DAOVisitasxTiendasImpl">
+        <property name="spVisitasxTiendas">
+            <ref bean="spVisitasPorTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasTiendasSel" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasTiendasSel">
+            <ref bean="spVisitasTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasTiendasUps" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasTiendasUps">
+            <ref bean="spVisitasTiendasUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoVisitasTiendasDel" class="com.crossmark.collector.persistence.daos.DAOVisitasImpl">
+        <property name="spVisitasTiendasDel">
+            <ref bean="spVisitasTiendasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoParametros"
+          class="com.crossmark.collector.persistence.daos.DAOParametrosImpl">
+        <property name="spParametros" ref="spParametrosSel"/>
+        <property name="spParametrosUps" ref="spParametrosUps"/>
+        <property name="spParametrosSeccion" ref="spParametrosSeccion"/>
+    </bean>
+    <!-- Termina para los reportes -->
+
+    <bean id="daoGruposSel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposTiendasImpl">
+        <property name="spGruposSel">
+            <ref bean="spGruposSel"/>
+        </property>
+    </bean>
+    <bean id="daoGruposUps"
+          class="com.crossmark.collector.persistence.daos.DAOGruposTiendasImpl">
+        <property name="spGruposUps">
+            <ref bean="spGruposUps"/>
+        </property>
+    </bean>
+    <bean id="daoGruposTiendasSel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposTiendasImpl">
+        <property name="spGruposTiendasSel">
+            <ref bean="spGruposTiendasSel"/>
+        </property>
+    </bean>
+    <bean id="daoGruposTiendasUps"
+          class="com.crossmark.collector.persistence.daos.DAOGruposTiendasImpl">
+        <property name="spGruposTiendasUps">
+            <ref bean="spGruposTiendasUps"/>
+        </property>
+    </bean>
+    <bean id="daoGruposTiendasDel"
+          class="com.crossmark.collector.persistence.daos.DAOGruposTiendasImpl">
+        <property name="spGruposTiendasDel">
+            <ref bean="spGruposTiendasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoPromotores"
+          class="com.crossmark.collector.persistence.daos.DAOPromotoresImpl">
+        <property name="spPromotores">
+            <ref bean="spPromotoresSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoPromotoresBus"
+          class="com.crossmark.collector.persistence.daos.DAOPromotoresBusImpl">
+        <property name="spPromotoresBus">
+            <ref bean="spPromotoresBus"/>
+        </property>
+        <property name="spUsuariosTerritoriosUps">
+            <ref bean="spUsuariosTerritoriosUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoPromotoresDel"
+          class="com.crossmark.collector.persistence.daos.DAOPromotoresDelImpl">
+        <property name="spPromotoresDel">
+            <ref bean="spUsuariosTerritoriosdel"/>
+        </property>
+    </bean>
+
+    <bean id="daoUsuariosProyectosSel"
+          class="com.crossmark.collector.persistence.daos.DAOPromotoresImpl">
+        <property name="spUsuariosProyectosSel">
+            <ref bean="spUsuariosProyectosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasTiendasVal" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasTiendasVal">
+            <ref bean="spRutasTiendasVal"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasUsuariosVal" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasUsuariosVal">
+            <ref bean="spRutasUsuariosVal"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasSel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasSel">
+            <ref bean="spRutasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasDel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasDel">
+            <ref bean="spRutasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasTiendas" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasTiendas">
+            <ref bean="spRutasTiendas"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasTiendasSel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasTiendasSel">
+            <ref bean="spRutasTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasTiendasDel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasTiendasDel">
+            <ref bean="spRutasTiendasDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasUsuariosDel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasUsuariosDel">
+            <ref bean="spRutasUsuariosDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasUsuarios" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasUsuarios">
+            <ref bean="spRutasUsuarios"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasUsuariosSel" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasUsuariosSel">
+            <ref bean="spRutasUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoRutasTiendasUsuarios" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutasTiendasUsuarios">
+            <ref bean="spRutasTiendasUsuarios"/>
+        </property>
+    </bean>
+    <bean id="daoRutas" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spRutas">
+            <ref bean="spRutasTiendasUsuarios"/>
+        </property>
+    </bean>
+
+    <bean id="daoGuardaRuta" class="com.crossmark.collector.persistence.daos.DAORutasImpl">
+        <property name="spGuardaRuta">
+            <ref bean="spRutasUps"/>
+        </property>
+    </bean>
+
+    <bean id="daoRegionUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAORegionesUsuariosImpl">
+        <property name="spRegionUsuarios">
+            <ref bean="spRegionUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoEquiposTerritoriosUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOEquiposTerritoriosUsuariosImpl">
+        <property name="spEquiposTerritoriosUsuarios">
+            <ref bean="spEquiposTerritoriosUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoUsuariosProyectos"
+          class="com.crossmark.collector.persistence.daos.DAOUsuariosProyectosImpl">
+        <property name="spUsuariosProyectos">
+            <ref bean="spUsuariosProyectosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoEquiposRegionUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOEquiposRegionUsuariosImpl">
+        <property name="spEquiposRegionUsuarios">
+            <ref bean="spEquiposRegionUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoCadenas" class="com.crossmark.collector.persistence.daos.DAOCadenasImpl">
+        <property name="spCadenas">
+            <ref bean="spCadenasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoEncuestasUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasUsuariosImpl">
+        <property name="spEncuestasUsuarios">
+            <ref bean="spEncuestasUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoProyectosUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosUsuariosImpl">
+        <property name="spProyectosUsuarios">
+            <ref bean="spProyectosUsuariosSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoUsuariosTiendas"
+          class="com.crossmark.collector.persistence.daos.DAOUsuariosTiendasImpl">
+        <property name="spUsuariosTiendas">
+            <ref bean="spUsuariosTiendasSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoReporteImagenesCategoria"
+          class="com.crossmark.collector.persistence.daos.DAOReporteImagenesCategoriaImpl">
+        <property name="spReporteImagenesCategoria">
+            <ref bean="spReporteImagenesCategoriaSel"/>
+        </property>
+    </bean>
+
+    <bean id="daoEncuestasProyecto"
+          class="com.crossmark.collector.persistence.daos.DAOEncuestasProyectoImpl">
+        <property name="spEncuestasProyecto">
+            <ref bean="storedEncuestasProyecto"/>
+        </property>
+    </bean>
+
+    <!-- Inicia Daos para seguridad perfiles, usuarios -->
+    <bean id="daoPerfiles"
+          class="com.crossmark.collector.persistence.daos.DAOPerfilesImpl">
+        <property name="spPerfilesDel">
+            <ref bean="storedPerfilesDel"/>
+        </property>
+        <property name="spPerfilesSel">
+            <ref bean="storedPerfilesSel"/>
+        </property>
+        <property name="spPerfilesUps">
+            <ref bean="storedPerfilesUps"/>
+        </property>
+
+        <property name="spModulosPerfilesDel">
+            <ref bean="storedModulosPerfilesDel"/>
+        </property>
+        <property name="spModulosPerfilesSel">
+            <ref bean="storedModulosPerfilesSel"/>
+        </property>
+        <property name="spModulosPerfilesUps">
+            <ref bean="storedModulosPerfilesUps"/>
+        </property>
+    </bean>
+
+    <!-- Termina Daos para perfiles -->
+
+    <bean id="daoTiposMensajes"
+          class="com.crossmark.collector.persistence.daos.DAOTiposMensajesImpl">
+        <property name="spTipoMensajesSel" ref="spTipoMensajesSel"/>
+        <property name="spTipoMensajesUps" ref="spTipoMensajesUps"/>
+        <property name="spTipoMensajesDel" ref="spTipoMensajesDel"/>
+    </bean>
+
+    <bean id="daoFormatos"
+          class="com.crossmark.collector.persistence.daos.DAOFormatosImpl">
+        <property name="spFormatosSel" ref="spFormatosSel"/>
+    </bean>
+
+
+    <bean id="daoMotivos" class="com.crossmark.collector.persistence.daos.DAOMotivosImpl">
+        <property name="spMotivosSel" ref="spMotivosSel"/>
+        <property name="spMotivosUps" ref="spMotivosUps"/>
+        <property name="spMotivosDel" ref="spMotivosDel"/>
+    </bean>
+
+    <!-- Dao para archivos -->
+    <bean id="daoArchivos"
+          class="com.crossmark.collector.persistence.daos.DAOProyectosImpl">
+        <property name="spArchivosDel" ref="spArchivosDel"/>
+        <property name="spArchivosSel" ref="spArchivosSel"/>
+        <property name="spArchivosUps" ref="spArchivosUps"/>
+    </bean>
+
+    <bean id="daoLista" class="com.crossmark.collector.persistence.daos.DAOListaImpl">
+        <property name="spListaSel" ref="spListaSel"/>
+        <property name="spListaUps" ref="spListaUps"/>
+        <property name="spGetListaByOID" ref="spGetListaByOID"/>
+        <property name="daoTipoLista" ref="daoTipoLista"/>
+    </bean>
+
+    <bean id="daoTipoLista"
+          class="com.crossmark.collector.persistence.daos.DAOTipoListaImpl">
+        <property name="spTipoLista" ref="storedTipoLista"/>
+        <property name="spTipoListaSel" ref="spTipoListaSel"/>
+        <property name="daoOpcionCruzada" ref="daoOpcionCruzada"/>
+        <property name="daoOpcionPlana" ref="daoOpcionPlana"/>
+
+    </bean>
+    <bean id="daoOpcionPlana" class="com.crossmark.collector.persistence.daos.DAOOpcionPlanaImpl">
+        <property name="spOpcionesPlanaSel" ref="spOpcionesPlanasSel"/>
+        <property name="spOpcionesPlanasDel" ref="spOpcionesPlanasDel"/>
+        <property name="spOpcionesPlanasUps" ref="spOpcionesPlanasUps"/>
+
+    </bean>
+
+    <bean id="daoOpcionCruzada" class="com.crossmark.collector.persistence.daos.DAOOpcionCruzadaImpl">
+        <property name="spOpcionesCruzadasSel" ref="spOpcionesCruzadasSel"/>
+        <property name="spOpcionesCruzadasDel" ref="spOpcionesCruzadasDel"/>
+        <property name="spOpcionesCruzadasUps" ref="spOpcionesCruzadasUps"/>
+    </bean>
+
+    <bean id="daoMenu" class="com.crossmark.collector.persistence.daos.DAOMenuImpl">
+        <property name="spMenu" ref="spMenu"/>
+    </bean>
+
+    <bean id="daoMensajes" class="com.crossmark.collector.persistence.daos.DAOMensajesImpl">
+        <property  name="spMensajesSel" ref="spMensajesSel"/>
+        <property  name="daoTiposMensajes" ref="daoTiposMensajes"/>
+        <property name="daoEquipos" ref="daoEquipos"/>
+    </bean>
+    
+    <bean id="daoPuestos" class="com.crossmark.collector.persistence.daos.DAOPuestosImpl">
+        <property name="storePuestosSel">
+            <ref bean="spPuestosSel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoEquiposTerritoriosUsuariosIn"
+          class="com.crossmark.collector.persistence.daos.DAOEquiposTerritoriosUsuariosInImpl">
+        <property name="storeEquiposTerritoriosUsuariosInSel">
+            <ref bean="spEquiposTerritoriosUsuariosInSel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoEquiposUsuarios"
+          class="com.crossmark.collector.persistence.daos.DAOEquiposUsuariosImpl">
+        <property name="storeEquiposUsuariosSel">
+            <ref bean="spEquiposUsuariosSel"/>
+        </property>
+        <property name="storeEquiposUsuariosUps">
+            <ref bean="spEquiposUsuariosUps"/>
+        </property>
+        <property name="storeEquiposUsuariosDel">
+            <ref bean="spEquiposUsuariosDel"/>
+        </property>
+    </bean>
+
+    <bean id="daoLogin"
+          class="com.crossmark.collector.persistence.daos.DAOLoginImpl">
+        <property name="spUsuariosEquiposUps" ref="spUsuariosEquiposUps"/>
+        <property name="spUsuariosLogDel" ref="spUsuariosLogDel"/>
+        <property name="spUsuariosLogUps" ref="spUsuariosLogUps"/>
+        <property name="spUsuariosOffUps" ref="spUsuariosOffUps"/>
+        <property name="spUsuariosLogSel" ref="spUsuariosLogSel"/>
+    </bean>
+    
+    <bean id="daoEncuestaCondicionesJsonUps" class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+        <property name="spEncuestaCondicionesJsonUps">
+            <ref bean="storedEncuestaCondicionesJsonUps"/>
+        </property>
+    </bean>
+    
+    <bean id="daoCondiciones" class="com.crossmark.collector.persistence.daos.DAOCondicionesImpl">
+        <property name="spCondicionesSel">
+            <ref bean="storedCondicionesSel"/>
+        </property>
+        <property name="spCondicionesUps">
+            <ref bean="storedCondicionesUps"/>
+        </property>
+        <property name="spCondicionesDel">
+            <ref bean="storedCondicionesDel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoListasPreguntasControlSel" class="com.crossmark.collector.persistence.daos.DAOEncuestasImpl">
+        <property name="spListasPreguntasControlSel">
+            <ref bean="storedListasPreguntasControlSel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoVariables"
+          class="com.crossmark.collector.persistence.daos.DAOVariablesImpl">
+        <property name="spVariablesSel">
+            <ref bean="storedVariablesSel"/>
+        </property>
+    </bean>
+    
+    <bean id="daoJobs"
+          class="com.crossmark.collector.persistence.daos.DAOJobsImpl">
+        <property name="spDWEncuestaInstanciaUps" ref="spDWEncuestaInstanciaUps" />
+    </bean>
+
+    <bean id="daoConfiguracionReporte"
+          class="com.crossmark.collector.persistence.daos.DAOConfiguracionReporteImpl">
+        <property name="spAgrupacionAltaCambio" ref="spAgrupacionAltaCambio" />
+        <property name="spAgrupacionBaja" ref="spAgrupacionBaja" />
+        <property name="spAgrupacionConsulta" ref="spAgrupacionConsulta" />
+
+        <property name="spCapturaConsultaEncuestas" ref="spCapturaConsultaEncuestas" />
+        <property name="spCapturaConsultaPreguntas" ref="spCapturaConsultaPreguntas" />
+        <property name="spCapturaAltaCambio" ref="spCapturaAltaCambio" />
+        <property name="spCapturaBaja" ref="spCapturaBaja" />
+        
+        <property name="spNoSolucionConsultaEncuestas" ref="spNoSolucionConsultaEncuestas" />
+        <property name="spNoSolucionConsultaPreguntas" ref="spNoSolucionConsultaPreguntas" />
+        <property name="spNoSolucionAltaCambio" ref="spNoSolucionAltaCambio" />
+        <property name="spNoSolucionBaja" ref="spNoSolucionBaja" />
+    </bean>
+    
+    <bean id="daoCoordinador"
+          class="com.crossmark.collector.persistence.daos.DAOCoordinadorImpl">
+        <property name="spCoordinadorUps" ref="spCoordinadorUps" />
+        <property name="spCoordinadorSel" ref="spCoordinadorSel" />
+    </bean>
+    
+</beans>

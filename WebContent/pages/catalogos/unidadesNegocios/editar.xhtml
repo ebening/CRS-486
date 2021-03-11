@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <p:panel id="panel-editar" styleClass="innermenu" >
+            <p:commandButton id="unidadesNegocios-editar-guardar"   title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             process="@this unidadesNegocios-panel-editar-formulario"
+                             ignoreAutoUpdate="true"
+                             update="unidadesNegocios-panel-editar-formulario unidadesNegocios-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-unidadesNegocios-editar').hide()"
+                             actionListener="#{unidadesNegociosController.editar}"     />
+        </p:panel>
+
+        <center>
+            <p:panel id="unidadesNegocios-panel-editar-formulario" style="border:none;">
+                <h:panelGrid columns="2" cellpadding="5" >
+                    <p:outputLabel id="unidadesNegocios-editar-unidadesNegocios-label" for="unidadesNegocios-editar-unidadesNegocios-value" value="Nombre de Unidad de Negocio"/>
+                    <p:inputText id="unidadesNegocios-editar-unidadesNegocios-value" value="#{unidadesNegociosController.current.nombreUnidad}" required="true" >
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                        <f:attribute name="label" value="Nombre de Unidad de Negocio"/>
+                        <f:validator validatorId="whiteSpaces" />
+                    </p:inputText>
+
+                    <p:outputLabel id="unidadesNegocios-editar-horaIni-label" for="unidadesNegocios-editar-horaIni-value" value="Hora Inicial " />
+                    <p:calendar id="unidadesNegocios-editar-horaIni-value"  pattern="HH:mm" timeOnly="true" required="true"
+                                value="#{unidadesNegociosController.current.dHoraIni}">
+                        <p:ajax event="dateSelect" update="unidadesNegocios-editar-horaFin-value"/>
+                    </p:calendar>
+
+                    <p:outputLabel id="unidadesNegocios-editar-horaFin-label" for="unidadesNegocios-editar-horaFin-value" value="Hora Final " />
+                    <p:calendar id="unidadesNegocios-editar-horaFin-value"  pattern="HH:mm" timeOnly="true" required="true"
+                                value="#{unidadesNegociosController.current.dHoraFin}">
+                        <f:attribute name="startDate" value="#{unidadesNegociosController.current.dHoraIni}"/>
+                        <f:validator validatorId="primeDateRangeValidator"/>
+                    </p:calendar>
+
+                </h:panelGrid>
+            </p:panel>
+        </center>
+    </h:body>
+</html>
+

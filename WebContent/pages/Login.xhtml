@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" >
+<h:head>
+    <h:outputStylesheet library="#{MBLogin.theme.theme}/css" name="AD-login.css"/>
+    <h:outputStylesheet library="#{MBLogin.theme.theme}/css" name="ADtheme.css"/>
+    <title>#{msg.titleLogin}</title>
+</h:head>
+    <h:body >
+    <h:form id="center-form" onkeypress="if (event.keyCode == 13) {return false; }">
+        <p:growl id="mensajes" autoUpdate="true" showDetail="true" globalOnly="true"/>
+        <p:growl id="mensajes2" showDetail="true" showSummary="false"/>
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" appendTo="center-form" draggable="false" closable="false"
+                  resizable="false" showHeader="false">
+                <p:graphicImage library="images" name="ajax-loader.gif" />
+        </p:dialog>
+
+        <div id="login-formulario-logo">
+            <!--<p:graphicImage library="images" height="50px" name="logo.png"/>-->
+            <p:graphicImage library="#{MBLogin.theme.theme}/images" height="50px" name="logo-left.png" />
+        </div>
+            
+        <h:panelGroup id="panel">
+        <table id="login-formulario">
+            <tbody>
+            <tr>
+                <td align="right" rowspan="2">
+                    <p:graphicImage library="images" style="border-radius: 4px;" height="80" name="userLogin-blanco.png"/>
+                </td>
+                <td style="width: 100%;">
+                    <p:inputText id="userName"
+                                 label="#{msg.user}"
+                                 placeholder="#{msg.user}"
+                                 styleClass="login-formulario-texto" value="#{usuarioLogin.userName}"
+                                 style="width: 95%;"
+                                 required="true">
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="width: 100%;">
+                    <div>
+                        <table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="width: 100%;">
+                                    <p:password id="password" styleClass="login-formulario-password"
+                                                value="#{usuarioLogin.password}"
+                                                placeholder="#{msg.password}"
+                                                label="#{msg.password}"
+                                                required="true">
+                                    </p:password>
+                                </td>
+                                <td width="80%">
+                                    <p:commandButton id="login-formulario-button"
+                                                     validateClient="true"
+                                                     styleClass="ui-icon-ADNavigate-right login-formulario-button" 
+                                                     icon="ui-icon-person"
+                                                     title="Acceder"
+                                                     actionListener="#{MBLogin.login}"
+                                                     process="@this panel"
+                                                     update="dialog-panel mensajes2"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </h:panelGroup>
+        <p:dialog id="verificacion" closeOnEscape="true" closable="true"
+                  widgetVar="verificacion"
+                  modal="true"
+                  height="120"
+                  appendTo="center-form"
+                  width="350"
+                  resizable="false"
+                  minHeight="120"
+                  minWidth="350"
+                  header="Seleccione Equipo">
+
+
+            <center>
+                    <h:panelGrid id="dialog-panel" styleClass="login-dialog" columns="1" cellpadding="5">
+                        <p:outputLabel id="equipos-label"
+                                       styleClass="text-label"
+                                       for="equipos-value"
+                                       value="Seleccione un equipo para ingresar al sistema"/>
+
+                        <p:selectOneMenu styleClass="text-label" id="equipos-value" required="true"
+                                         value="#{MBLogin.usSistema.equipoId}" >
+                            <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                            <f:selectItems value="#{MBLogin.equipos}"
+                                           var="o" itemLabel="#{o.nombre}"
+                                           itemValue="#{o.id}"/>
+                        </p:selectOneMenu>
+
+                        <p:commandButton id="continuar"
+                                         title="Acceder"
+                                         value="Acceder" styleClass="bton-dialog-continueLogin"
+                                         icon="ui-icon-circle-check"
+                                         actionListener="#{MBLogin.continueLogin()}"
+                                         validateClient="true"
+                                         process="@this dialog-panel"
+                                         update="dialog-panel"
+                                         oncomplete="if(args &amp;&amp; !args.validationFailed) PF('verificacion').hide()"/>
+                    </h:panelGrid>
+            </center>
+
+            <p:ajax event="close"
+                    resetValues="true"
+                    ignoreAutoUpdate="true"
+                    update="dialog-panel"/>
+        </p:dialog>
+
+    </h:form>
+
+</h:body>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+    <!-- Bean de configuracion de dataSource -->
+
+
+
+    <!-- ******************************************************************* -->
+    <!-- Declaración de archivos de mapeo y configuración de Hibernate -->
+    <!-- ******************************************************************* -->
+
+    <bean id="bonecpDataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+              destroy-method="close">
+
+        <property name="driverClass">
+            <value>${jdbc.driverClassName}</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>${jdbc.url}</value>
+        </property>
+        <property name="username">
+            <value>${jdbc.username}</value>
+        </property>
+        <property name="password">
+            <value>${jdbc.password}</value>
+        </property>
+
+        <property name="idleConnectionTestPeriod">
+            <value>${bonecp.pool.testConnection}</value>
+        </property>
+        <property name="idleMaxAge">
+            <value>${bonecp.pool.idleMaxTime}</value>
+        </property>
+        <property name="maxConnectionsPerPartition">
+            <value>${bonecp.pool.maxConnectionsPerPartition}</value>
+        </property>
+        <property name="minConnectionsPerPartition">
+            <value>${bonecp.pool.minConnectionsPerPartition}</value>
+        </property>
+        <property name="partitionCount">
+            <value>${bonecp.pool.partitionCount}</value>
+        </property>
+        <property name="acquireIncrement">
+            <value>${bonecp.pool.acquireIncrement}</value>
+        </property>
+        <property name="statementsCacheSize">
+            <value>${bonecp.pool.statementsCacheSize}</value>
+        </property>
+        <property name="releaseHelperThreads">
+            <value>${bonecp.pool.releaseHelperThreads}</value>
+        </property>
+
+    </bean>
+
+
+    <!-- Configuracion lazy de acceso a base de datos -->
+    <bean id="dataSource"
+              class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <ref bean="bonecpDataSource" />
+        </property>
+    </bean>
+  
+</beans>

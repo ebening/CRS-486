@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+    <p:confirmDialog header="#{msg.eliminar_region}"
+                     appendTo="center-form"
+                     message="#{msg.remove_region_confirm}"
+                     widgetVar="dialog-opciones-eliminar"
+                     icon="ui-icon-alert"
+                     showEffect="fade" hideEffect="explode">
+        <p:commandButton value="Si"
+                         update="opciones-tabla" process="@this"
+                         oncomplete="PF('dialog-opciones-eliminar').hide()"
+                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                         actionListener="#{opcionesController.eliminar()}"/>
+        <p:commandButton value="No"
+                         process="@this"
+                         oncomplete="PF('dialog-opciones-eliminar').hide()"
+                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </p:confirmDialog>
+
+    <ui:include src="nvo_catalogo.xhtml"/>
+
+    <ui:include src="nvo_cruzada.xhtml"/>
+
+
+    <p:confirmDialog header="Salir" appendTo="center-form"
+                     message="¿Estás seguro de salir sin grabar?" widgetVar="dialog-opciones-salir"
+                     icon="ui-icon-alert" showEffect="fade" hideEffect="explode">
+        <p:commandButton value="Si"
+                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check">
+            <p:ajax event="click" process="@this" update="@form"
+                    resetValues="true" ignoreAutoUpdate="true"
+                    oncomplete="PF('dialog-opciones-salir').hide()"
+                    listener="#{opcionesController.salir}"/>
+        </p:commandButton>
+
+        <p:commandButton value="No" process="@this"
+                         oncomplete="PF('dialog-opciones-salir').hide()"
+                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </p:confirmDialog>
+</h:body>
+</html>
+

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition>
+
+        <h2 class="subtitle">Configuración de Agrupaciones</h2>
+
+        <p:outputPanel id="capturaAgrupador" style="margin: 10px;">
+
+            <p:inputText value="#{MBConfiguracionReporte.nombreAgrupadorCaptura}"
+                         id="nombreAgrupador"
+                         maxlength="100"
+                         required="true"
+                         requiredMessage="Nombre de agrupador requerido."
+                         placeholder="Nombre de agrupador"
+                         style="width: 200px; margin-right: 10px;"
+                         onkeypress="if (event.keyCode === 13) {
+                                     PF('btnAgregarAgrupacion').jq.click();
+                                     return false;
+                                 }"
+                         />
+            <p:commandButton value="Agregar"
+                             widgetVar="btnAgregarAgrupacion"
+                             actionListener="#{MBConfiguracionReporte.agregarAgrupacion()}"
+                             update="tablaAgrupadores,nombreAgrupador,growl"
+                             process="capturaAgrupador"
+                             />
+        </p:outputPanel>
+
+        <div class="page-search">
+            <p:dataTable id="tablaAgrupadores" 
+                         paginator="true"
+                         rows="10"
+                         var="agrupador" 
+                         emptyMessage="#{msg.emptyMessage}"
+                         paginatorTemplate="#{msg.paginatorTemplate}"
+                         rowsPerPageTemplate="#{msg.rowsPerPageTemplate}"
+                         value="#{MBConfiguracionReporte.agrupadores}">
+                <p:column>
+                    <f:facet name="header">
+                        Agrupador
+                    </f:facet>
+                    <h:outputText value="#{agrupador.nombre}" />
+                </p:column>
+
+                <p:column style="width:5%">
+                    <p:commandButton
+                        icon="ui-icon-pencil"
+                        actionListener="#{MBConfiguracionReporte.editarAgrupacion(agrupador)}"
+                        update="tablaAgrupadores,:center-form:dialogoEditarAgrupacion"
+                        styleClass="ui-icon-ADEditar25x25" 
+                        oncomplete="PF('dialogoEditarAgrupacion').show()"
+                        process="tablaAgrupadores"
+                        resetValues="true"
+                        title="Editar Agrupador #{agrupador.nombre}" >
+                    </p:commandButton>
+                </p:column>
+                <p:column style="width:5%">
+                    <p:commandButton
+                        icon="ui-icon-trash"
+                        actionListener="#{MBConfiguracionReporte.eliminarAgrupacion(agrupador)}" 
+                        update="tablaAgrupadores"
+                        styleClass="ui-icon-ADEliminar25x25"  
+                        immediate="true"
+                        title="Eliminar Agrupador" >
+                        <p:confirm header="Confirmación"
+                                   message="¿Está seguro que desea eliminar el agrupador?"
+                                   icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </div>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+            <p:commandButton value="Si" type="button"
+                             styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button"
+                             styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+
+        <p:dialog 
+            draggable="true"
+            header="Editar Agrupación"
+            id="dialogoEditarAgrupacion"
+            widgetVar="dialogoEditarAgrupacion"
+            showEffect="explode"
+            hideEffect="fade"
+            resizable="false"
+            modal="true"
+            closeOnEscape="true"
+            >
+            <div style="text-align: center;">
+                <p:inputText value="#{MBConfiguracionReporte.nombreAgrupadorEdicion}" 
+                             maxlength="100"
+                             required="true"
+                             requiredMessage="Nombre de agrupador requerido."
+                             placeholder="Nombre de agrupador"
+                             style="width: 200px; margin-right: 10px;"
+                             onkeypress="if (event.keyCode === 13) {
+                                         PF('btnEditarAgrupacion').jq.click();
+                                         return false;
+                                     }"
+                             />
+                <p:commandButton 
+                    value="Aceptar"
+                    widgetVar="btnEditarAgrupacion"
+                    actionListener="#{MBConfiguracionReporte.guardarCambioAgrupacion()}"
+                    update="tablaAgrupadores,growl"
+                    process="dialogoEditarAgrupacion"
+                    oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('dialogoEditarAgrupacion').hide()}"
+                    />
+            </div>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

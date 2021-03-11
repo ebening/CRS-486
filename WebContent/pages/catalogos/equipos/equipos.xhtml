@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="../../template/templatef.xhtml">
+            <ui:define name="center" >
+                <p:panel id="panel" styleClass="innermenu">
+                    <p:commandButton id="equipos-agregar" icon="ui-icon-plus"
+                                     process="@this"
+                                     styleClass="ui-icon-ADAdd" title="Agregar">
+                        <p:ajax event="click"
+                                listener="#{equiposController.comprobarSeleccionCrear}"
+                                update="equipos-panel-crear-formulario equipos-tabla"
+                                resetValues="true"/>
+                    </p:commandButton>
+
+
+                    <p:commandButton id="equipos-editar" icon="ui-icon-pencil"
+                                     process="@this"
+                                     actionListener="#{equiposController.comprobarSeleccionEditar}"
+                                     styleClass="ui-icon-ADEdit" title="Editar">
+                        <p:ajax event="dialogReturn"/>
+                    </p:commandButton>
+
+
+                    <p:commandButton id="equipos-eliminar" icon="ui-icon-trash"
+                                     process="@this"
+                                     actionListener="#{equiposController.comprobarSeleccionEliminar}"
+                                     styleClass="ui-icon-ADTrash" title="Eliminar" >
+                        <p:ajax event="dialogReturn"/>
+                    </p:commandButton>
+                </p:panel>
+
+                <h1 class="title">#{msg.equipos_title}</h1>
+
+                <ui:include src="tabla.xhtml"/>
+
+                <p:dialog id="equipos-dialog-crear"  closeOnEscape="true" closable="true"
+                          widgetVar="dialog-equipos-crear"
+                          modal="true"
+                          appendTo="center-form"
+                          height="500"
+                          width="500"
+                          resizable="false"
+                          minHeight="500"
+                          minWidth="500"
+                          header="#{msg.crear_equipo }  " >
+
+                    <ui:include src="crear.xhtml"/>
+                    <p:ajax event="close"
+                            resetValues="true"
+                            ignoreAutoUpdate="true"
+                            update="equipos-panel-crear-formulario equipos-tabla"
+                            listener="#{equiposController.cerrarDialogCrear}"/>
+                </p:dialog>
+
+                <p:dialog id="equipos-dialog-editar"  closeOnEscape="true" closable="true"
+                          widgetVar="dialog-equipos-editar"
+                          modal="true"
+                          appendTo="center-form"
+                          height="500"
+                          width="500"
+                          resizable="false"
+                          minHeight="500"
+                          minWidth="500"
+                          header="#{msg.editar_equipo }  " >
+
+                    <ui:include src="editar.xhtml"/>
+                    <p:ajax event="close" ignoreAutoUpdate="true"
+                            resetValues="true"
+                            update="equipos-panel-editar-formulario equipos-tabla"
+                            listener="#{equiposController.cerrarDialogEditar}"/>
+                </p:dialog>
+
+                <p:confirmDialog header="Eliminar Equipo"
+                                 appendTo="center-form"
+                                 message="#{equiposController.removeQuestion()}"
+                                 widgetVar="dialog-equipos-eliminar"
+                                 icon="ui-icon-alert"
+                                 showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si"
+                                     update="equipos-tabla" process="@this"
+                                     oncomplete="PF('dialog-equipos-eliminar').hide()"
+                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                     actionListener="#{equiposController.eliminar}"/>
+                    <p:commandButton value="No"
+                                     process="@this"
+                                     oncomplete="PF('dialog-equipos-eliminar').hide()"
+                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </p:confirmDialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

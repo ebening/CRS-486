@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+<!-- ********************************************** Dialog Visitas Programadas *************************** -->
+<ui:composition>
+ <p:dialog header="Visitas programadas" widgetVar="visitasDialog" showEffect="explode" hideEffect="fade" 
+           width="70%" onHide="reset()" appendTo="center-form" onShow='remoteOnShow()'>
+     
+     <p:outputLabel styleClass="text-label" value="Tienda: #{MBTiendas.storeName}" id="txtStoreName" />
+     
+         <br /><br />
+         <p:dataTable id="tableVisitasview" paginatorAlwaysVisible="false" 
+                      emptyMessage="No existen registros" value="#{MBTiendas.visitas}" var="data"
+                      paginator="true" rowsPerPageTemplate="5,10,50,100">
+             <p:column headerText="Visita" width="20%">
+                 <h:outputText value="#{data.visitas}" />
+             </p:column>
+             <p:column headerText="Ruta" width="20%">
+                 <h:outputText value="#{data.ruta}" />
+             </p:column>
+             <p:column headerText="Proyecto" width="20%">
+                 <h:outputText value="#{data.proyectos}" />
+             </p:column>
+             <p:column headerText="Encuesta" width="20%">
+                 <h:outputText value="#{data.encuesta}" />
+             </p:column>
+             <p:column headerText="Promotor" width="20%">
+                 <h:outputText value="#{data.promotor}" />
+             </p:column>
+             <p:column headerText="Fecha visita" width="20%">
+                 <h:outputText value="#{data.fechaIniFormated}" />
+             </p:column>
+         </p:dataTable>
+         <p:remoteCommand id="remoteOnShow" name="remoteOnShow" update="tableVisitasview,txtStoreName"/>
+         <p:remoteCommand id="reset" name="reset" action="#{MBTiendas.resetView()}" update="tableVisitasview" />
+ </p:dialog>
+</ui:composition>
+</html>
+

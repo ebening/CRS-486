@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+      <center>
+          <div class="page-content">
+            <p:dataTable id="territorios-tabla" var="o"
+                         value="#{territoriosController.list}"
+                         selection="#{territoriosController.selected}"
+                         filteredValue="#{territoriosController.filtered}"
+                         rowKey="#{o.id}"
+                         selectionMode="multiple"
+                         rows="10"
+                         paginator="true"
+                         emptyMessage="#{msg.emptyMessage}"
+                         paginatorTemplate="#{msg.paginatorTemplate}"
+                         rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+
+                  <p:columns value="#{territoriosController.columns}"
+                             var="column" columnIndexVar="colIndex"
+                             sortBy="#{o[column.property]}"
+                             filterBy="#{o[column.property]}">
+                        <f:facet name="header">
+                              <h:outputText value="#{column.header}"/>
+                        </f:facet>
+                        <h:outputText value="#{o[column.property]}"/>
+                  </p:columns>
+                  <p:ajax event="rowSelect" listener="#{territoriosController.seleccionar}" update=":center-form:territorios-dialog-editar" />
+                  <p:ajax event="rowUnselect" listener="#{territoriosController.quitarSeleccion}" update=":center-form:territorios-dialog-editar" />
+            </p:dataTable>
+          </div>
+      </center>
+</h:body>
+</html>

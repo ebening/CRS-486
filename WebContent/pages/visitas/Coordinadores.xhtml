@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBCoordinador.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBCoordinador.processUrl()}" />
+    </f:metadata>
+
+    <h:body>
+
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center">
+                <p:remoteCommand autoRun="true" actionListener="#{MBCoordinador.initCoordinador()}" update="tableCoordinador" />
+                
+                <p:panel id="panel" styleClass="innermenu">
+                    <p:commandButton id="bttnDelCoordinador" styleClass="ui-icon-ADTrash" title="Eliminar Coordinador" icon="ui-icon-trash"
+                                     actionListener="#{MBCoordinador.eliminarCoordinador()}" update="tableCoordinador">
+                    </p:commandButton>
+                    <p:tooltip for="bttnDelCoordinador" value="Eliminar Coordinador" trackMouse="true" />
+                    <p:commandButton id="bttnSave" styleClass="ui-icon-ADSave" title="Guardar" update="tableCoordinador" icon="ui-icon-disk"
+                                     actionListener="#{MBCoordinador.guardarCoordinador()}" />
+                    <p:tooltip for="bttnSave" value="Guardar" trackMouse="true" />
+
+                    <!--    <p:commandButton id="bttnDelTiendas" styleClass="ui-icon-ADTrash" title="Borrar" ajax="false" />
+                        <p:tooltip for="bttnDelTiendas" value="Quitar Tiendas del Grupo" trackMouse="true" /> -->
+                </p:panel>
+                <h1 class="title">Coordinador</h1>
+                <br /><br />
+
+                <div class="page-content">
+                        <p:dataTable id="tableCoordinador"
+                                     var="data"
+                                     value="#{MBCoordinador.coordinadores}"
+                                     selection="#{MBCoordinador.coordinadorSeleccionado}"
+                                     rowKey="#{data.usuariosOID}"
+                                     rows="10"
+                                     paginator="true"
+                                     rowsPerPageTemplate="10,20,50,100"
+                                     emptyMessage="No existen registros" 
+                                     >
+
+                            <p:column headerText="Nombre" >
+                                <h:outputText value="#{data.nombreUsuario}" />
+                            </p:column>
+                            <p:column headerText="Perfil" >
+                                <h:outputText value="#{data.nombrePerfil}" />
+                            </p:column>
+                            <p:column width="20%" selectionMode="single" style="width:16px;text-align:center"/>
+                            <p:ajax event="rowSelectRadio" update="tableCoordinador"/>
+                        </p:dataTable>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

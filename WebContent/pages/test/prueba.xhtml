@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <h1 style="color: blueviolet">pagina.xhtml</h1>
+
+        <br/>
+      
+        <p>
+            Las paginas no deben de de este tipo no deben de tener h:head /h:head 
+        </p>
+        <br/>
+        <p>
+            Las paginas se deben de guardar en la base de datos de la siguiente forma:
+            <ul>
+                <li>si las paginas no tienen carpeta de origen debe de guardarse asi : <strong> ../prueba.xhtml</strong></li>
+                <li>si las paginas tienen carpetas de origen debe de guardarse asi :  <strong> ../carpeta/prueba.xhtml</strong></li>
+                <li><p>si las url's tienen parametros :  <strong> ../carpeta/page.xhtml?parameter1=value1&amp;parameter2=value2</strong> <br/>
+                        el menu ya esta preparado para tratar ese cotorreo, los parametros se suben a session
+                        para mas info checarse el MenuPrincipal.java, el metodo <strong>onNodeSelect(NodeSelectEvent event);</strong>.
+                    </p>
+                </li>    
+            </ul>
+
+
+        </p>
+        <br/>
+        <span style="color: red"> Parametros de prueba.xhtml</span>
+        <br/>
+        <h:dataTable value="#{MBAplicacion.menuPrincipal.navigator.parametros}" var="reg">
+
+            <h:column>
+                <f:facet name="header"><span style="color: blue">Key</span></f:facet>
+                <h:outputText value="#{reg.key}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header"><span style="color: blue">Value</span></f:facet>
+                <h:outputText value="#{reg.value}" />
+            </h:column>
+
+        </h:dataTable>
+
+
+
+
+
+
+        <ui:include src="seguridad/UsuariosAD.xhtml"/>
+
+
+
+    </h:body>
+</html>
+

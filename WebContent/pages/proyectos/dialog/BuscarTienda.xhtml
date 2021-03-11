@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog header="Buscar tiendas"
+                  widgetVar="buscarTienda"
+                  showEffect="explode"
+                  hideEffect="fade"
+                  width="80%"
+                  resizable="false"
+                  onShow="initEstados(),initCadena(),initGrupo(),initFormatos()">
+
+            <p:remoteCommand id="initEstados" name="initEstados" action="#{MBEstados.estadosList()}" update="comboEstado,tableBusqueda" />
+            <p:remoteCommand id="initCadena" name="initCadena" action="#{MBCadena.cadenasList()}" update="comboCadena" />
+            <p:remoteCommand id="initFormatos" name="initFormatos" actionListener="#{MBProyectosTiendas.initListaFormatos()}" update="comboFormato" />
+            <p:remoteCommand id="initGrupo" name="initGrupo" action="#{MBProyectosTiendas.listaGruposTiendas()}" update="comboGrupo" />
+
+            <p:panel styleClass="innermenu">
+                <p:commandButton id="bttnBuscarTiendas" 
+                                 styleClass="ui-icon-ADSearch"
+                                 title="Buscar"
+                                 icon="ui-icon-search"
+                                 update="comboGrupo, tableBusqueda"
+                                 actionListener="#{MBProyectosTiendas.buscarTiendas()}">
+                </p:commandButton>
+                <p:tooltip for="bttnBuscarTiendas" value="Buscar" trackMouse="true" />
+                <p:commandButton id="bttnAddBusTiendas" styleClass="ui-icon-ADAdd" actionListener="#{MBProyectosTiendas.agregarTienda()}" icon="ui-icon-plus"
+                                 update="tableTiendas" />
+                <p:tooltip for="bttnAddBusTiendas" value="Agregar Tiendas" trackMouse="true" />
+            </p:panel>
+
+            <h:panelGrid columns="5" cellpadding="5" id="panelFiltros">
+                <p:outputLabel for="nombre" value="Nombre tienda" styleClass="text-label" />
+                <p:outputLabel for="comboCadena" value="Cadena" styleClass="text-label" />
+                <p:outputLabel for="comboFormato" value="Formato" styleClass="text-label" />
+                <p:outputLabel for="comboEstado" value="Estado" styleClass="text-label" />
+                <p:outputLabel for="comboCiudad" value="Ciudad" styleClass="text-label" />
+
+                <p:inputText id="nombre" value="#{MBProyectosTiendas.nombreTienda}"/>
+                <p:selectOneMenu id="comboCadena" value="#{MBProyectosTiendas.cadenasId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:200px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona cadena" itemValue="0" />
+                    <f:selectItems value="#{MBCadena.cadenas}" var="cadena" 
+                                   itemLabel="#{cadena.nombre}" itemValue="#{cadena.id}"/>
+                </p:selectOneMenu>
+                <p:selectOneMenu id="comboFormato" value="#{MBProyectosTiendas.formatoId}" >
+                    <f:selectItem itemLabel="Selecciona formato" itemValue="0" />
+                    <f:selectItems value="#{MBProyectosTiendas.formatos}" var="formato"
+                                   itemLabel="#{formato.nombre}" itemValue="#{formato.id}" /> 
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboEstado" value="#{MBProyectosTiendas.estadosId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:100px;font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona estado" itemValue="0" />
+                    <f:selectItems value="#{MBEstados.estados}" var="estado" itemLabel="#{estado.nombre}" itemValue="#{estado.id}" />
+                    <p:ajax update="comboCiudad" listener="#{MBProyectosTiendas.ciudadeByEstadoId()}" />
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboCiudad" value="#{MBProyectosTiendas.ciudadesId}"
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona ciudad" itemValue="0" />
+                    <f:selectItems value="#{MBProyectosTiendas.ciudades}" var="ciudad" itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <br /><br />
+            <p:outputLabel value="Filtrar por Grupo" for="comboGrupo" styleClass="text-label" /><br /><br />
+            <p:selectOneMenu id="comboGrupo" value="#{MBProyectosTiendas.grupoSelected}"
+                             filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                <f:selectItem itemLabel="Todas las tiendas (Filtros)" itemValue="0" />
+                <f:selectItems value="#{MBProyectosTiendas.grupos}" var="grupo"
+                               itemLabel="#{grupo.nombre}" itemValue="#{grupo.id}" /> 
+                <p:ajax update="tableBusqueda" listener="#{MBProyectosTiendas.fillTableByGrupo(true)}" />
+            </p:selectOneMenu>
+            <br /><br />
+            <p:dataTable id="tableBusqueda" var="data" paginator="true" rows="10" value="#{MBProyectosTiendas.tiendaListSearch}"
+                         rowKey="#{data.id}" selection="#{MBProyectosTiendas.tiendaSearchSelected}" selectionMode="multiple" emptyMessage="No existen registros">
+                <p:column headerText="N&uacute;mero tienda" filterBy="#{data.clave}" filterMatchMode="contains">
+                    <h:outputText value="#{data.clave}" />
+                </p:column>
+                <p:column headerText="Nombre tienda" filterBy="#{data.nombre}" filterMatchMode="contains">
+                    <h:outputText value="#{data.nombre}" />
+                </p:column>
+                <p:column headerText="Cadena" filterBy="#{data.cadena}" filterMatchMode="contains">
+                    <h:outputText value="#{data.cadena}" />
+                </p:column>
+                <p:column headerText="Formato" filterBy="#{data.formato}" filterMatchMode="contains">
+                    <h:outputText value="#{data.formato}" />
+                </p:column>
+                <p:column headerText="Estado" filterBy="#{data.estados}" filterMatchMode="contains">
+                    <h:outputText value="#{data.estados}" />
+                    <p:column headerText="Ciudad" filterBy="#{data.ciudades}" filterMatchMode="contains">
+                        <h:outputText value="#{data.ciudades}" />
+                    </p:column>
+                </p:column>
+            </p:dataTable>
+        </p:dialog> 
+    </ui:composition>
+</html>
+

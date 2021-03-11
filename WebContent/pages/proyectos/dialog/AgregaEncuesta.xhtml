@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition >
+        <p:dialog  header="Elige la Encuesta" widgetVar="agregadoDialog"  id="agregadoDialog"
+                   width="40%" resizable="false" modal="true">
+                   
+            
+            <p:panel styleClass="innermenu">
+                    
+                <p:commandButton id="btnAgregaEncuesta" icon="ui-icon-disk"
+                                 styleClass="ui-icon-ADSave" 
+                                 title="Guardar" 
+                                 actionListener="#{MBProyectos.agregarEncuesta()}" 
+                                 process="@this,panelEncProy" 
+                                 validateClient="true" 
+                                 update=":center-form:tablaEncuestasProyecto,growl" 
+                                 ignoreAutoUpdate="true"
+                                 oncomplete="if(args &amp;&amp; !args.validationFailed) PF('agregadoDialog').hide()">
+
+                </p:commandButton>
+                <!--
+                <p:commandButton id="btnCierraAgregaEncuesta" title="Cerrar" 
+                                 process="@this"
+                                 styleClass="ui-icon-ADGo-left" oncomplete="PF('agregadoDialog').hide()" 
+                                 update=":center-form:tablaEncuestasProyecto :center-form:edicionProyecto" />
+                -->
+            </p:panel>
+            
+            <div class="page-content">
+                <p:panelGrid id="panelEncProy" columns="2" styleClass="panelGridNoBorde"> 
+                    <p:outputLabel  value="Encuestas" />
+                    <p:selectOneMenu  value="#{MBProyectos.idEncuestaSeleccionada}" id="seleccionEncuestas" 
+                                      required="true" requiredMessage="Seleccione una encuesta." filter="true" filterMatchMode="contains" >
+                        <f:selectItem itemLabel="Seleccione una encuesta." itemValue="#{null}" />
+                        <f:selectItems value="#{MBProyectos.listaEncuestasMostrar}" var="encuestaProyecto" 
+                                       itemLabel="#{encuestaProyecto.encuestasId},#{encuestaProyecto.nombreEncuesta}" itemValue="#{encuestaProyecto.encuestasId}" />
+                    </p:selectOneMenu>
+                </p:panelGrid>
+            </div>
+            
+        </p:dialog>
+    </ui:composition>
+</html>
+
+
+

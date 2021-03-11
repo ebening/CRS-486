@@ -1,0 +1,1055 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:composition>
+        <!--<p:scrollPanel style="width:5000px;height:1000px">-->
+        <p:dialog id="miPlantilla"  styleClass="ui-dialog"
+                  resizable="false" widgetVar="plantillaDinamica" showEffect="explode"
+                  hideEffect="fade" width="900"
+                  height="500px" onHide="limpiarDatosEncuesta()" modal="true"
+                  style="position: absolute;">
+            <p:ajax event="close" listener="#{MBEncuestas.loadRefresh()}" update="encuestasDT" />
+
+            <p:remoteCommand name="limpiarDatosEncuesta" 
+                             action="#{MBEncuestas.limpiarDatosEncuesta()}"
+                             update="panelPlantillaDinamica,tabDinamico" />
+
+            <h1 class="title">Encuesta</h1>
+
+            <!-- FINALIZA - Panel busqueda -->
+            <!-- INICIA - Panel resultado configuraciones  -->
+
+
+            <p:outputPanel id="panelPlantillaDinamica">
+                <p:panelGrid id="panelEncuesta" styleClass="panelGridNoBorde">
+                    <p:row>
+                        <p:column >
+                            <p:outputLabel for="nombreEncuesta" value="Nombre de la encuesta " styleClass="text-label"/>
+                            &nbsp;&nbsp;
+                            <p:inputText id="nombreEncuesta" value="#{MBEncuestas.nombreEncuesta}" maxlength="100" style="width: 70%" 
+                                         required="true" requiredMessage="Nombre de la encuesta requerida."/>
+                        </p:column>
+
+                        <p:column >
+                            <p:outputLabel for="observacionEncuesta" value="Observaciones " styleClass="text-label"/>
+                            &nbsp;&nbsp;
+                            <p:inputText id="observacionEncuesta" value="#{MBEncuestas.observacionEncuesta}" maxlength="100" style="width: 100%" 
+                                         required="true" requiredMessage="Observaciones de la encuesta requerida."/>
+                        </p:column>
+
+                        <p:column >
+                            <p:selectBooleanCheckbox value="#{MBEncuestas.operacion}" />
+                            &nbsp;&nbsp;
+                            <p:outputLabel value="Activa " styleClass="text-label"/>
+                        </p:column>
+
+                        <p:column >
+                            <p:commandButton  styleClass="ui-icon-ADSave" id="btnGuardaEncuesta" process="@this,panelEncuesta" icon="ui-icon-disk"
+                                              ignoreAutoUpdate="true" 
+                                              actionListener="#{MBEncuestas.guardaEncuesta()}" update="encuestasDT,panelGuardaComoPlantilla,panelEncuesta,mensajes2">
+                            </p:commandButton>
+                            <p:tooltip for="btnGuardaEncuesta" value="Guardar encuesta" trackMouse="true" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+                <p:panel styleClass="innermenu">
+
+                    <p:commandButton styleClass="ui-icon-ADAgregar-seccion" resetValues="true" process="@this" update="panelConfigSeccion" icon="ui-icon-script"
+                                     title="Configura secci&oacute;n" actionListener="#{MBEncuestas.traeSeccion(null, '')}">
+                    </p:commandButton>
+
+                    <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"  resetValues="true" process="@this" icon="ui-icon-comment"
+                                     ignoreAutoUpdate="true"
+                                     update=":center-form:panelConfiguraPregunta,mensajes2"
+                                     actionListener="#{MBEncuestas.traePregunta(0,'','')}"
+                                     title="Configurar pregunta" />
+
+                    <p:commandButton resetValues="true" process="@this" icon="ui-icon-note"
+                                     update=":center-form:panelBancoPreguntas,:center-form:preguntasBancoDT" 
+                                     actionListener="#{MBEncuestas.eventBancoPreguntas()}" 
+                                     styleClass="ui-icon-ADBanco-preguntas" title="Banco de preguntas" />
+
+                    <p:commandButton process="@this" styleClass="ui-icon-ADFolder-opened" icon="ui-icon-folder-open" resetValues="true"  actionListener="#{MBEncuestas.validaGuardaComoPlantilla()}"
+                                     title="Guardar como plantilla" />
+                </p:panel>
+
+                <p:accordionPanel multiple="true" id="tabDinamico" dynamic="true"
+                                  value="#{MBEncuestas.laEncuesta.listaSecciones}" var="secciones"   >
+
+                    <p:tab title="#{secciones.orden} - #{secciones.nombreSeccion}" >
+                        <!--
+                        <p:outputLabel  value="{secciones.orden} - " styleClass="text-label" />
+                        
+                        <p:outputLabel  value="{secciones.nombreSeccion}" styleClass="text-label" />
+                        -->
+                        <div align="right">
+                            <p:commandButton process="@this"
+                                             resetValues="true"
+                                             icon="ui-icon-pencil"
+                                             update=":center-form:panelConfigSeccion"
+                                             actionListener="#{MBEncuestas.traeSeccion(null, secciones.seccionOID)}"
+                                             styleClass="ui-icon-ADEdit"
+                                             title="Editar #{secciones.nombreSeccion}" />
+                            &nbsp;&nbsp;
+                            <p:commandButton styleClass="ui-icon-ADAgregar-seccion"
+                                             resetValues="true"
+                                             process="@this"
+                                             update=":center-form:panelConfigSeccion"
+                                             icon="ui-icon-script"
+                                             title="Configura secci&oacute;n"
+                                             actionListener="#{MBEncuestas.traeSeccion(secciones, '')}"/>
+                            &nbsp;&nbsp;
+                            <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"
+                                             resetValues="true"
+                                             process="@this"
+                                             icon="ui-icon-comment"
+                                             ignoreAutoUpdate="true"
+                                             update=":center-form:panelConfiguraPregunta,:center-form:mensajes2"
+                                             actionListener="#{MBEncuestas.traePregunta(secciones.orden,secciones.seccionOID,'')}"
+                                             title="Configurar pregunta" />
+                            &nbsp;&nbsp;
+                            <p:commandButton actionListener="#{MBEncuestas.eliminaSeccion(secciones.seccionOID)}"
+                                             icon="ui-icon-trash"
+                                             styleClass="ui-icon-ADTrash"
+                                             title="Eliminar #{secciones.nombreSeccion}"
+                                             process="@this"
+                                             update=":center-form:tabDinamico,:center-form:mensajes2">
+                                <p:confirm header="Confirmaci&oacute;n"
+                                           message="¿Est&aacute; seguro que desea eliminar la sección de la encuesta?"
+                                           icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </div>
+                        <p:dataTable  var="preg" value="#{secciones.miListaPreguntas}" emptyMessage="No existen preguntas">
+
+                            <p:column style="width:5%">
+                                <p:rowToggler />
+                            </p:column>
+
+                            <p:column style="width:85%">
+                                <h:outputText value="#{preg.orden} - #{preg.descripcionPregunta}" styleClass="text-label"/>
+                                <br/>
+                                <ui:fragment rendered="${preg.idTipoPregunta == 1}">
+                                    <p:inputTextarea rows="1" cols="33" />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 2}">
+                                    <p:inputText />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 3}">
+                                    <p:inputText />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 4}">
+                                    <p:calendar id="button"  showOn="button" />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 5}">
+                                    <p:calendar id="time" pattern="HH:mm a" timeOnly="true"  />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 6}">
+                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}"
+                                               varStatus="statsop">-->
+                                    <!-- value="{MBEncuestas.opcion}" -->
+                                    <p:selectOneRadio id="opcoinMultiple" value="#{MBEncuestas.opcion}" 
+                                                      layout="grid" columns="1" styleClass="AD-ui-selecton-control" >
+                                        <!--<f:selectItem  itemLabel="{ops.textoOpcion}" itemValue="{ops.textoOpcion}" />-->
+                                        <f:selectItems var="ops" value="#{preg.misOpciones}" itemLabel="#{ops.textoOpcion}" itemValue="#{ops.textoOpcion}" />
+                                    </p:selectOneRadio>
+                                    <!--    <p:outputLabel value="" />
+                                        <p:outputLabel value="" />
+                                    </ui:repeat>-->
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 7}">
+                                    <ui:repeat var="ops" value="${preg.misOpciones}"
+                                               varStatus="statsop">
+                                        <p:selectManyCheckbox 
+                                            value="#{MBEncuestas.opcionCheck}" layout="grid" columns="1" styleClass="AD-ui-selecton-control">
+                                            <f:selectItem itemLabel="#{ops.textoOpcion}"
+                                                          itemValue="#{ops.textoOpcion}" />
+                                        </p:selectManyCheckbox>
+                                        <p:outputLabel value="" />
+                                        <p:outputLabel value="" />
+                                    </ui:repeat>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 8}">
+                                    <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" 
+                                                  process="@this"
+                                                  label="Seleccione una imagen" 
+                                                  uploadLabel="Subir" 
+                                                  cancelLabel="Cancelar"
+                                                  fileLimitMessage="Solo puede haber una imagen." 
+                                                  invalidFileMessage="Tipo de archivo no valido." 
+                                                  invalidSizeMessage="Tamaño de archivo no valido."
+                                                  />
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 9}">
+                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}" varStatus="statsop">-->
+
+                                    <p:selectOneMenu value="#{MBEncuestas.opcionCheck}" >
+                                        <f:selectItems value="${preg.misOpciones}" var="item" 
+                                                       itemLabel="#{item.textoOpcion}" itemValue="#{item.textoOpcion}" itemDisabled="true" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="" />
+                                    <p:outputLabel value="" />
+                                    <!--</ui:repeat>-->
+                                </ui:fragment>
+
+                                <ui:fragment rendered="${preg.idTipoPregunta == 10}">
+                                    <!-- value="{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"  -->
+                                    <p:remoteCommand autoRun="true" name="loadLogonew" process="@this" update="myImage" actionListener="#{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"/>
+                                    <p:graphicImage id="myImage" value="#{MBEncuestas.imgInstruccion}" 
+                                                    width="200" height="171" cache="false" 
+                                                    rendered="#{not empty preg.archivoImagen}">
+                                        <f:param name="imgPregunta" value="#{preg.archivoImagen}" />
+                                    </p:graphicImage>
+
+                                    <pe:imageRotateAndResize id="rotateAndResize" for="myImage" widgetVar="rotateAndResizeWidget">  
+                                        <p:ajax event="rotate" listener="#{MBEncuestas.rotateListener}" />  
+                                        <p:ajax event="resize" listener="#{MBEncuestas.resizeListener}" />  
+                                    </pe:imageRotateAndResize>
+                                    <p:outputLabel value="#{preg.archivoImagen}" />
+                                    <br/>
+
+                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="izquierda"  
+                                                     onclick="PF('rotateAndResizeWidget').rotateLeft(90);
+                                                             return false;" rendered="#{not empty preg.archivoImagen}"/>  
+                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-e" value="derecha"  
+                                                     onclick="PF('rotateAndResizeWidget').rotateRight(90);
+                                                             return false;" rendered="#{not empty preg.archivoImagen}"/>  
+                                    <p:commandButton icon="ui-icon-zoomin" value="aumenta +"  
+                                                     onclick="PF('rotateAndResizeWidget').scale(1.05);
+                                                             return false;" rendered="#{not empty preg.archivoImagen}"/>  
+                                    <p:commandButton icon="ui-icon-zoomout" value="disminuye -"  
+                                                     onclick="PF('rotateAndResizeWidget').scale(0.95);
+                                                             return false;" rendered="#{not empty preg.archivoImagen}"/>
+                                </ui:fragment>
+                            </p:column>
+                            <p:column style="width:5%; padding:0; text-align:center">
+                                <p:commandButton
+                                    update=":center-form:panelConfiguraPregunta" resetValues="true" process="@this" icon="ui-icon-pencil"
+                                    actionListener="#{MBEncuestas.traePregunta(secciones.orden,secciones.seccionOID,preg.preguntaOID)}"
+                                    styleClass="ui-icon-ADEditar25x25" 
+                                    title="Editar Pregunta #{pregs.descripcionPregunta}" >
+
+                                    <f:param name="sec" value="#{secciones.seccionOID}" />
+                                    <f:param name="prg" value="#{preg.preguntaOID}" />
+
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:5%; padding:0; text-align:center">
+                                <p:commandButton
+                                    actionListener="#{MBEncuestas.eliminaPregunta(preg.preguntaOID)}" immediate="true" icon="ui-icon-trash"
+                                    styleClass="ui-icon-ADEliminar25x25"  process="@this"
+                                    title="Eliminar pregunta." update=":center-form:tabDinamico,:center-form:mensajes2">
+                                    <p:confirm header="Confirmación"
+                                               message="¿Est&aacute; seguro que desea eliminar la pregunta de la encuesta?"
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:accordionPanel multiple="true" id="tabDinamicoInternal" dynamic="true"
+                                          value="#{secciones.secciones}" var="internalSeccion"   >
+
+                            <p:tab title="#{internalSeccion.orden} - #{internalSeccion.nombreSeccion}" >
+                                <!--
+                                <p:outputLabel  value="{secciones.orden} - " styleClass="text-label" />
+                                
+                                <p:outputLabel  value="{secciones.nombreSeccion}" styleClass="text-label" />
+                                -->
+                                <div align="right">
+                                    <p:commandButton process="@this"
+                                                     resetValues="true"
+                                                     icon="ui-icon-pencil"
+                                                     update=":center-form:panelConfigSeccion"
+                                                     actionListener="#{MBEncuestas.traeSeccion(secciones, internalSeccion.seccionOID)}"
+                                                     styleClass="ui-icon-ADEdit"
+                                                     title="Editar #{internalSeccion.nombreSeccion}" />
+                                    &nbsp;&nbsp;
+                                    <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"
+                                                     resetValues="true"
+                                                     process="@this"
+                                                     icon="ui-icon-comment"
+                                                     ignoreAutoUpdate="true"
+                                                     update=":center-form:panelConfiguraPregunta,:center-form:mensajes2"
+                                                     actionListener="#{MBEncuestas.traePregunta(internalSeccion.orden,internalSeccion.seccionOID,'')}"
+                                                     title="Configurar pregunta" />
+                                    &nbsp;&nbsp;
+                                    <p:commandButton actionListener="#{MBEncuestas.eliminaSeccion(internalSeccion.seccionOID)}"
+                                                     icon="ui-icon-trash"
+                                                     styleClass="ui-icon-ADTrash"
+                                                     title="Eliminar #{internalSeccion.nombreSeccion}"
+                                                     process="@this"
+                                                     update=":center-form:tabDinamico,:center-form:mensajes2">
+                                        <p:confirm header="Confirmaci&oacute;n"
+                                                   message="¿Est&aacute; seguro que desea eliminar la sección de la encuesta?"
+                                                   icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </div>
+                                <p:dataTable  var="internalPreg" value="#{internalSeccion.miListaPreguntas}" emptyMessage="No existen preguntas">
+
+                                    <p:column style="width:5%">
+                                        <p:rowToggler />
+                                    </p:column>
+
+                                    <p:column style="width:85%">
+                                        <h:outputText value="#{internalPreg.orden} - #{internalPreg.descripcionPregunta}" styleClass="text-label"/>
+                                        <br/>
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 1}">
+                                            <p:inputTextarea rows="1" cols="33" />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 2}">
+                                            <p:inputText />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 3}">
+                                            <p:inputText />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 4}">
+                                            <p:calendar id="button"  showOn="button" />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 5}">
+                                            <p:calendar id="time" pattern="HH:mm a" timeOnly="true"  />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 6}">
+                                            <!--<ui:repeat var="ops" value="{preg.misOpciones}"
+                                                       varStatus="statsop">-->
+                                            <!-- value="{MBEncuestas.opcion}" -->
+                                            <p:selectOneRadio id="opcoinMultiple" value="#{MBEncuestas.opcion}" 
+                                                              layout="grid" columns="1" styleClass="AD-ui-selecton-control" >
+                                                <!--<f:selectItem  itemLabel="{ops.textoOpcion}" itemValue="{ops.textoOpcion}" />-->
+                                                <f:selectItems var="internalOps" value="#{internalPreg.misOpciones}" itemLabel="#{internalOps.textoOpcion}" itemValue="#{internalOps.textoOpcion}" />
+                                            </p:selectOneRadio>
+                                            <!--    <p:outputLabel value="" />
+                                                <p:outputLabel value="" />
+                                            </ui:repeat>-->
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 7}">
+                                            <ui:repeat var="internalOps" value="${internalPreg.misOpciones}"
+                                                       varStatus="statsop">
+                                                <p:selectManyCheckbox 
+                                                    value="#{MBEncuestas.opcionCheck}" layout="grid" columns="1" styleClass="AD-ui-selecton-control">
+                                                    <f:selectItem itemLabel="#{internalOps.textoOpcion}"
+                                                                  itemValue="#{internalOps.textoOpcion}" />
+                                                </p:selectManyCheckbox>
+                                                <p:outputLabel value="" />
+                                                <p:outputLabel value="" />
+                                            </ui:repeat>
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 8}">
+                                            <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" 
+                                                          process="@this"
+                                                          label="Seleccione una imagen" 
+                                                          uploadLabel="Subir" 
+                                                          cancelLabel="Cancelar"
+                                                          fileLimitMessage="Solo puede haber una imagen." 
+                                                          invalidFileMessage="Tipo de archivo no valido." 
+                                                          invalidSizeMessage="Tamaño de archivo no valido."
+                                                          />
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 9}">
+                                            <!--<ui:repeat var="ops" value="{preg.misOpciones}" varStatus="statsop">-->
+
+                                            <p:selectOneMenu value="#{MBEncuestas.opcionCheck}" >
+                                                <f:selectItems value="${internalPreg.misOpciones}" var="internalItems" 
+                                                               itemLabel="#{internalItems.textoOpcion}" itemValue="#{internalItems.textoOpcion}" itemDisabled="true" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="" />
+                                            <!--</ui:repeat>-->
+                                        </ui:fragment>
+
+                                        <ui:fragment rendered="${internalPreg.idTipoPregunta == 10}">
+                                            <!-- value="{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"  -->
+                                            <p:remoteCommand autoRun="true" name="loadLogonew" process="@this" update="myImage" actionListener="#{MBEncuestas.getISInstDinamico(internalPreg.archivoImagen)}"/>
+                                            <p:graphicImage id="myImage" value="#{MBEncuestas.imgInstruccion}" 
+                                                            width="200" height="171" cache="false" 
+                                                            rendered="#{not empty internalPreg.archivoImagen}">
+                                                <f:param name="imgPregunta" value="#{internalPreg.archivoImagen}" />
+                                            </p:graphicImage>
+
+                                            <pe:imageRotateAndResize id="rotateAndResize" for="myImage" widgetVar="rotateAndResizeWidget">  
+                                                <p:ajax event="rotate" listener="#{MBEncuestas.rotateListener}" />  
+                                                <p:ajax event="resize" listener="#{MBEncuestas.resizeListener}" />  
+                                            </pe:imageRotateAndResize>
+                                            <p:outputLabel value="#{internalPreg.archivoImagen}" />
+                                            <br/>
+
+                                            <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="izquierda"  
+                                                             onclick="PF('rotateAndResizeWidget').rotateLeft(90);
+                                                                     return false;" rendered="#{not empty internalPreg.archivoImagen}"/>  
+                                            <p:commandButton icon="ui-icon-arrowreturnthick-1-e" value="derecha"  
+                                                             onclick="PF('rotateAndResizeWidget').rotateRight(90);
+                                                                     return false;" rendered="#{not empty internalPreg.archivoImagen}"/>  
+                                            <p:commandButton icon="ui-icon-zoomin" value="aumenta +"  
+                                                             onclick="PF('rotateAndResizeWidget').scale(1.05);
+                                                                     return false;" rendered="#{not empty internalPreg.archivoImagen}"/>  
+                                            <p:commandButton icon="ui-icon-zoomout" value="disminuye -"  
+                                                             onclick="PF('rotateAndResizeWidget').scale(0.95);
+                                                                     return false;" rendered="#{not empty internalPreg.archivoImagen}"/>
+                                        </ui:fragment>
+                                    </p:column>
+                                    <p:column style="width:5%; padding:0; text-align:center">
+                                        <p:commandButton
+                                            update=":center-form:panelConfiguraPregunta" resetValues="true" process="@this" icon="ui-icon-pencil"
+                                            actionListener="#{MBEncuestas.traePregunta(internalSeccion.orden,internalSeccion.seccionOID,internalPreg.preguntaOID)}"
+                                            styleClass="ui-icon-ADEditar25x25" 
+                                            title="Editar Pregunta #{internalPreg.descripcionPregunta}" >
+
+                                            <f:param name="sec" value="#{internalSeccion.seccionOID}" />
+                                            <f:param name="prg" value="#{internalPreg.preguntaOID}" />
+
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column style="width:5%; padding:0; text-align:center">
+                                        <p:commandButton
+                                            actionListener="#{MBEncuestas.eliminaPregunta(internalPreg.preguntaOID)}" immediate="true" icon="ui-icon-trash"
+                                            styleClass="ui-icon-ADEliminar25x25"  process="@this"
+                                            title="Eliminar pregunta." update=":center-form:tabDinamico,:center-form:mensajes2">
+                                            <p:confirm header="Confirmación"
+                                                       message="¿Est&aacute; seguro que desea eliminar la pregunta de la encuesta?"
+                                                       icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                                <p:accordionPanel multiple="true" id="tabDinamicoSecond" dynamic="true"
+                                                  value="#{internalSeccion.secciones}" var="secondSeccion"   >
+
+                                    <p:tab title="#{secondSeccion.orden} - #{secondSeccion.nombreSeccion}" >
+                                        <!--
+                                        <p:outputLabel  value="{secciones.orden} - " styleClass="text-label" />
+                                        
+                                        <p:outputLabel  value="{secciones.nombreSeccion}" styleClass="text-label" />
+                                        -->
+                                        <div align="right">
+                                            <p:commandButton process="@this"
+                                                             resetValues="true"
+                                                             icon="ui-icon-pencil"
+                                                             update=":center-form:panelConfigSeccion"
+                                                             actionListener="#{MBEncuestas.traeSeccion(internalSeccion, secondSeccion.seccionOID)}"
+                                                             styleClass="ui-icon-ADEdit"
+                                                             title="Editar #{secondSeccion.nombreSeccion}" />
+                                            &nbsp;&nbsp;
+                                            <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"
+                                                             resetValues="true"
+                                                             process="@this"
+                                                             icon="ui-icon-comment"
+                                                             ignoreAutoUpdate="true"
+                                                             update=":center-form:panelConfiguraPregunta,:center-form:mensajes2"
+                                                             actionListener="#{MBEncuestas.traePregunta(secondSeccion.orden,secondSeccion.seccionOID,'')}"
+                                                             title="Configurar pregunta" />
+                                            &nbsp;&nbsp;
+                                            <p:commandButton actionListener="#{MBEncuestas.eliminaSeccion(secondSeccion.seccionOID)}"
+                                                             icon="ui-icon-trash"
+                                                             styleClass="ui-icon-ADTrash"
+                                                             title="Eliminar #{secondSeccion.nombreSeccion}"
+                                                             process="@this"
+                                                             update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                <p:confirm header="Confirmaci&oacute;n"
+                                                           message="¿Est&aacute; seguro que desea eliminar la sección de la encuesta?"
+                                                           icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                        </div>
+                                        <p:dataTable  var="secondPreg" value="#{secondSeccion.miListaPreguntas}" emptyMessage="No existen preguntas">
+
+                                            <p:column style="width:5%">
+                                                <p:rowToggler />
+                                            </p:column>
+
+                                            <p:column style="width:85%">
+                                                <h:outputText value="#{secondPreg.orden} - #{secondPreg.descripcionPregunta}" styleClass="text-label"/>
+                                                <br/>
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 1}">
+                                                    <p:inputTextarea rows="1" cols="33" />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 2}">
+                                                    <p:inputText />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 3}">
+                                                    <p:inputText />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 4}">
+                                                    <p:calendar id="button"  showOn="button" />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 5}">
+                                                    <p:calendar id="time" pattern="HH:mm a" timeOnly="true"  />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 6}">
+                                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}"
+                                                               varStatus="statsop">-->
+                                                    <!-- value="{MBEncuestas.opcion}" -->
+                                                    <p:selectOneRadio id="opcoinMultiple" value="#{MBEncuestas.opcion}" 
+                                                                      layout="grid" columns="1" styleClass="AD-ui-selecton-control" >
+                                                        <!--<f:selectItem  itemLabel="{ops.textoOpcion}" itemValue="{ops.textoOpcion}" />-->
+                                                        <f:selectItems var="secondOps" value="#{secondPreg.misOpciones}" itemLabel="#{secondOps.textoOpcion}" itemValue="#{secondOps.textoOpcion}" />
+                                                    </p:selectOneRadio>
+                                                    <!--    <p:outputLabel value="" />
+                                                        <p:outputLabel value="" />
+                                                    </ui:repeat>-->
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 7}">
+                                                    <ui:repeat var="secondOps" value="${secondPreg.misOpciones}"
+                                                               varStatus="statsop">
+                                                        <p:selectManyCheckbox 
+                                                            value="#{MBEncuestas.opcionCheck}" layout="grid" columns="1" styleClass="AD-ui-selecton-control">
+                                                            <f:selectItem itemLabel="#{secondOps.textoOpcion}"
+                                                                          itemValue="#{secondOps.textoOpcion}" />
+                                                        </p:selectManyCheckbox>
+                                                        <p:outputLabel value="" />
+                                                        <p:outputLabel value="" />
+                                                    </ui:repeat>
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 8}">
+                                                    <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" 
+                                                                  process="@this"
+                                                                  label="Seleccione una imagen" 
+                                                                  uploadLabel="Subir" 
+                                                                  cancelLabel="Cancelar"
+                                                                  fileLimitMessage="Solo puede haber una imagen." 
+                                                                  invalidFileMessage="Tipo de archivo no valido." 
+                                                                  invalidSizeMessage="Tamaño de archivo no valido."
+                                                                  />
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 9}">
+                                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}" varStatus="statsop">-->
+
+                                                    <p:selectOneMenu value="#{MBEncuestas.opcionCheck}" >
+                                                        <f:selectItems value="${secondPreg.misOpciones}" var="secondItems" 
+                                                                       itemLabel="#{secondItems.textoOpcion}" itemValue="#{secondItems.textoOpcion}" itemDisabled="true" />
+                                                    </p:selectOneMenu>
+                                                    <p:outputLabel value="" />
+                                                    <p:outputLabel value="" />
+                                                    <!--</ui:repeat>-->
+                                                </ui:fragment>
+
+                                                <ui:fragment rendered="${secondPreg.idTipoPregunta == 10}">
+                                                    <!-- value="{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"  -->
+                                                    <p:remoteCommand autoRun="true" name="loadLogonew" process="@this" update="myImage" actionListener="#{MBEncuestas.getISInstDinamico(secondPreg.archivoImagen)}"/>
+                                                    <p:graphicImage id="myImage" value="#{MBEncuestas.imgInstruccion}" 
+                                                                    width="200" height="171" cache="false" 
+                                                                    rendered="#{not empty secondPreg.archivoImagen}">
+                                                        <f:param name="imgPregunta" value="#{secondPreg.archivoImagen}" />
+                                                    </p:graphicImage>
+
+                                                    <pe:imageRotateAndResize id="rotateAndResize" for="myImage" widgetVar="rotateAndResizeWidget">  
+                                                        <p:ajax event="rotate" listener="#{MBEncuestas.rotateListener}" />  
+                                                        <p:ajax event="resize" listener="#{MBEncuestas.resizeListener}" />  
+                                                    </pe:imageRotateAndResize>
+                                                    <p:outputLabel value="#{secondPreg.archivoImagen}" />
+                                                    <br/>
+
+                                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="izquierda"  
+                                                                     onclick="PF('rotateAndResizeWidget').rotateLeft(90);
+                                                                             return false;" rendered="#{not empty secondPreg.archivoImagen}"/>  
+                                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-e" value="derecha"  
+                                                                     onclick="PF('rotateAndResizeWidget').rotateRight(90);
+                                                                             return false;" rendered="#{not empty secondPreg.archivoImagen}"/>  
+                                                    <p:commandButton icon="ui-icon-zoomin" value="aumenta +"  
+                                                                     onclick="PF('rotateAndResizeWidget').scale(1.05);
+                                                                             return false;" rendered="#{not empty secondPreg.archivoImagen}"/>  
+                                                    <p:commandButton icon="ui-icon-zoomout" value="disminuye -"  
+                                                                     onclick="PF('rotateAndResizeWidget').scale(0.95);
+                                                                             return false;" rendered="#{not empty secondPreg.archivoImagen}"/>
+                                                </ui:fragment>
+                                            </p:column>
+                                            <p:column style="width:5%; padding:0; text-align:center">
+                                                <p:commandButton
+                                                    update=":center-form:panelConfiguraPregunta" resetValues="true" process="@this" icon="ui-icon-pencil"
+                                                    actionListener="#{MBEncuestas.traePregunta(secondSeccion.orden,secondSeccion.seccionOID,secondPreg.preguntaOID)}"
+                                                    styleClass="ui-icon-ADEditar25x25" 
+                                                    title="Editar Pregunta #{secondPreg.descripcionPregunta}" >
+
+                                                    <f:param name="sec" value="#{secondSeccion.seccionOID}" />
+                                                    <f:param name="prg" value="#{secondPreg.preguntaOID}" />
+
+                                                </p:commandButton>
+                                            </p:column>
+                                            <p:column style="width:5%; padding:0; text-align:center">
+                                                <p:commandButton
+                                                    actionListener="#{MBEncuestas.eliminaPregunta(secondPreg.preguntaOID)}" immediate="true" icon="ui-icon-trash"
+                                                    styleClass="ui-icon-ADEliminar25x25"  process="@this"
+                                                    title="Eliminar pregunta." update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                    <p:confirm header="Confirmación"
+                                                               message="¿Est&aacute; seguro que desea eliminar la pregunta de la encuesta?"
+                                                               icon="ui-icon-alert" />
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                        <p:accordionPanel multiple="true" id="tabDinamicoThird" dynamic="true"
+                                                          value="#{secondSeccion.secciones}" var="thirdSeccion"   >
+
+                                            <p:tab title="#{thirdSeccion.orden} - #{thirdSeccion.nombreSeccion}" >
+                                                <!--
+                                                <p:outputLabel  value="{secciones.orden} - " styleClass="text-label" />
+                                                
+                                                <p:outputLabel  value="{secciones.nombreSeccion}" styleClass="text-label" />
+                                                -->
+                                                <div align="right">
+                                                    <p:commandButton process="@this"
+                                                                     resetValues="true"
+                                                                     icon="ui-icon-pencil"
+                                                                     update=":center-form:panelConfigSeccion"
+                                                                     actionListener="#{MBEncuestas.traeSeccion(secondSeccion, thirdSeccion.seccionOID)}"
+                                                                     styleClass="ui-icon-ADEdit"
+                                                                     title="Editar #{thirdSeccion.nombreSeccion}" />
+                                                    &nbsp;&nbsp;
+                                                    <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"
+                                                                     resetValues="true"
+                                                                     process="@this"
+                                                                     icon="ui-icon-comment"
+                                                                     ignoreAutoUpdate="true"
+                                                                     update=":center-form:panelConfiguraPregunta,:center-form:mensajes2"
+                                                                     actionListener="#{MBEncuestas.traePregunta(thirdSeccion.orden,thirdSeccion.seccionOID,'')}"
+                                                                     title="Configurar pregunta" />
+                                                    &nbsp;&nbsp;
+                                                    <p:commandButton actionListener="#{MBEncuestas.eliminaSeccion(thirdSeccion.seccionOID)}"
+                                                                     icon="ui-icon-trash"
+                                                                     styleClass="ui-icon-ADTrash"
+                                                                     title="Eliminar #{thirdSeccion.nombreSeccion}"
+                                                                     process="@this"
+                                                                     update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                        <p:confirm header="Confirmaci&oacute;n"
+                                                                   message="¿Est&aacute; seguro que desea eliminar la sección de la encuesta?"
+                                                                   icon="ui-icon-alert" />
+                                                    </p:commandButton>
+                                                </div>
+                                                <p:dataTable  var="thirdPreg" value="#{thirdSeccion.miListaPreguntas}" emptyMessage="No existen preguntas">
+
+                                                    <p:column style="width:5%">
+                                                        <p:rowToggler />
+                                                    </p:column>
+
+                                                    <p:column style="width:85%">
+                                                        <h:outputText value="#{thirdPreg.orden} - #{thirdPreg.descripcionPregunta}" styleClass="text-label"/>
+                                                        <br/>
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 1}">
+                                                            <p:inputTextarea rows="1" cols="33" />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 2}">
+                                                            <p:inputText />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 3}">
+                                                            <p:inputText />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 4}">
+                                                            <p:calendar id="button"  showOn="button" />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 5}">
+                                                            <p:calendar id="time" pattern="HH:mm a" timeOnly="true"  />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 6}">
+                                                            <!--<ui:repeat var="ops" value="{preg.misOpciones}"
+                                                                       varStatus="statsop">-->
+                                                            <!-- value="{MBEncuestas.opcion}" -->
+                                                            <p:selectOneRadio id="opcoinMultiple" value="#{MBEncuestas.opcion}" 
+                                                                              layout="grid" columns="1" styleClass="AD-ui-selecton-control" >
+                                                                <!--<f:selectItem  itemLabel="{ops.textoOpcion}" itemValue="{ops.textoOpcion}" />-->
+                                                                <f:selectItems var="thirdOps" value="#{thirdPreg.misOpciones}" itemLabel="#{thirdOps.textoOpcion}" itemValue="#{thirdOps.textoOpcion}" />
+                                                            </p:selectOneRadio>
+                                                            <!--    <p:outputLabel value="" />
+                                                                <p:outputLabel value="" />
+                                                            </ui:repeat>-->
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 7}">
+                                                            <ui:repeat var="thirdOps" value="${thirdPreg.misOpciones}"
+                                                                       varStatus="statsop">
+                                                                <p:selectManyCheckbox 
+                                                                    value="#{MBEncuestas.opcionCheck}" layout="grid" columns="1" styleClass="AD-ui-selecton-control">
+                                                                    <f:selectItem itemLabel="#{thirdOps.textoOpcion}"
+                                                                                  itemValue="#{thirdOps.textoOpcion}" />
+                                                                </p:selectManyCheckbox>
+                                                                <p:outputLabel value="" />
+                                                                <p:outputLabel value="" />
+                                                            </ui:repeat>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 8}">
+                                                            <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" 
+                                                                          process="@this"
+                                                                          label="Seleccione una imagen" 
+                                                                          uploadLabel="Subir" 
+                                                                          cancelLabel="Cancelar"
+                                                                          fileLimitMessage="Solo puede haber una imagen." 
+                                                                          invalidFileMessage="Tipo de archivo no valido." 
+                                                                          invalidSizeMessage="Tamaño de archivo no valido."
+                                                                          />
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 9}">
+                                                            <!--<ui:repeat var="ops" value="{preg.misOpciones}" varStatus="statsop">-->
+
+                                                            <p:selectOneMenu value="#{MBEncuestas.opcionCheck}" >
+                                                                <f:selectItems value="${thirdPreg.misOpciones}" var="thirdItems" 
+                                                                               itemLabel="#{thirdItems.textoOpcion}" itemValue="#{thirdItems.textoOpcion}" itemDisabled="true" />
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="" />
+                                                            <p:outputLabel value="" />
+                                                            <!--</ui:repeat>-->
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="${thirdPreg.idTipoPregunta == 10}">
+                                                            <!-- value="{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"  -->
+                                                            <p:remoteCommand autoRun="true" name="loadLogonew" process="@this" update="myImage" actionListener="#{MBEncuestas.getISInstDinamico(thirdPreg.archivoImagen)}"/>
+                                                            <p:graphicImage id="myImage" value="#{MBEncuestas.imgInstruccion}" 
+                                                                            width="200" height="171" cache="false" 
+                                                                            rendered="#{not empty thirdPreg.archivoImagen}">
+                                                                <f:param name="imgPregunta" value="#{thirdPreg.archivoImagen}" />
+                                                            </p:graphicImage>
+
+                                                            <pe:imageRotateAndResize id="rotateAndResize" for="myImage" widgetVar="rotateAndResizeWidget">  
+                                                                <p:ajax event="rotate" listener="#{MBEncuestas.rotateListener}" />  
+                                                                <p:ajax event="resize" listener="#{MBEncuestas.resizeListener}" />  
+                                                            </pe:imageRotateAndResize>
+                                                            <p:outputLabel value="#{thirdPreg.archivoImagen}" />
+                                                            <br/>
+
+                                                            <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="izquierda"  
+                                                                             onclick="PF('rotateAndResizeWidget').rotateLeft(90);
+                                                                                     return false;" rendered="#{not empty thirdPreg.archivoImagen}"/>  
+                                                            <p:commandButton icon="ui-icon-arrowreturnthick-1-e" value="derecha"  
+                                                                             onclick="PF('rotateAndResizeWidget').rotateRight(90);
+                                                                                     return false;" rendered="#{not empty thirdPreg.archivoImagen}"/>  
+                                                            <p:commandButton icon="ui-icon-zoomin" value="aumenta +"  
+                                                                             onclick="PF('rotateAndResizeWidget').scale(1.05);
+                                                                                     return false;" rendered="#{not empty thirdPreg.archivoImagen}"/>  
+                                                            <p:commandButton icon="ui-icon-zoomout" value="disminuye -"  
+                                                                             onclick="PF('rotateAndResizeWidget').scale(0.95);
+                                                                                     return false;" rendered="#{not empty thirdPreg.archivoImagen}"/>
+                                                        </ui:fragment>
+                                                    </p:column>
+                                                    <p:column style="width:5%; padding:0; text-align:center">
+                                                        <p:commandButton
+                                                            update=":center-form:panelConfiguraPregunta" resetValues="true" process="@this" icon="ui-icon-pencil"
+                                                            actionListener="#{MBEncuestas.traePregunta(thirdSeccion.orden,thirdSeccion.seccionOID,thirdPreg.preguntaOID)}"
+                                                            styleClass="ui-icon-ADEditar25x25" 
+                                                            title="Editar Pregunta #{thirdPreg.descripcionPregunta}" >
+
+                                                            <f:param name="sec" value="#{thirdSeccion.seccionOID}" />
+                                                            <f:param name="prg" value="#{thirdPreg.preguntaOID}" />
+
+                                                        </p:commandButton>
+                                                    </p:column>
+                                                    <p:column style="width:5%; padding:0; text-align:center">
+                                                        <p:commandButton
+                                                            actionListener="#{MBEncuestas.eliminaPregunta(thirdPreg.preguntaOID)}" immediate="true" icon="ui-icon-trash"
+                                                            styleClass="ui-icon-ADEliminar25x25"  process="@this"
+                                                            title="Eliminar pregunta." update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                            <p:confirm header="Confirmación"
+                                                                       message="¿Est&aacute; seguro que desea eliminar la pregunta de la encuesta?"
+                                                                       icon="ui-icon-alert" />
+                                                        </p:commandButton>
+                                                    </p:column>
+
+                                                </p:dataTable>
+
+                                                <p:accordionPanel multiple="true" id="tabDinamicoFourth" dynamic="true"
+                                                                  value="#{thirdSeccion.secciones}" var="fourthSeccion"   >
+
+                                                    <p:tab title="#{fourthSeccion.orden} - #{fourthSeccion.nombreSeccion}" >
+                                                        <!--
+                                                        <p:outputLabel  value="{secciones.orden} - " styleClass="text-label" />
+                                                        
+                                                        <p:outputLabel  value="{secciones.nombreSeccion}" styleClass="text-label" />
+                                                        -->
+                                                        <div align="right">
+                                                            <p:commandButton process="@this"
+                                                                             resetValues="true"
+                                                                             icon="ui-icon-pencil"
+                                                                             update=":center-form:panelConfigSeccion"
+                                                                             actionListener="#{MBEncuestas.traeSeccion(thirdSeccion, fourthSeccion.seccionOID)}"
+                                                                             styleClass="ui-icon-ADEdit"
+                                                                             title="Editar #{thirdSeccion.nombreSeccion}" />
+                                                            &nbsp;&nbsp;
+                                                            <p:commandButton styleClass="ui-icon-ADAgregar-pregunta"
+                                                                             resetValues="true"
+                                                                             process="@this"
+                                                                             icon="ui-icon-comment"
+                                                                             ignoreAutoUpdate="true"
+                                                                             update=":center-form:panelConfiguraPregunta,:center-form:mensajes2"
+                                                                             actionListener="#{MBEncuestas.traePregunta(fourthSeccion.orden,fourthSeccion.seccionOID,'')}"
+                                                                             title="Configurar pregunta" />
+                                                            &nbsp;&nbsp;
+                                                            <p:commandButton actionListener="#{MBEncuestas.eliminaSeccion(fourthSeccion.seccionOID)}"
+                                                                             icon="ui-icon-trash"
+                                                                             styleClass="ui-icon-ADTrash"
+                                                                             title="Eliminar #{fourthSeccion.nombreSeccion}"
+                                                                             process="@this"
+                                                                             update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                                <p:confirm header="Confirmaci&oacute;n"
+                                                                           message="¿Est&aacute; seguro que desea eliminar la sección de la encuesta?"
+                                                                           icon="ui-icon-alert" />
+                                                            </p:commandButton>
+                                                        </div>
+                                                        <p:dataTable  var="fourthPreg" value="#{fourthSeccion.miListaPreguntas}" emptyMessage="No existen preguntas">
+
+                                                            <p:column style="width:5%">
+                                                                <p:rowToggler />
+                                                            </p:column>
+
+                                                            <p:column style="width:85%">
+                                                                <h:outputText value="#{fourthPreg.orden} - #{fourthPreg.descripcionPregunta}" styleClass="text-label"/>
+                                                                <br/>
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 1}">
+                                                                    <p:inputTextarea rows="1" cols="33" />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 2}">
+                                                                    <p:inputText />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 3}">
+                                                                    <p:inputText />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 4}">
+                                                                    <p:calendar id="button"  showOn="button" />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 5}">
+                                                                    <p:calendar id="time" pattern="HH:mm a" timeOnly="true"  />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 6}">
+                                                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}"
+                                                                               varStatus="statsop">-->
+                                                                    <!-- value="{MBEncuestas.opcion}" -->
+                                                                    <p:selectOneRadio id="opcoinMultiple" value="#{MBEncuestas.opcion}" 
+                                                                                      layout="grid" columns="1" styleClass="AD-ui-selecton-control" >
+                                                                        <!--<f:selectItem  itemLabel="{ops.textoOpcion}" itemValue="{ops.textoOpcion}" />-->
+                                                                        <f:selectItems var="fourthOps" value="#{fourthPreg.misOpciones}" itemLabel="#{fourthOps.textoOpcion}" itemValue="#{fourthOps.textoOpcion}" />
+                                                                    </p:selectOneRadio>
+                                                                    <!--    <p:outputLabel value="" />
+                                                                        <p:outputLabel value="" />
+                                                                    </ui:repeat>-->
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 7}">
+                                                                    <ui:repeat var="fourthOps" value="${fourthPreg.misOpciones}"
+                                                                               varStatus="statsop">
+                                                                        <p:selectManyCheckbox 
+                                                                            value="#{MBEncuestas.opcionCheck}" layout="grid" columns="1" styleClass="AD-ui-selecton-control">
+                                                                            <f:selectItem itemLabel="#{fourthOps.textoOpcion}"
+                                                                                          itemValue="#{fourthOps.textoOpcion}" />
+                                                                        </p:selectManyCheckbox>
+                                                                        <p:outputLabel value="" />
+                                                                        <p:outputLabel value="" />
+                                                                    </ui:repeat>
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 8}">
+                                                                    <p:fileUpload fileUploadListener="#{MBProyectos.upload}" mode="advanced" fileLimit="1"
+                                                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" 
+                                                                                  process="@this"
+                                                                                  label="Seleccione una imagen" 
+                                                                                  uploadLabel="Subir" 
+                                                                                  cancelLabel="Cancelar"
+                                                                                  fileLimitMessage="Solo puede haber una imagen." 
+                                                                                  invalidFileMessage="Tipo de archivo no valido." 
+                                                                                  invalidSizeMessage="Tamaño de archivo no valido."
+                                                                                  />
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 9}">
+                                                                    <!--<ui:repeat var="ops" value="{preg.misOpciones}" varStatus="statsop">-->
+
+                                                                    <p:selectOneMenu value="#{MBEncuestas.opcionCheck}" >
+                                                                        <f:selectItems value="${fourthPreg.misOpciones}" var="fourthItems" 
+                                                                                       itemLabel="#{fourthItems.textoOpcion}" itemValue="#{fourthItems.textoOpcion}" itemDisabled="true" />
+                                                                    </p:selectOneMenu>
+                                                                    <p:outputLabel value="" />
+                                                                    <p:outputLabel value="" />
+                                                                    <!--</ui:repeat>-->
+                                                                </ui:fragment>
+
+                                                                <ui:fragment rendered="${fourthPreg.idTipoPregunta == 10}">
+                                                                    <!-- value="{MBEncuestas.getISInstDinamico(preg.archivoImagen)}"  -->
+                                                                    <p:remoteCommand autoRun="true" name="loadLogonew" process="@this" update="myImage" actionListener="#{MBEncuestas.getISInstDinamico(fourthPreg.archivoImagen)}"/>
+                                                                    <p:graphicImage id="myImage" value="#{MBEncuestas.imgInstruccion}" 
+                                                                                    width="200" height="171" cache="false" 
+                                                                                    rendered="#{not empty fourthPreg.archivoImagen}">
+                                                                        <f:param name="imgPregunta" value="#{fourthPreg.archivoImagen}" />
+                                                                    </p:graphicImage>
+
+                                                                    <pe:imageRotateAndResize id="rotateAndResize" for="myImage" widgetVar="rotateAndResizeWidget">  
+                                                                        <p:ajax event="rotate" listener="#{MBEncuestas.rotateListener}" />  
+                                                                        <p:ajax event="resize" listener="#{MBEncuestas.resizeListener}" />  
+                                                                    </pe:imageRotateAndResize>
+                                                                    <p:outputLabel value="#{fourthPreg.archivoImagen}" />
+                                                                    <br/>
+
+                                                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="izquierda"  
+                                                                                     onclick="PF('rotateAndResizeWidget').rotateLeft(90);
+                                                                                             return false;" rendered="#{not empty fourthPreg.archivoImagen}"/>  
+                                                                    <p:commandButton icon="ui-icon-arrowreturnthick-1-e" value="derecha"  
+                                                                                     onclick="PF('rotateAndResizeWidget').rotateRight(90);
+                                                                                             return false;" rendered="#{not empty fourthPreg.archivoImagen}"/>  
+                                                                    <p:commandButton icon="ui-icon-zoomin" value="aumenta +"  
+                                                                                     onclick="PF('rotateAndResizeWidget').scale(1.05);
+                                                                                             return false;" rendered="#{not empty fourthPreg.archivoImagen}"/>  
+                                                                    <p:commandButton icon="ui-icon-zoomout" value="disminuye -"  
+                                                                                     onclick="PF('rotateAndResizeWidget').scale(0.95);
+                                                                                             return false;" rendered="#{not empty fourthPreg.archivoImagen}"/>
+                                                                </ui:fragment>
+                                                            </p:column>
+                                                            <p:column style="width:5%; padding:0; text-align:center">
+                                                                <p:commandButton
+                                                                    update=":center-form:panelConfiguraPregunta" resetValues="true" process="@this" icon="ui-icon-pencil"
+                                                                    actionListener="#{MBEncuestas.traePregunta(fourthSeccion.orden,fourthSeccion.seccionOID,fourthPreg.preguntaOID)}"
+                                                                    styleClass="ui-icon-ADEditar25x25" 
+                                                                    title="Editar Pregunta #{fourthPreg.descripcionPregunta}" >
+
+                                                                    <f:param name="sec" value="#{fourthSeccion.seccionOID}" />
+                                                                    <f:param name="prg" value="#{fourthPreg.preguntaOID}" />
+
+                                                                </p:commandButton>
+                                                            </p:column>
+                                                            <p:column style="width:5%; padding:0; text-align:center">
+                                                                <p:commandButton
+                                                                    actionListener="#{MBEncuestas.eliminaPregunta(fourthPreg.preguntaOID)}" immediate="true" icon="ui-icon-trash"
+                                                                    styleClass="ui-icon-ADEliminar25x25"  process="@this"
+                                                                    title="Eliminar pregunta." update=":center-form:tabDinamico,:center-form:mensajes2">
+                                                                    <p:confirm header="Confirmación"
+                                                                               message="¿Est&aacute; seguro que desea eliminar la pregunta de la encuesta?"
+                                                                               icon="ui-icon-alert" />
+                                                                </p:commandButton>
+                                                            </p:column>
+
+                                                        </p:dataTable>
+
+                                                    </p:tab>
+
+                                                </p:accordionPanel>
+
+                                            </p:tab>
+
+                                        </p:accordionPanel>
+
+                                    </p:tab>
+
+                                </p:accordionPanel>
+
+                            </p:tab>
+
+                        </p:accordionPanel>
+
+                    </p:tab>
+
+                </p:accordionPanel>
+            </p:outputPanel>
+            <br/>
+
+
+        </p:dialog>
+        <!--</p:scrollPanel>-->
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+            <p:commandButton value="Si" type="button"
+                             styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button"
+                             styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+    </ui:composition>
+</html>

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <!-- ************************************** Nueva Ruta Dialog ******************************** -->
+    <ui:composition>
+        <p:dialog header="Nueva/Editar Ruta" id="editarDialog" widgetVar="editarDialog" showEffect="explode" hideEffect="fade" 
+                  width="50%" resizable="false">
+
+
+            <p:remoteCommand id="initTiendas" name="initTiendas" actionListener="#{MBRutas.initListaTiendas()}"
+                             update="tableTiendas"/>
+
+            <p:remoteCommand id="initPromotores" name="initPromotores" actionListener="#{MBRutas.initListaPromotores()}"
+                             update="tablePromotores"/>
+
+            <p:remoteCommand id="updateDatos" name="updateDatos" update="txtRutaNombre tableTiendas" />
+
+            <div align="right">
+                <p:panel styleClass="innermenu">
+                    <p:commandButton id="bttnSave" styleClass="ui-icon-ADSave" actionListener="#{MBRutas.checkSaveData()}" icon="ui-icon-disk"
+                                     update="tableRutas" />
+                    <p:tooltip for="bttnSave" trackMouse="true" value="Guardar" />
+
+                    <p:commandButton id="bttnClose" title="Regresar" styleClass="ui-icon-ADClose" onclick="PF('editarDialog').hide();" icon="ui-icon-closethick"/>
+                    <p:tooltip for="bttnClose" trackMouse="true" value="Cerrar" />
+                </p:panel>
+            </div>
+            <br /><br />
+            <div align="center" class="page-content">
+                <h:outputLabel for="txtRutaNombre" value="Nombre Ruta:" />
+                <p:inputText id="txtRutaNombre" value="#{MBRutas.nombreRuta}" onchange="updateDatos()" />
+            </div>
+            <br />
+            <h:panelGrid columns="2" border="0">
+                <p:column width="50%">
+                    <p:dataTable id="tableTiendas" var="data" emptyMessage="No hay registros" scrollable="true" scrollHeight="150" 
+                                 rowKey="#{data.id}" value="#{MBRutas.tiendasAll}" selection="#{MBRutas.tiendas}"
+                                 selectionMode="multiple" >
+                        <p:column headerText="Tiendas" width="95%" filterBy="#{data.nombre}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombre}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:column>    
+                <p:column width="50%">
+                    <p:dataTable id="tablePromotores" var="prom" value="#{MBRutas.promotoresAll}" selection="#{MBRutas.promotores}" 
+                                 emptyMessage="No hay registros" rowKey="#{prom.OID}" scrollable="true" scrollHeight="150"
+                                 selectionMode="multiple" >
+                        <p:column headerText="Promotores" filterBy="#{prom.nombre}" filterMatchMode="contains">
+                            <h:outputLabel value="#{prom.nombre} #{prom.apellidoPaterno}" />
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{MBRutas.isPromotorSelectable()}" />
+                    </p:dataTable>
+                </p:column>
+            </h:panelGrid>        
+        </p:dialog>
+    </ui:composition>      
+</html>
+

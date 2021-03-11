@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<!-- Este jsf sirve para que se pueda activar la funcionalidad de tener todo el sistema
+    controlado por una sola pagina que solo refresca la parte del centro -->
+    <h:body>
+        <h:form id="center-form" onkeypress="if (event.keyCode == 13) {return false; }">
+            <p:growl id="mensajes" autoUpdate="true" showDetail="true"  globalOnly="true" />
+            <p:growl id="mensajes2" showDetail="true" showSummary="false"/>
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+            <p:dialog widgetVar="statusDialog" modal="true" appendTo="center-form" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage library="images" name="ajax-loader.gif" />
+            </p:dialog>
+            <ui:insert name="center">
+                <!--ui:include src="{MBAplicacion.menuPrincipal.treeMenu.navigator.pagina}" /-->
+                <ui:include src="#{MBAplicacion.menuPrincipal.panelMenu.navigator.pagina}" />
+            </ui:insert>
+        </h:form>
+    </h:body>
+</html>
+

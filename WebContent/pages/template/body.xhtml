@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+    </h:head>
+    <h:body>
+
+        <table class="template-schema">
+            <tr>
+                <td colspan="2" id="cabezera"><ui:insert name="top"><ui:include src="commonHeader.xhtml" /></ui:insert></td>
+            </tr>
+            <tr>
+                <td id="menu" align="left"> <ui:insert name="left"><ui:include src="commonMenu.xhtml" /></ui:insert></td>
+                <td id="centro" align="left"><ui:insert name="content">
+
+                        <div id="center-div">
+                            <ui:include src="commonCenter.xhtml" />   
+                        </div>  
+
+                    </ui:insert></td>
+            </tr>
+            <tr>
+                <td colspan="2" id="pie-pagina"> <ui:insert name="bottom"><ui:include src="commonFooter.xhtml" /></ui:insert></td>
+            </tr>
+        </table>
+
+    </h:body>
+</html>
+
+

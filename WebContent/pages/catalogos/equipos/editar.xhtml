@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"  >
+
+    <h:body>
+        <p:panel id="panel-editar" styleClass="innermenu">
+            <p:commandButton id="equipos-editar-guardar" title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave" validateClient="true"
+                             process="@this equipos-panel-editar-formulario"
+                             ignoreAutoUpdate="true"
+                             update="equipos-panel-editar-formulario equipos-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-equipos-editar').hide()"
+                             actionListener="#{equiposController.editar }"/>
+        </p:panel>
+        <center>
+            <p:panel id="equipos-panel-editar-formulario" style="border:none;">
+                <h:panelGrid styleClass="catalogos-datatable" columns="2" cellpadding="5" >
+
+                    <p:outputLabel id="equipos-editar-equipoNombre-Label" styleClass="text-label"
+                                   for="equipos-editar-equipoNombre-value" value="#{msg.nombre_equipo}"/>
+                    <p:inputText id="equipos-editar-equipoNombre-value" value="#{equiposController.current.nombre}" required="true" >
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                    </p:inputText>
+
+                    <p:outputLabel id="equipos-editar-region-label" styleClass="text-label"
+                                   for="equipos-editar-region-value" value="#{msg.region}"/>
+                    <p:selectOneMenu id="equipos-editar-region-value" required="true"
+                                     value="#{equiposController.current.region.id}" >
+                        <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                        <f:selectItems value="#{equiposController.listaRegiones}"
+                                       var="region" itemLabel="#{region.nombre}"
+                                       itemValue="#{region.id}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="equipos-editar-unidadNegocio-label" styleClass="text-label"
+                                   for="equipos-editar-unidadNegocio-value" value="Unidad de Negocio"/>
+                    <p:selectOneMenu id="equipos-editar-unidadNegocio-value" required="true"
+                                     value="#{equiposController.current.unidadesNegocio.idUnidadNegocio}" >
+                        <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                        <f:selectItems value="#{equiposController.listaUnidadesNegocios}"
+                                       var="unidad" itemLabel="#{unidad.nombreUnidad}"
+                                       itemValue="#{unidad.idUnidadNegocio}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="equipos-editar-territorios-label" styleClass="text-label"
+                                   for="equipos-editar-territorios-value" value="#{msg.territorios}"/>
+                    <p:selectManyMenu id="equipos-editar-territorios-value" required="true"
+                                      value="#{equiposController.listaTerrioriosSeleccionadas}" >
+                        <f:selectItems value="#{equiposController.listaTerritorios}"
+                                       var="territorio" itemLabel="#{territorio.nombre}"
+                                       itemValue="#{territorio.id}"/>
+                    </p:selectManyMenu>
+
+                </h:panelGrid>   
+            </p:panel>
+        </center>   
+    </h:body>
+</html>
+

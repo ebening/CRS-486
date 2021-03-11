@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" 
+             xmlns:beans="http://www.springframework.org/schema/beans" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:aop="http://www.springframework.org/schema/aop" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+       http://www.springframework.org/schema/security 
+       http://www.springframework.org/schema/security/spring-security-3.2.xsd" >
+    
+    <global-method-security secured-annotations="disabled" ></global-method-security>
+    
+    <http pattern="/**" auto-config="true" use-expressions="true" create-session="ifRequired" servlet-api-provision="false"> 
+        <session-management invalid-session-url="/pages/Login.xhtml" />
+        
+        <intercept-url pattern="/pages/Login.xhtml" access="permitAll" />
+        <intercept-url pattern="/pages/redirectError.xhtml" access="permitAll" />
+        <intercept-url pattern="/faces/pages/AccesoDenegado.xhtml" access="permitAll" />
+        
+        <intercept-url pattern="/faces/pages/Login.xhtml" access="permitAll" />
+        <intercept-url pattern="/faces/pages/redirectError.xhtml" access="permitAll" />
+        <intercept-url pattern="/faces/pages/AccesoDenegado.xhtml" access="permitAll" />
+        
+        <intercept-url pattern="/LoadFilesFromDrive**" access="permitAll" />
+        <!--
+        <intercept-url pattern="/pages/catalogos/clientes/clientes*" access="hasRole('3')" />
+        <intercept-url pattern="/pages/catalogos/unidadesNegocios/unidadesNegocios*" access="hasRole('4')" />
+        <intercept-url pattern="/pages/catalogos/regiones/regiones*" access="hasRole('5')" />
+        <intercept-url pattern="/pages/catalogos/equipos/equipos*" access="hasRole('6')" />
+        <intercept-url pattern="/pages/catalogos/territorios/territorios*" access="hasRole('7')" />
+        <intercept-url pattern="/pages/catalogos/tiendas/tiendas.*" access="hasRole('8')" />
+        <intercept-url pattern="/pages/catalogos/tiposMensajes/tiposMensajes*" access="hasRole('9')" />
+        <intercept-url pattern="/pages/catalogos/tiposIncidentes/tiposIncidentes*" access="hasRole('10')" />
+        <intercept-url pattern="/pages/catalogos/catalogoOpciones/catalogoOpciones*" access="hasRole('11')" />
+        <intercept-url pattern="/pages/catalogos/seguridad/usuarios/usuarios*" access="hasRole('13')" />
+        <intercept-url pattern="/pages/catalogos/seguridad/perfiles/perfiles*" access="hasRole('14')" />
+        <intercept-url pattern="/pages/encuestas/AdminEncuestas*" access="hasRole('18')" />
+        <intercept-url pattern="/pages/proyectos/AdminProyectos*" access="hasRole('20')" />
+        <intercept-url pattern="/pages/visitas/TiendasPorTerritorio*" access="hasRole('23')" />
+        <intercept-url pattern="/pages/visitas/GruposTiendas*" access="hasRole('24')" />
+        <intercept-url pattern="/pages/visitas/PromotoresPorTerritorio*" access="hasRole('25')" />
+        <intercept-url pattern="/pages/visitas/RutasPorTerritorio*" access="hasRole('26')" />
+        <intercept-url pattern="/pages/visitas/VisitasPorTerritorio*" access="hasRole('27')" />
+        <intercept-url pattern="/pages/reportesoperativos/ReportesOperativos*" access="hasRole('30')" />
+        <intercept-url pattern="/pages/reportescliente/RepCliCumplProyecto*" access="hasRole('32')" />
+        <intercept-url pattern="/pages/reportescliente/RepCliEjecucionGps*" access="hasRole('33')" />
+        <intercept-url pattern="/pages/reportescliente/RepCliImagenes*" access="hasRole('34')" />
+        <intercept-url pattern="/pages/reportescliente/RepCliResultados*" access="hasRole('35')" />
+        
+        <intercept-url pattern="/faces/pages/catalogos/clientes/clientes*" access="hasRole('3')" />
+        <intercept-url pattern="/faces/pages/catalogos/unidadesNegocios/unidadesNegocios*" access="hasRole('4')" />
+        <intercept-url pattern="/faces/pages/catalogos/regiones/regiones*" access="hasRole('5')" />
+        <intercept-url pattern="/faces/pages/catalogos/equipos/equipos*" access="hasRole('6')" />
+        <intercept-url pattern="/faces/pages/catalogos/territorios/territorios*" access="hasRole('7')" />
+        <intercept-url pattern="/faces/pages/catalogos/tiendas/tiendas.*" access="hasRole('8')" />
+        <intercept-url pattern="/faces/pages/catalogos/tiposMensajes/tiposMensajes*" access="hasRole('9')" />
+        <intercept-url pattern="/faces/pages/catalogos/tiposIncidentes/tiposIncidentes*" access="hasRole('10')" />
+        <intercept-url pattern="/faces/pages/catalogos/catalogoOpciones/catalogoOpciones*" access="hasRole('11')" />
+        <intercept-url pattern="/faces/pages/catalogos/seguridad/usuarios/usuarios*" access="hasRole('13')" />
+        <intercept-url pattern="/faces/pages/catalogos/seguridad/perfiles/perfiles*" access="hasRole('14')" />
+        <intercept-url pattern="/faces/pages/encuestas/AdminEncuestas*" access="hasRole('18')" />
+        <intercept-url pattern="/faces/pages/proyectos/AdminProyectos*" access="hasRole('20')" />
+        <intercept-url pattern="/faces/pages/visitas/TiendasPorTerritorio*" access="hasRole('23')" />
+        <intercept-url pattern="/faces/pages/visitas/GruposTiendas*" access="hasRole('24')" />
+        <intercept-url pattern="/faces/pages/visitas/PromotoresPorTerritorio*" access="hasRole('25')" />
+        <intercept-url pattern="/faces/pages/visitas/RutasPorTerritorio*" access="hasRole('26')" />
+        <intercept-url pattern="/faces/pages/visitas/VisitasPorTerritorio*" access="hasRole('27')" />
+        <intercept-url pattern="/faces/pages/reportesoperativos/ReportesOperativos*" access="hasRole('30')" />
+        <intercept-url pattern="/faces/pages/reportescliente/RepCliCumplProyecto*" access="hasRole('32')" />
+        <intercept-url pattern="/faces/pages/reportescliente/RepCliEjecucionGps*" access="hasRole('33')" />
+        <intercept-url pattern="/faces/pages/reportescliente/RepCliImagenes*" access="hasRole('34')" />
+        <intercept-url pattern="/faces/pages/reportescliente/RepCliResultados*" access="hasRole('35')" />
+        -->
+        
+        <intercept-url pattern="/ReportingService**" access="isAuthenticated()" />
+        <intercept-url pattern="/faces/pages/**" access="isAuthenticated()" />
+        <intercept-url pattern="/pages/**" access="isAuthenticated()" />
+        
+        <form-login login-page="/pages/Login.xhtml" 
+                    authentication-failure-url="/pages/Login.xhtml" 
+                    default-target-url="/pages/Principal.xhtml"
+                    always-use-default-target="true"
+        />
+        
+        <logout  logout-success-url="/pages/Login.xhtml" delete-cookies="true" invalidate-session="true" />
+        <!--<access-denied-handler error-page="404"/>-->
+        <access-denied-handler error-page="/pages/AccesoDenegado.xhtml"/>
+
+        <session-management>
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </session-management>
+
+    </http>
+    <beans:bean scope="session" id="usuarioLogin" name="usuarioLogin"
+                class="com.crossmark.collector.presentation.views.security.objects.UsuarioSession">
+        <aop:scoped-proxy/>
+    </beans:bean>
+
+    <beans:bean id="customUserDetailsService" class="com.crossmark.collector.presentation.views.security.CustomUserDetailsService">
+        <beans:property name="usuarioLogin" ref="usuarioLogin" />
+        <beans:property name="serviceLogin" ref="serviceLogin" />
+        <beans:property name="ldapAuthenticator" ref="ldapAuthenticator" />
+        <beans:property name="ldapActivo" value="${ldap.active}" />
+    </beans:bean>
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <!--<password-encoder hash="md5" />-->
+        </authentication-provider>
+    </authentication-manager>
+    
+</beans:beans>

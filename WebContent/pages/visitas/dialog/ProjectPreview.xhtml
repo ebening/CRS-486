@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog widgetVar="preview" header="Vista Previa Proyecto">
+            <object type="application/pdf" 
+                    data="/JavaServerFaces/faces/javax.faces.resource/preview/VistaPreviaProyectos.pdf?pfdrid_c=true" 
+                    height="300px" width="100%">
+                No puedes visualizar el archivo, 
+                <a href="/JavaServerFaces/faces/javax.faces.resource/preview/VistaPreviaProyectos.pdf">click</a> para descargar.
+            </object>
+        </p:dialog>
+    </ui:composition>
+</html>
+

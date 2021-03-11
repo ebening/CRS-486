@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <ui:composition template="../../../template/templatef.xhtml">      
+            <ui:define name="center" >
+                
+                
+                
+                <p:panel id="panel" styleClass="innermenu" >
+                    <p:commandButton id="perfilesAgregar" icon="ui-icon-plus"
+                                     process="@this" 
+                                    update="panelNuevoPerfil tablePerfiles" 
+                                     action="#{MBPerfiles.eventCrearPerfil()}" 
+                                     styleClass="ui-icon-ADAdd" title="Agregar"  resetValues="true" />
+                    
+                    <p:commandButton id="perfilesConfigurar"  icon="ui-icon-wrench"
+                                     process="@this"
+                                     update="configurarPerfil"
+                                     action="#{MBPerfiles.eventConfigurarPerfil()}"
+                                    styleClass="ui-icon-ADTools" title="Privilegios perfil" />
+                    
+                    <p:commandButton id="perfilesEditar"  icon="ui-icon-pencil"
+                                     process="@this" 
+                                     update="editarPerfil"
+                                     action="#{MBPerfiles.eventEditarPerfil()}"
+                                    styleClass="ui-icon-ADEdit" 
+                                    title="Editar perfil"  />
+                    
+                    <p:commandButton id="perfilesEliminar" icon="ui-icon-trash"
+                                 process="@this"
+                                 update="tablePerfiles"
+                                 actionListener="#{MBPerfiles.eliminarPerfiles()}"
+                                 styleClass="ui-icon-ADTrash" title="Eliminar">
+                        <p:confirm header="#{msg.eliminar_region}" message="#{msg.delete_confirm}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                </p:panel>
+                
+                <h1 class="title">#{msg.title_perfil}</h1>
+                
+                
+                
+                <div class="page-content">
+                    <center>
+                        <p:dataTable id="tablePerfiles" emptyMessage="No existen registros" 
+                                    var="data" value="#{MBPerfiles.listaPerfiles}" 
+                                    widgetVar="tablePerfiles" 
+                                    rowKey="#{data.perfilesId}" 
+                                    rows="10"
+                                     paginator="true" 
+                                     rowsPerPageTemplate="10,20,50,100"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     selectionMode="multiple" selection="#{MBPerfiles.selectedPerfiles}" 
+                                     filteredValue="#{MBPerfiles.filteredPerfiles}" 
+                                     style="width: 80%;">
+
+                            <p:column headerText="Perfil" filterBy="#{data.nombre}" sortBy="#{data.nombre}" filterMatchMode="contains">
+                                <h:outputLabel value="#{data.nombre}" />
+                            </p:column>
+                            <p:column headerText="Descripci&oacute;n" filterBy="#{data.descripcion}" sortBy="#{data.descripcion}" filterMatchMode="contains">
+                                <h:outputLabel value="#{data.descripcion}" />
+                            </p:column>
+                            <p:ajax event="rowSelect" listener="#{MBPerfiles.seleccionarPerfil}" update=":center-form:editarPerfil :center-form:configurarPerfil" />
+                            <p:ajax event="rowUnselect" listener="#{MBPerfiles.quitarSeleccion}" update=":center-form:editarPerfil :center-form:configurarPerfil" />
+
+                        </p:dataTable>
+                    
+                    </center>
+                </div>
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </p:confirmDialog>
+                
+                <ui:include src="dialog/editar_perfil.xhtml" />
+                <ui:include src="dialog/crear_perfil.xhtml" />
+                <ui:include src="dialog/configurar_perfil.xhtml" />
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

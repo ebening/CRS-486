@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBProyectosTiendas.query}"  />
+        <!--
+        <f:viewParam name="ClientesId" value="{MBProyectosTiendas.clienteId}" />
+        <f:viewParam name="RegionesId" value="{MBProyectosTiendas.regionesId}" />
+        <f:viewParam name="UnidadesNegocios" value="{MBProyectosTiendas.unidadesNegociosId}" />
+        <f:viewParam name="TerritorioId" value="{MBProyectosTiendas.territorioId}" />
+        <f:viewParam name="EquiposId" value="{MBProyectosTiendas.equipoId}" />
+        <f:viewParam name="ProyectoId" value="{MBProyectosTiendas.proyectoId}" />
+        <f:viewParam name="ProyectoN" value="{MBProyectosTiendas.nombreProyecto}" />
+        -->
+        <f:event type="preRenderView" listener="#{MBProyectosTiendas.procesaQuery()}"/>
+    </f:metadata>
+    <h:body>
+        <ui:composition template="../template/templatef.xhtml">          
+            <ui:define name="center" >
+                <p:remoteCommand autoRun="true" actionListener="#{MBProyectosTiendas.initListaTiendas()}" update="tableTiendas,proyectoName,clienteName" />
+
+                <p:panel styleClass="innermenu">
+                    <p:commandButton id="bttnAddTiendas" styleClass="ui-icon-ADSearch" icon="ui-icon-search"
+                                     title="Agregar Tiendas" actionListener="#{MBProyectosTiendas.openSearchDialog()}" />
+                    <p:tooltip for="bttnAddTiendas" value="Buscar tiendas" trackMouse="true" />
+
+                    <p:commandButton id="bttnGrupos" styleClass="ui-icon-ADGrupo-tiendas" icon="ui-icon-cart"
+                                     onclick="PF('grupoDialog').show()" title="Grupos de tiendas" />
+                    <p:tooltip for="bttnGrupos" value="Grupos de tiendas" trackMouse="true" />
+
+                    <p:commandButton id="bttnDelTienda" styleClass="ui-icon-ADTrash" title="Eliminar Tiendas" icon="ui-icon-trash"
+                                     action="#{MBProyectosTiendas.borrarTienda()}" />
+                    <p:tooltip for="bttnDelTienda" value="Eliminar tiendas" trackMouse="true" />
+
+                    <p:commandButton id="bttnRegresar" styleClass="ui-icon-ADGo-left" title="Regresar" icon="ui-icon-arrowthickstop-1-w"
+                                     action="AdminProyectos?faces-redirect=true" />
+                    <p:tooltip for="bttnRegresar" value="Regresar a proyectos" trackMouse="true" />
+
+                    <p:confirmDialog widgetVar="confirmDelTienda" message="¿Esta seguro que desea eliminar las tiendas del proyecto?"
+                                     showEffect="fade" hideEffect="explode" severity="alert">
+                        <p:commandButton value="Si" onclick="confirmDelTiendaRemote()" 
+                                         type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" onclick="PF('confirmDelTienda').hide()" 
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                    <p:remoteCommand id="confirmDelTiendaRemote" name="confirmDelTiendaRemote" 
+                                     actionListener="#{MBProyectosTiendas.confirmDelete()}" update="tableTiendas" />
+                </p:panel>
+                <br /><br/>
+                <h1 class="title">Tiendas por proyecto</h1>
+                <br /><br /><br />
+                <h:outputText id="clienteName" value="Cliente: #{MBProyectosTiendas.nombreCliente}" styleClass="text-label" style="padding-left: 2.5%" />
+                <br /><br />
+                <h:outputText id="proyectoName" value="Proyecto: #{MBProyectosTiendas.nombreProyecto}" style="padding-left: 2.5%" styleClass="text-label" />
+                <br /><br />
+                <div align="center">
+                    <p:dataTable id="tableTiendas" var="data" value="#{MBProyectosTiendas.tiendasAll}" paginator="true"
+                                 rows="10" rowsPerPageTemplate="10,20,50,100" emptyMessage="No existen registros" style="width: 95%"
+                                 selectionMode="multiple" selection="#{MBProyectosTiendas.tiendaSelected}" rowKey="#{data.id}" >
+                        <p:column headerText="N&uacute;mero tienda" filterBy="#{data.clave}" filterMatchMode="contains">
+                            <h:outputText value="#{data.clave}" />
+                        </p:column>
+                        <p:column headerText="Nombre tienda" filterBy="#{data.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{data.nombre}" />
+                        </p:column>
+                        <p:column headerText="Cadena" filterBy="#{data.cadena}" filterMatchMode="contains">
+                            <h:outputText value="#{data.cadena}" />
+                        </p:column>
+                        <p:column headerText="Estado" filterBy="#{data.estados}" filterMatchMode="contains">
+                            <h:outputText value="#{data.estados}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" filterBy="#{data.ciudades}" filterMatchMode="contains">
+                            <h:outputText value="#{data.ciudades}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <ui:include src="dialog/BuscarTienda.xhtml" />
+                <ui:include src="dialog/GruposTiendas.xhtml" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

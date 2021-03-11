@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+    <!-- Configuracion para el manejo de transacciones con inyeccion automatica 
+    en los daos -->
+    <!-- asi como valores opcionales (tipo de propagacion, isolation, throws, 
+    ...) -->
+
+
+
+    <!-- ******************************************************************* -->
+    <!-- Declaración de servicios -->
+    <!-- ******************************************************************* -->
+
+    <bean name="serviceEjemplo"
+          class="com.crossmark.collector.business.services.ServiceEjemploImpl">
+        <property name="daoEjemplo">
+            <ref bean="daoEjemplo" />
+        </property>
+    </bean>
+
+
+    <bean name="serviceProyectos"
+          class="com.crossmark.collector.business.services.ServiceProyectosImpl">
+        <property name="daoProyectos">
+            <ref bean="daoProyectos" />
+        </property>
+        <property name="daoGuardaProyectos">
+            <ref bean="daoGuardaProyectos" />
+        </property>
+        <property name="daoTraeProyecto">
+            <ref bean="daoTraeProyecto" />
+        </property>
+    </bean>
+
+
+
+    <bean name="serviceUnidadesNegocio"
+          class="com.crossmark.collector.business.services.ServiceUnidadesNegocioImpl">
+        <property name="daoUnidadesNegocio">
+            <ref bean="daoUnidadesNegocio" />
+        </property>
+    </bean>
+        
+    <bean name="serviceClientes"
+          class="com.crossmark.collector.business.services.ServiceClientesImpl">
+        <property name="daoClientes">
+            <ref bean="daoClientes" />
+        </property>
+    </bean>
+        
+        
+    <bean name="serviceEncuestas"
+          class="com.crossmark.collector.business.services.ServiceEncuestasImpl">
+        <property name="daoEncuestas">
+            <ref bean="daoEncuestas" />
+        </property>
+        <property name="daoCreaEncuesta">
+            <ref bean="daoCreaEncuesta" />
+        </property>
+        <property name="daoGuardaEncuesta">
+            <ref bean="daoGuardaEncuesta" />
+        </property>
+        <property name="daoGuardaComoPlantilla">
+            <ref bean="daoGuardaComoPlantilla" />
+        </property>
+        <property name="daoTraePlantilla">
+            <ref bean="daoTraePlantilla" />
+        </property>
+       <property name="daoListaCatalogos">
+            <ref bean="daoListaCatalogos" />
+        </property> 
+      <property name="daoListaPreguntaOrigen">
+            <ref bean="daoListaPreguntaOrigen" />
+        </property> 
+    </bean>
+    
+    
+    
+    <bean name="serviceTipoLista"
+          class="com.crossmark.collector.business.services.ServiceTipoListaImpl">
+        <property name="daoTipoLista">
+            <ref bean="daoTipoLista" />
+        </property>
+    </bean>
+    
+    
+        <bean name="serviceSecciones"
+          class="com.crossmark.collector.business.services.ServiceSeccionesImpl">
+        <property name="daoSecciones">
+            <ref bean="daoSecciones" />
+        </property>
+    </bean>
+
+
+
+    <bean name="serviceTiendas"
+          class="com.crossmark.collector.business.services.ServiceTiendasImpl">
+        <property name="daoTiendas">
+            <ref bean="daoTiendas" />
+        </property>
+    </bean>
+    <bean name="serviceTerritorios"
+          class="com.crossmark.collector.business.services.ServiceTerritoriosImpl">
+        <property name="daoTerritorios">
+            <ref bean="daoTerritorios" />
+        </property>
+    </bean>
+    <bean name="serviceCiudades"
+          class="com.crossmark.collector.business.services.ServiceCiudadesImpl">
+        <property name="daoCiudades">
+            <ref bean="daoCiudades" />
+        </property>
+    </bean>
+    <bean name="serviceEstados"
+          class="com.crossmark.collector.business.services.ServiceEstadosImpl">
+        <property name="daoEstados">
+            <ref bean="daoEstados" />
+        </property>
+    </bean>
+    <bean name="serviceCadena"
+          class="com.crossmark.collector.business.services.ServiceCadenaImpl">
+        <property name="daoCadena">
+            <ref bean="daoCadena" />
+        </property>
+    </bean>
+    <bean name="serviceVisitas"
+          class="com.crossmark.collector.business.services.ServiceVisitasImpl">
+        <property name="daoVisitas">
+            <ref bean="daoVisitas" />
+        </property>
+    </bean>
+    <bean name="serviceVisitasxTiendas"
+          class="com.crossmark.collector.business.services.ServiceVisitasxTiendasImpl">
+        <property name="daoVisitasxTiendas">
+            <ref bean="daoVisitasxTiendas" />
+        </property>
+    </bean>
+    <bean name="servicePromotores"
+            class="com.crossmark.collector.business.services.ServicePromotoresImpl">
+        <property name="daoPromotores">
+          <ref bean="daoPromotores" />  
+        </property>
+    </bean>
+    <bean name="servicePromotoresBus"
+            class="com.crossmark.collector.business.services.ServicePromotoresBusImpl">
+        <property name="daoPromotoresBus">
+            <ref bean="daoPromotoresBus" />
+        </property>
+    </bean>
+    <bean name="serviceRutasTiendas"
+            class="com.crossmark.collector.business.services.ServiceRutasTiendasImpl">
+        <property name="daoRutasTiendas">
+            <ref bean="daoRutasTiendas" />
+        </property>
+    </bean>
+    
+    <bean name="serviceRutas"
+		class="com.crossmark.collector.business.services.ServiceRutasImpl">
+		<property name="daoRutas">
+			<ref bean="daoRutas" />
+		</property>
+		<property name="daoListaRutas">
+			<ref bean="daoListaRutas" />
+		</property>
+        <property name="daoGuardaRuta">
+			<ref bean="daoGuardaRuta" />
+		</property>
+	</bean>
+    
+
+    <!-- Inicia servicio para reporte -->
+        <bean name="serviceReportesOperativos"
+          class="com.crossmark.collector.business.services.ServiceReportesOperativosImpl">
+            <property name="daoRegiones">
+                <ref bean="daoRegiones" />
+            </property>
+            <property name="daoEquipos">
+                <ref bean="daoEquipos" />
+            </property>
+            <property name="daoEquiposTerritorios">
+                <ref bean="daoEquiposTerritorios" />
+            </property>
+            <property name="daoUsuarios">
+                <ref bean="daoUsuarios" />
+            </property>
+            <property name="daoSecciones">
+                <ref bean="daoSecciones" />
+            </property>
+            
+            <property name="daoClientes">
+                <ref bean="daoClientes" />
+            </property>
+            <property name="daoEncuestas">
+                <ref bean="daoEncuestas" />
+            </property>
+            <property name="daoProyectos">
+                <ref bean="daoProyectos" />
+            </property>
+            <property name="daoParametros">
+                <ref bean="daoParametros" />
+            </property>
+        </bean>
+
+</beans>

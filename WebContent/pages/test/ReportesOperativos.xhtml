@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body >
+
+            <h1 class="title">Dashboard operativo</h1>
+                <br /><br />
+                <TABLE width="100%">
+                    <tr>
+                        <td>
+                            <p:outputLabel for="comboRegion" value="Región: "  /><br/>
+                            <p:selectOneMenu id="comboRegion" value="#{MBReportesOperativos.regionId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Seleccione una región."><!--  -->
+                                <f:selectItem itemLabel="Seleccione una región" itemValue="0" noSelectionOption="true" />
+                                <f:selectItems value="#{MBReportesOperativos.listaRegiones}" var="region" itemLabel="#{region.nombre}" itemValue="#{region.id}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetEquipos()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.equiposByRegion()}" update="comboEquipo"  />
+                                <p:ajax listener="#{MBReportesOperativos.resetEquiposTerritorios()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboEquipo" value="Equipo: " /><br/>
+                            <p:selectOneMenu id="comboEquipo" value="#{MBReportesOperativos.equipoId}" rendered="true" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Seleccione un equipo."><!--  -->
+                                <f:selectItem itemLabel="Seleccione un equipo" itemValue="0" noSelectionOption="true" />
+                                <f:selectItems value="#{MBReportesOperativos.listaEquipos}" var="equipo" itemLabel="#{equipo.nombre}" itemValue="#{equipo.id}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetEquiposTerritorios()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.getEquiposTerritoriosByEqAndTerr()}" update="comboTerritorio" />
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                                
+                            </p:selectOneMenu>
+                            <!--<p:message for="comboEquipo" />-->
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboTerritorio" value="Territorio: " /><br/>
+                            <p:selectOneMenu id="comboTerritorio" value="#{MBReportesOperativos.territorioId}" filter="true" filterMatchMode="startsWith" 
+                                             required="true" requiredMessage="Seleccione un territorio."><!--   -->
+                                <f:selectItem itemLabel="Seleccione un territorio" itemValue="0" noSelectionOption="true" rendered="true"/>
+                                <f:selectItems value="#{MBReportesOperativos.equiposTerritorios}" var="equipoTerritorio" itemLabel="#{equipoTerritorio.nombre}" itemValue="#{equipoTerritorio.territorioId}" />
+                                
+                                <p:ajax listener="#{MBReportesOperativos.resetClientes()}" update="comboCliente" />
+                                <f:ajax event="change" execute="comboEquipo comboRegion comboTerritorio" listener="#{MBReportesOperativos.clientesList()}" render="comboCliente"/>
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:outputLabel for="comboCliente" value="Cliente: " /><br/>
+                            <p:selectOneMenu id="comboCliente" value="#{MBReportesOperativos.clienteId}" filter="true" filterMatchMode="startsWith" 
+                                             rendered="true" required="true" requiredMessage="Seleccione un cliente."><!--  -->
+                                <f:selectItem itemLabel="Seleccione un cliente" itemValue="0" noSelectionOption="true" />
+                                <f:selectItems value="#{MBReportesOperativos.listaClientes}" var="cliente" itemLabel="#{cliente.nombreCliente}" itemValue="#{cliente.clienteId}" />
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p:outputLabel for="calendarFechaIni" value="Fechas de visitas:" /><br/>
+                            <p:calendar id="calendarFechaIni" size="10" 
+				title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+				showButtonPanel="true" navigator="true" 
+                                value="#{MBReportesOperativos.fechaIni}" showOn="button" readonlyInput="true" widgetVar="bus_cnf_inv_det_fecIniWV" required="true" requiredMessage="Seleccione una fecha de inicio."/>
+                            &nbsp;&nbsp;
+                            <p:calendar id="calendarFechaFin" size="10" 
+				title="Fecha de inicio." locale="es" pattern="dd/MM/yyyy" 
+                                showButtonPanel="true" navigator="true" 
+                                mindate="#{MBReportesOperativos.fechaIni}" 
+                                value="#{MBReportesOperativos.fechaFin}" showOn="button" readonlyInput="true" widgetVar="bus_cnf_inv_det_fecIniWV" required="true" requiredMessage="Seleccione una fecha final.">
+                                <f:attribute name="calendarFechaIni" value="#{MBReportesOperativos.fechaIni}" />
+                            </p:calendar>
+                        </td>
+                        <td>
+                            <p:commandButton value="Generar información" ajax="false" id="genererInformacion" action="#{MBReportesOperativos.getDashboard()}" styleClass="ui-priority-primary" update="getReporteDashboard getReporteCumplimiento getReporteVisitas getReporteResultados growl" />
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </TABLE>
+                <TABLE BORDER="0" width="100%">
+                    <tr>
+                        <td>
+                            <p:commandLink id="getReporteCumplimiento" action="#{MBReportesOperativos.getStringHtmlCumplimiento()}" update="growl">
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de cumplimiento" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteVisitas" action="#{MBReportesOperativos.getStringHtmlVisitas()}" update="growl">
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de visitas" />
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink id="getReporteResultados" action="#{MBReportesOperativos.getInfoResultados()}" update="growl">
+                                <h:graphicImage name="images/flechaReportes.png" />
+                                <h:outputText value="Reporte de resultados" />
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" >
+                            <!--<div id="getReporteDashboard" style="width:100%;height:100%;overflow-x:scroll;"> -->
+                                <h:outputText id="mostrarDashboard" value="#{MBReportesOperativos.reportDashboard}" escape="false" />
+                            <!--</div>-->
+                        </td>
+                    </tr>
+                </TABLE>
+
+    </h:body>
+</html>

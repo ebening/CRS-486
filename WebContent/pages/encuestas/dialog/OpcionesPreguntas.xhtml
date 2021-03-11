@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="configOpciones" header="Configurar Opciones" widgetVar="configOpciones"  
+                  showEffect="explode" hideEffect="fade" width="700" height="500" modal="true" resizable="false"
+                  style="position: absolute;">
+            <p:ajax event="close" ignoreAutoUpdate="true" update="panelConfiguraPregunta" />
+            
+            <p:panel styleClass="innermenu">
+                <p:commandButton id="btnGuardaConfOpciones" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                                 process="@this,tblOpcionesConfigurar,tblOpcionesConfiguracion" 
+                                 actionListener="#{MBEncuestas.guardarConfOpciones()}"/>
+                <p:tooltip for="btnGuardaConfOpciones" value="Guardar" trackMouse="true" />
+            </p:panel>
+            <h1 class="title">Configurar opciones.</h1>
+            
+            <p:outputPanel id="panelOpcionPreguntas">
+                <br/>
+                <p:outputLabel id="labelPreguntaTexto" value="Pregunta: #{MBEncuestas.textoPregunta}"  styleClass="text-label"/>
+                <p:dataTable id="tblOpcionesConfigurar" var="opcionConf" 
+                            rowKey="#{opcionConf.opcionesOID}"
+                            value="#{MBEncuestas.listaOpcionesConf}" style="width: 50%" emptyMessage="No existen opciones">
+                    <p:column headerText="Lista de opciones" >
+                        <p:commandButton process="@this,:center-form:tblOpcionesConfigurar" value="#{opcionConf.textoOpcion}" style="width: 100%;" 
+                                         actionListener="#{MBEncuestas.eventChangeOption}"  
+                                         update=":center-form:labelOpcionConf,:center-form:seleccionadasOpcConf,:center-form:tblOpcionesConfiguracion">
+                            <f:attribute name="opcion" value="#{opcionConf}" />
+                            <p:confirm header="Confirmaci&oacute;n" 
+                                       message="¿Si no ha guardado la configuraci&oacute;n, esta se perder&aacute;. ¿Est&aacute; seguro que quiere cambiar de opci&oacute;n?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                </p:dataTable>
+                <br/>
+                
+                <p:outputLabel id="labelOpcionConf" value="Opci&oacute;n a configurar: #{MBEncuestas.opcionSelectedConf.textoOpcion}" styleClass="text-label"/>
+                <p:selectOneRadio id="seleccionadasOpcConf" value="#{MBEncuestas.seleccionadaOpcConf}" >
+                    <f:selectItem itemLabel="Seleccionadas" itemValue="1"/>
+                    <f:selectItem itemLabel="No seleccionadas" itemValue="0" />
+                    <p:ajax listener="#{MBEncuestas.traeaListaPreguntasSecciones()}" update=":center-form:tblOpcionesConfiguracion" />
+                </p:selectOneRadio>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <p:outputLabel id="labelMessageChange" value="Al cambiar de opci&oacute;n, la configuraci&oacute;n se perder&aacute; si no ha guardado." styleClass="text-label-message"/>
+                
+                <br/>
+                <p:dataGrid var="seccionConf" value="#{MBEncuestas.encuestaConf.listaSecciones}" columns="1" id="tblOpcionesConfiguracion" emptyMessage="No existen secciones">
+                    
+                    <p:row>
+                        <p:column >
+                            &nbsp;&nbsp;
+                            <p:selectBooleanCheckbox id="habilitarSeccion" itemLabel="Habilitar" value="#{seccionConf.habilitadoOk}"  >
+                                <p:ajax process="@this,:center-form:tblOpcionesConfiguracion" listener="#{MBEncuestas.eventCheckedPregSeccionSel}" update=":center-form:tblOpcionesConfiguracion" />
+                                <f:attribute name="seccion" value="#{seccionConf}" />
+                            </p:selectBooleanCheckbox>
+                            &nbsp;&nbsp;&nbsp;
+                            <p:selectBooleanCheckbox id="desHabilitarSeccion" itemLabel="Deshabilitar" value="#{seccionConf.deshabilitadoOk}">
+                                <p:ajax process="@this,:center-form:tblOpcionesConfiguracion" listener="#{MBEncuestas.eventCheckedPregSeccionNoSel}" update=":center-form:tblOpcionesConfiguracion" />
+                                <f:attribute name="seccion" value="#{seccionConf}" />
+                            </p:selectBooleanCheckbox>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <h:outputText value="#{seccionConf.nombreSeccion}" styleClass="text-label"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:dataTable id="preguntaConf" var="preguntaConf" value="#{seccionConf.miListaPreguntas}" emptyMessage="No existen preguntas">
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText="Habilitar" style="width: 15% !important;" />
+                                            <p:column headerText="Deshabilitar" style="width: 15% !important;"/>
+                                            <p:column headerText="Orden" style="width: 10% !important;"/>
+                                            <p:column headerText="Pregunta" style="width: 60% !important;" />
+                                        </p:row>
+                                    </p:columnGroup>
+                                    <p:column headerText="Habilitar" style="width: 15% !important;">
+                                        <p:selectBooleanCheckbox value="#{preguntaConf.habilitadoOk}">
+                                            <p:ajax process="@this,:center-form:tblOpcionesConfiguracion" 
+                                                    listener="#{MBEncuestas.eventCheckedPregSel}" 
+                                                    update=":center-form:tblOpcionesConfiguracion" />
+                                            <f:attribute name="pregunta" value="#{preguntaConf}" />
+                                        </p:selectBooleanCheckbox>
+                                    </p:column>
+                                    <p:column headerText="Deshabilitar" style="width: 15% !important;">
+                                        <p:selectBooleanCheckbox  value="#{preguntaConf.deshabilitadoOk}">
+                                            <p:ajax process="@this,:center-form:tblOpcionesConfiguracion" 
+                                                    listener="#{MBEncuestas.eventCheckedPregNoSel}" 
+                                                    update=":center-form:tblOpcionesConfiguracion" />
+                                            <f:attribute name="pregunta" value="#{preguntaConf}" />
+                                        </p:selectBooleanCheckbox>
+                                    </p:column>
+                                    <p:column headerText="Orden" >
+                                        <h:outputText value="#{preguntaConf.orden}" style="width: 10% !important;"/>
+                                    </p:column>
+                                    <p:column headerText="Pregunta" >
+                                        <h:outputText value="#{preguntaConf.descripcionPregunta}" style="width: 60% !important;"/>
+                                    </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:dataGrid>
+                
+                <br />
+            </p:outputPanel>
+            <br />
+            
+            
+        </p:dialog>
+        
+    </ui:composition>
+</html>
+
+
+
+

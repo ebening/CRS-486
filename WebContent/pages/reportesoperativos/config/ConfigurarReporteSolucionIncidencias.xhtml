@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <ui:composition template="../../template/templatef.xhtml">
+            <ui:define name="center" >
+                <p:remoteCommand autoRun="true" 
+                                 name="initBeanSession"
+                                 action="#{MBSession.init()}"/>
+                <p:remoteCommand autoRun="true"
+                                 update="contenedorConfiguracion"
+                                 immediate="true"
+                                 action="#{MBConfiguracionReporte.init()}" />
+
+                <p:growl id="growl" life="20000" />
+
+                <!--Barra superior-->
+                <p:panel id="panel" styleClass="innermenu">
+                    <table class="right">
+                        <tr>
+                            <td></td>
+                            <td class="tdcontrol">
+                            </td>
+                            <td class="tdimage">
+                            </td>
+                            <td class="tdimage">
+                                <p:commandButton id="guardarConfiguracion"
+                                                 actionListener="#{MBConfiguracionReporte.guardar()}"
+                                                 styleClass="ui-icon-ADSave"
+                                                 title="Guardar" 
+                                                 icon="ui-icon-disk" 
+                                                 immediate="true"
+                                                 update="contenedorConfiguracion"
+                                                 />
+                                <p:tooltip for="guardarConfiguracion" 
+                                           value="Guardar Configuración" 
+                                           trackMouse="true" />
+                            </td>
+                            <td class="tdimage">
+                                <p:commandButton id="regresarElement"
+                                                 action="#{MBConfiguracionReporte.regresar()}"
+                                                 styleClass="ui-icon-ADGo-left"
+                                                 title="Regresar" 
+                                                 icon="ui-icon-arrowthickstop-1-w" 
+                                                 immediate="true"
+                                                 />
+                                <p:tooltip for="regresarElement" 
+                                           value="Regresar al dashboard" 
+                                           trackMouse="true" />
+                            </td>
+                        </tr>
+                    </table>
+                </p:panel>
+
+                <h1 class="title">Configuración de Reporte de Solución de Incidencias</h1>
+
+                <!--Vistas por seccion--> 
+                <p:panel id="contenedorConfiguracion">
+                    <ui:include src="Agrupaciones.xhtml" />
+                    <ui:include src="Incidencias.xhtml" />
+                    <ui:include src="NoSolucionados.xhtml" />
+                </p:panel>
+
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

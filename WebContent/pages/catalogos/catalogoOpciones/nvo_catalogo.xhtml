@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+<h:body>
+    <p:dialog id="opciones-dialog-catalogo" closeOnEscape="true" closable="true"
+              widgetVar="dialog-catalogo" modal="true" appendTo="center-form"
+              height="250" width="400" resizable="false"
+              minHeight="250" minWidth="400" header="Crear Catálogo">
+
+        <p:panel id="panel-catalogo" styleClass="innermenu">
+            <p:commandButton id="catalogo-agregar" title="Guardar" styleClass="ui-icon-ADSave" icon="ui-icon-disk"
+                             validateClient="true" actionListener="#{opcionesController.agregarRowPlana}"
+                             process="@this catalogo-formulario"  update="catalogo-formulario opciones-plano-tabla"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-catalogo').hide()">
+            </p:commandButton>
+        </p:panel>
+
+        <center>
+            <h:panelGrid id="catalogo-formulario" styleClass="catalogos-datatable" columns="2" cellpadding="5">
+
+                <p:outputLabel id="clave-Label" styleClass="text-label" for="clave-value" value="Clave"/>
+                <p:inputText id="clave-value"
+                             value="#{opcionesController.currentPlana.clave}" required="true">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Clave"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+
+                <p:outputLabel id="texto-label" styleClass="text-label" for="texto-value" value="Texto"/>
+                <p:inputText id="texto-value" required="true"
+                             value="#{opcionesController.currentPlana.texto}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Texto"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+
+                <p:outputLabel id="orden-Label" styleClass="text-label" for="orden-value" value="Orden"/>
+                <p:inputText id="orden-value" value="#{opcionesController.currentPlana.orden}" required="true">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter for="orden-value" mask="num" preventPaste="false"/>
+                </p:inputText>
+
+                <p:outputLabel id="codigoBarras-Label" styleClass="text-label" for="codigoBarras-value" value="C&oacute;digo de barras"/>
+                <p:inputText id="codigoBarras-value"
+                             value="#{opcionesController.currentPlana.codigoBarra}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Código de barras"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                
+                <p:outputLabel id="valorVariable-Label" styleClass="text-label" for="valorVariable-value" value="Valor variable"/>
+                <p:inputText id="valorVariable-value"
+                             value="#{opcionesController.currentPlana.valor}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                    <pe:keyFilter regEx="#{msg.alphanumericwCharacters}" preventPaste="false"/>
+                    <f:attribute name="label" value="Código de barras"/>
+                    <f:validator validatorId="whiteSpaces" />
+                </p:inputText>
+                
+                <p:outputLabel id="visible-Label" styleClass="text-label" for="visible-value" value="Visible"/>
+                <p:selectBooleanCheckbox id="visible-value" required="true"
+                                         value="#{opcionesController.currentPlana.visible}">
+                    <p:ajax event="change" listener="#{opcionesController.cambio}" />
+                </p:selectBooleanCheckbox>
+            </h:panelGrid>
+        </center>
+
+        <p:ajax event="close"
+                resetValues="true"
+                ignoreAutoUpdate="true"
+                update="catalogo-formulario opciones-plano-tabla"/>
+    </p:dialog>
+</h:body>
+</html>
+

@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="../../template/templatef.xhtml">
+        <ui:define name="center">
+            <p:panel id="panel" styleClass="innermenu">
+                <p:commandButton id="regiones-agregar" icon="ui-icon-plus"
+                                 process="@this"
+                                 styleClass="ui-icon-ADAdd" title="Agregar">
+                    <p:ajax event="click"
+                            listener="#{regionesController.comprobarSeleccionCrear}"
+                            update="regiones-panel-crear-formulario regiones-tabla"
+                            resetValues="true"/>
+                </p:commandButton>
+
+
+                <p:commandButton id="regiones-editar" icon="ui-icon-pencil"
+                                 process="@this"
+                                 actionListener="#{regionesController.comprobarSeleccionEditar}"
+                                 styleClass="ui-icon-ADEdit" title="Editar">
+                    <p:ajax event="dialogReturn"/>
+                </p:commandButton>
+
+
+                <p:commandButton id="regiones-eliminar" icon="ui-icon-trash"
+                                 process="@this"
+                                 actionListener="#{regionesController.comprobarSeleccionEliminar}"
+                                 styleClass="ui-icon-ADTrash" title="Eliminar">
+                    <p:ajax event="dialogReturn"/>
+                </p:commandButton>
+            </p:panel>
+
+            <h1 class="title">#{msg.regiones_title}</h1>
+
+            <ui:include src="tabla.xhtml"/>
+
+            <p:dialog id="regiones-dialog-crear" closeOnEscape="true" closable="true"
+                      widgetVar="dialog-regiones-crear"
+                      modal="true"
+                      appendTo="center-form"
+                      height="150"
+                      width="500"
+                      resizable="false"
+                      minHeight="150"
+                      minWidth="500"
+                      header="#{msg.crear_region }  ">
+
+                <ui:include src="crear.xhtml"/>
+                <p:ajax event="close"
+                        resetValues="true"
+                        ignoreAutoUpdate="true"
+                        update="regiones-panel-crear-formulario regiones-tabla"
+                        listener="#{regionesController.cerrarDialogCrear}"/>
+            </p:dialog>
+
+            <p:dialog id="regiones-dialog-editar" closeOnEscape="true" closable="true"
+                      widgetVar="dialog-regiones-editar"
+                      modal="true"
+                      appendTo="center-form"
+                      height="150"
+                      width="500"
+                      resizable="false"
+                      minHeight="150"
+                      minWidth="500"
+                      header="#{msg.editar_region }  ">
+
+                <ui:include src="editar.xhtml"/>
+                <p:ajax event="close" ignoreAutoUpdate="true"
+                resetValues="true"
+                update="regiones-panel-editar-formulario regiones-tabla"
+                listener="#{regionesController.cerrarDialogEditar}"/>
+            </p:dialog>
+
+            <p:confirmDialog header="#{msg.eliminar_region}"
+                             appendTo="center-form"
+                             message="#{regionesController.removeQuestion()}"
+                             widgetVar="dialog-regiones-eliminar"
+                             icon="ui-icon-alert"
+                             showEffect="fade" hideEffect="explode">
+                <p:commandButton value="Si"
+                                 update="regiones-tabla" process="@this"
+                                 oncomplete="PF('dialog-regiones-eliminar').hide()"
+                                 styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+                                 actionListener="#{regionesController.eliminar()}"  />
+                <p:commandButton value="No"
+                                 process="@this"
+                                 oncomplete="PF('dialog-regiones-eliminar').hide()"
+                                 styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

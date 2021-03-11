@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBGruposTiendas.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBGruposTiendas.processUrl()}" />
+    </f:metadata>
+
+    <h:body>
+
+        <ui:composition template="../template/templatef.xhtml">
+            <ui:define name="center">
+                <p:remoteCommand autoRun="true" actionListener="#{MBGruposTiendas.listaGrupos()}" update="comboGrupo" />
+                <p:remoteCommand autoRun="true" actionListener="#{MBGruposTiendas.initTiendas()}" update="tableTiendas" />
+
+
+                <p:panel id="panel" styleClass="innermenu">
+                    <p:commandButton id="bttnNewGroup" styleClass="ui-icon-ADAdd" title="Nuevo Grupo" icon="ui-icon-plus"
+                                     actionListener="#{MBGruposTiendas.resetNombre()}" />
+                    <p:tooltip for="bttnNewGroup" value="Nuevo Grupo" trackMouse="true" />
+                    <p:commandButton id="bttnSave" styleClass="ui-icon-ADSave" title="Guardar" update="tableTiendas" icon="ui-icon-disk"
+                                     actionListener="#{MBGruposTiendas.guardarEstado()}" />
+                    <p:tooltip for="bttnSave" value="Guardar" trackMouse="true" />
+                    <!--    <p:commandButton id="bttnDelTiendas" styleClass="ui-icon-ADTrash" title="Borrar" ajax="false" />
+                        <p:tooltip for="bttnDelTiendas" value="Quitar Tiendas del Grupo" trackMouse="true" /> -->
+                </p:panel>
+                <h1 class="title">Grupos de Tiendas</h1>
+                <br /><br />
+                <div class="page-search">
+                    <p:remoteCommand id="updateDatos" name="updateDatos" update="comboGrupo" />
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="comboGrupo" value="Nombre Grupo" styleClass="text-label" />
+                        <p:selectOneMenu id="comboGrupo" value="#{MBGruposTiendas.grupoSelectedId}" onchange="updateDatos()"
+                                         filter="true" filterMatchMode="startsWith" >
+                            <f:selectItem itemLabel="Selecciona Grupo"  />
+                            <f:selectItems value="#{MBGruposTiendas.grupos}" var="data"
+                                           itemLabel="#{data.nombre}" itemValue="#{data.id}" />
+                            <p:ajax update="tableTiendas" event="change" listener="#{MBGruposTiendas.listaTiendasByGrupoId()}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>  
+                </div>
+                <br /><br />
+                <div class="page-content">
+                    <p:dataTable id="tableTiendas" var="data" value="#{MBGruposTiendas.tiendas}" filteredValue="#{MBGruposTiendas.tiendasFiltered}"
+                                 selection="#{MBGruposTiendas.tiendasSelected}" rowKey="#{data.id}" rows="10"
+                                 paginator="true" rowsPerPageTemplate="10,20,50,100" emptyMessage="No existen registros" >
+                        <p:column width="10%" selectionMode="multiple" style="width:16px;text-align:center"/>
+                        <p:column headerText="N&uacute;mero tienda" filterBy="#{data.clave}" filterMatchMode="contains" >
+                            <h:outputText value="#{data.clave}" />
+                        </p:column>
+                        <p:column headerText="Nombre tienda" filterBy="#{data.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{data.nombre}" />
+                        </p:column>
+                        <p:column headerText="Cadena" filterBy="#{data.cadena}"  filterMatchMode="contains">
+                            <p:outputLabel value="#{data.cadena}" />
+                        </p:column>
+                        <p:column headerText="Estado" filterBy="#{data.estados}" filterMatchMode="contains">
+                            <p:outputLabel value="#{data.estados}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" filterBy="#{data.ciudades}" filterMatchMode="contains">
+                            <p:outputLabel value="#{data.ciudades}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <!-- ************************************ Dialog Crear Grupo ***************************************** -->   
+                <p:dialog header="Crear Grupo" showEffect="bounce" width="400" height="200"
+                          widgetVar="crearGrupoDialog" resizable="false" onShow="updateDatosNuevo();">
+                    <p:remoteCommand id="updateDatosNuevo" name="updateDatosNuevo" update="txtNombre" />
+                    <div align="right">
+                        <p:panel id="panelNuevo" styleClass="innermenu">
+                            <p:commandButton id="bttnSaveNuevo" styleClass="ui-icon-ADSave" title="Crear" icon="ui-icon-disk"
+                                             actionListener="#{MBGruposTiendas.crearNuevoGrupo()}" update="txtNombre,comboGrupo" />
+                            <p:tooltip for="bttnSaveNuevo" value="Crear Grupo" trackMouse="true" />
+                            <p:commandButton id="bttnCloseNuevo" styleClass="ui-icon-ADClose" onclick="PF('crearGrupoDialog').hide()" icon="ui-icon-closethick"/>
+                            <p:tooltip for="bttnCloseNuevo" value="Cancelar" trackMouse="true" />
+                        </p:panel>
+                    </div>
+                    <br /><br /><br /><br />
+                    <div align="center">
+                        <h:panelGrid columns="2" border="0">
+                            <p:outputLabel for="txtNombre" value="Nombre: " styleClass="text-label" />
+                            <p:inputText id="txtNombre" style="width: 120%" value="#{MBGruposTiendas.nuevoNombre}" onchange="updateDatosNuevo()" />
+                        </h:panelGrid> 
+                    </div>   
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

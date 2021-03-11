@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="../../template/templatef.xhtml">
+        <ui:define name="center">
+            <p:panel id="panel" styleClass="innermenu">
+
+               <ui:include src="botones.xhtml"/>
+
+            </p:panel>
+
+            <h1 class="title">#{opcionesController.principal ?  msg.opciones_title : "Editar catálogo" }</h1>
+
+
+
+                <div class="page-content">
+
+                        <ui:include src="formulario.xhtml"/>
+
+                            <p:dataTable id="opciones-tabla" var="o"
+                                         rendered="#{opcionesController.principal}"
+                                         value="#{opcionesController.list}"
+                                         emptyMessage="#{msg.emptyMessage}"
+                                         rowKey="#{o.oid}"
+                                         selectionMode="multiple"
+                                         selection="#{opcionesController.selected}"
+                                         filteredValue="#{opcionesController.filtered}"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="#{msg.paginatorTemplate}"
+                                         rowsPerPageTemplate="#{msg.rowsPerPageTemplate}">
+
+
+                                <p:columns value="#{opcionesController.columns}"
+                                           var="column" columnIndexVar="colIndex"
+                                           sortBy="#{o[column.property]}"
+                                           filterBy="#{o[column.property]}">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{column.header}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{o[column.property]}"/>
+                                </p:columns>
+
+                                <p:column headerText="Tipo"
+                                          sortBy="#{o.tipoLista.nombre}"
+                                          filterBy="#{o.tipoLista.nombre}">
+                                    <h:outputText value="#{o.tipoLista.nombre}"/>
+                                </p:column>
+
+                                <p:ajax event="rowSelect" listener="#{opcionesController.seleccionar}" update=":center-form:opciones-panel-formulario"/>
+                                <p:ajax event="rowUnselect" listener="#{opcionesController.quitarSeleccion}" update=":center-form:opciones-panel-formulario"/>
+
+                            </p:dataTable>
+                </div>
+
+            <ui:include src="dialogs.xhtml"/>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

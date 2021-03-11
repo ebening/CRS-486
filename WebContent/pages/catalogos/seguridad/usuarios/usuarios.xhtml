@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBUsuarios.query}" />
+        <f:event type="preRenderView" listener="#{MBUsuarios.procesaQuery()}"/>
+        <!--f:viewParam name="RegionesId" value="{MBUsuarios.regionesId}"  />
+        <f:viewParam name="TerritorioId" value="{MBUsuarios.territorioId}" />
+        <f:viewParam name="EquiposId" value="{MBUsuarios.equiposId}" />
+        <f:viewParam name="UnidadesNegocios" value="{MBUsuarios.unidadesNegocios}" />
+        <f:viewParam name="ClienteId" value="{MBUsuarios.clienteId}" /-->
+    </f:metadata>
+    <h:body>
+
+        <ui:composition template="../../../template/templatef.xhtml">      
+            <ui:define name="center" >
+                
+                <p:remoteCommand process="@this"  autoRun="true" action="#{MBUsuarios.loadRefresh()}" update="tableUsuarios" />
+                <p:panel id="panel" styleClass="innermenu" >
+                    <!-- update="editarUsuario" -->
+                    <p:commandButton id="usuariosEditar"  icon="ui-icon-pencil" 
+                                     process="@this" 
+                                     update="editarUsuario" 
+                                     action="#{MBUsuarios.eventEditarUsuario()}"
+                                    styleClass="ui-icon-ADEdit" 
+                                    title="#{msg.editar_usuario}" resetValues="true"/>
+                    
+                    <p:commandButton id="usuariosEliminar" icon="ui-icon-trash" 
+                                 process="@this"
+                                 update="tableUsuarios"
+                                 actionListener="#{MBUsuarios.eventEliminarUsuarios()}"
+                                 styleClass="ui-icon-ADTrash" title="#{msg.eliminar_usuarios}">
+                        <p:confirm header="#{msg.eliminar_usuarios}" message="#{msg.delete_confirm_usuarios}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                </p:panel>
+                
+                <h1 class="title">#{msg.usuarios_title}</h1>
+                
+                <div class="page-content">
+                    <p:dataTable id="tableUsuarios" emptyMessage="No existen registros" 
+                                var="data" value="#{MBUsuarios.listaUsuarios}" 
+                                widgetVar="tableUsuarios" 
+                                rowKey="#{data.usuariosOID}" 
+                                rows="10" 
+                                 paginator="true" 
+                                 rowsPerPageTemplate="10,20,50,100" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                 selectionMode="multiple" selection="#{MBUsuarios.usuariosSeleccionados}">
+                        
+                        <p:column headerText="Usuario" filterBy="#{data.userName}" sortBy="#{data.userName}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.userName}" />
+                        </p:column>
+                        <p:column headerText="Nombre" filterBy="#{data.nombre}" sortBy="#{data.nombre}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombre} #{data.apellidoPaterno} #{data.apellidoMaterno}" />
+                        </p:column>
+                        <p:column headerText="Perfil" filterBy="#{data.nombrePerfil}" sortBy="#{data.nombrePerfil}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombrePerfil}" />
+                        </p:column>
+                        <p:column headerText="Equipo" filterBy="#{data.nombreEquipo}" sortBy="#{data.nombreEquipo}" filterMatchMode="contains">
+                            <p:row>
+                                <ui:repeat value="#{data.equiposByUsuario}" var="eqs">
+                                    <h:outputText value="#{eqs.id}, #{eqs.nombre}" />
+                                    <br />
+                                </ui:repeat>
+                            </p:row>
+                        </p:column>
+                        <p:column headerText="Puesto" filterBy="#{data.nombrePuesto}" sortBy="#{data.nombrePuesto}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombrePuesto}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" filterBy="#{data.nombreCiudades}" sortBy="#{data.nombreCiudades}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombreCiudades}" />
+                        </p:column>
+                        <p:column headerText="Estado" filterBy="#{data.nombreEstados}" sortBy="#{data.nombreEstados}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.nombreEstados}" />
+                        </p:column>
+                        <p:column headerText="Estatus" filterBy="#{data.estatus}" sortBy="#{data.estatus}" filterMatchMode="contains">
+                            <h:outputLabel value="#{data.estatus}" />
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{MBUsuarios.eventSeleccionarUsuario}" />
+                        <p:ajax event="rowUnselect" listener="#{MBUsuarios.eventQuitarSeleccion}" />
+                        
+                    </p:dataTable>
+                    
+                </div>
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </p:confirmDialog>
+                
+                <ui:include src="dialog/editar_usuario.xhtml" />
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

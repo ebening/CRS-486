@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <p:panel id="regiones-panel-editar" styleClass="innermenu">
+            <p:commandButton id="regiones-editar-guardar"   title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave"  validateClient="true"
+                             ignoreAutoUpdate="true"
+                             process="@this regiones-panel-editar-formulario"
+                             update="regiones-panel-editar-formulario regiones-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-regiones-editar').hide()"
+                             actionListener="#{regionesController.editar}"  />
+        </p:panel>
+        <center>
+            <p:panel style="border:none;">
+                <h:panelGrid id="regiones-panel-editar-formulario" columns="2" cellpadding="5" >
+                    <p:outputLabel id="regiones-editar-label" styleClass="text-label"
+                                   for="regiones-editar-value" value="#{msg.nombre_region}"/>
+                    <p:inputText id="regiones-editar-value" value="#{regionesController.current.nombre}" required="true" >
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                        <f:attribute name="label" value="#{msg.nombre_region}"/>
+                        <f:validator validatorId="whiteSpaces" />
+                    </p:inputText>
+                    <p:outputLabel id="regiones-editar-coordinador-label"
+                                   styleClass="text-label"
+                                   for="regiones-editar-coordinador-value"
+                                   value="#{msg.coordinador}"/>
+                    <p:selectOneMenu id="regiones-editar-coordinador-value"  required="true"
+                                     value="#{regionesController.current.userCoordinador.usuariosOID}" >
+                        <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                        <f:selectItems value="#{regionesController.listaCoordinadores}"
+                                       var="coordinador" itemLabel="#{regionesController.nombreCompleto(coordinador)}"
+                                       itemValue="#{coordinador.usuariosOID}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:panel>
+        </center>   
+    </h:body>
+</html>
+

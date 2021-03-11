@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition >
+        <p:dialog id="configurarPerfil" header="#{msg.header_conf_perfil}" 
+                    widgetVar="configurarPerfil" 
+                    showEffect="explode" hideEffect="fade" 
+                    height="500"
+                    width="400"
+                    resizable="false" modal="true">
+            <p:panel styleClass="innermenu">
+                
+                <p:commandButton id="perfilGuardarConf" title="Guardar" icon="ui-icon-disk"
+                                 actionListener="#{MBPerfiles.configurarPerfil()}"
+                                 styleClass="ui-icon-ADSave"  validateClient="true"
+                                 process="@this,treePerfiles"
+                                 update="tablePerfiles" 
+                                 oncomplete="if(args &amp;&amp; !args.validationFailed) PF('configurarPerfil').hide()"/>
+                
+                <!--
+                <p:commandButton id="perfilRegresarNuevo" title="Regresar" update="panelNuevoPerfil tablePerfiles" 
+                                 styleClass="ui-icon-ADGo-left" oncomplete="PF('crearPerfil').hide()"/>-->
+            </p:panel>
+            
+            <!--<div class="page-content">-->
+                
+                <p:outputLabel value="#{msg.texto_perfil}" styleClass="text-label"/>
+                &nbsp;
+                <p:outputLabel value="#{MBPerfiles.selectedPerfil.nombre}" styleClass="text-label"/>
+                <br/><br/>
+                <p:treeTable id="treePerfiles" value="#{MBPerfiles.treeModulosPerfil}" 
+                             var="modulo" 
+                             selectionMode="checkbox" 
+                             selection="#{MBPerfiles.selectedModulosPerfil}" >
+                    <p:column headerText="#{msg.texto_modulos}" >
+                        <h:outputText value="#{modulo.titulos}" />
+                    </p:column>
+                </p:treeTable>
+                <br/>
+            <!--</div>-->
+        </p:dialog>
+        
+        
+        
+    </ui:composition>
+</html>
+

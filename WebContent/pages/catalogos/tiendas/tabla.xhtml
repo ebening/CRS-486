@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <center>
+        <div class="page-content">
+            <p:panel  id="panelFiltrosTiendas" style="border:none;" >
+            <h:panelGrid columns="5" cellpadding="5">
+                <p:outputLabel for="nombre" value="Nombre tienda" styleClass="text-label" />
+                <p:outputLabel for="comboCadena" value="Cadena" styleClass="text-label" />
+                <p:outputLabel for="comboFormato" value="Formato" styleClass="text-label" />
+                <p:outputLabel for="comboEstado" value="Estado" styleClass="text-label" />
+                <p:outputLabel for="comboCiudad" value="Ciudad" styleClass="text-label" />
+                
+                <p:inputText id="nombre" value="#{tiendasController.nombreTienda}" />
+                
+                <p:selectOneMenu id="comboCadena" value="#{tiendasController.cadenasId}"
+                                                   filter="true" filterMatchMode="startsWith" panelStyle="width:200px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona cadena" itemValue="0" />
+                    <f:selectItems value="#{tiendasController.listaCadenas}" var="cadena" 
+                                                     itemLabel="#{cadena.nombre}" itemValue="#{cadena.id}"/>
+                </p:selectOneMenu>
+                <p:selectOneMenu id="comboFormato" value="#{tiendasController.formatoId}">
+                    <f:selectItem itemLabel="Selecciona formato" itemValue="0" />
+                    <f:selectItems value="#{tiendasController.listaFormatos}" var="formato"
+                                   itemLabel="#{formato.nombre}" itemValue="#{formato.id}" /> 
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboEstado"
+                                 value="#{tiendasController.estadosId}"
+                                 filter="true"
+                                 filterMatchMode="startsWith"
+                                 panelStyle="width:100px;font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona estado" itemValue="0" />
+                    <f:selectItems value="#{tiendasController.listaEstados}"
+                                   var="estado"
+                                   itemLabel="#{estado.nombre}"
+                                   itemValue="#{estado.id}" />
+                    <p:ajax event="change"
+                            listener="#{tiendasController.cambiarListEstado}"
+                            update="comboCiudad" />
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboCiudad" value="#{tiendasController.ciudadesId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona ciudad" itemValue="0" />
+                    <f:selectItems value="#{tiendasController.listaCiudades}" var="ciudad" itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
+                </p:selectOneMenu>
+                
+            </h:panelGrid>
+                </p:panel>
+            <p:dataTable id="tiendas-tabla" var="o"
+                         value="#{tiendasController.lazyModel}"
+                         selection="#{tiendasController.selected}"
+                         filteredValue="#{tiendasController.filtered}"
+                         rowKey="#{o.id}"
+                         selectionMode="multiple"
+                         rows="10"
+                         paginator="true"
+                         emptyMessage="#{msg.emptyMessage}"
+                         paginatorTemplate="#{msg.paginatorTemplate}"
+                         rowsPerPageTemplate="#{msg.rowsPerPageTemplate}"
+                         lazy="true" >
+                
+                    <p:column headerText="N&uacute;mero tienda">
+                        <h:outputText value="#{o.clave}"/>
+                    </p:column>
+                
+                  <p:columns value="#{tiendasController.columns}"
+                             var="column" columnIndexVar="colIndex"
+                             sortBy="#{o[column.property]}"><!--
+                             filterBy="{o[column.property]}"-->
+                        <f:facet name="header">
+                              <h:outputText value="#{column.header}"/>
+                        </f:facet>
+                        <h:outputText value="#{o[column.property]}"/>
+                  </p:columns>
+                
+                <p:column headerText="Cadena"><!--
+                            filterBy="{o.cadena.nombre}" filterMatchMode="contains"-->
+                        <h:outputText value="#{o.cadena.nombre}"/>
+                  </p:column>
+                    
+                <p:column headerText="Formato"><!--
+                            filterBy="{o.formato.nombre}" filterMatchMode="contains"-->
+                        <h:outputText value="#{o.formato.nombre}"/>
+                  </p:column>
+                
+                <p:column headerText="Estado"><!--
+                            filterBy="{o.estado.nombre}" filterMatchMode="contains"-->
+                        <h:outputText value="#{o.estado.nombre}"/>
+                  </p:column>
+                
+                <p:column headerText="Ciudad"><!--
+                            filterBy="{o.ciudad.nombre}" filterMatchMode="contains"-->
+                        <h:outputText value="#{o.ciudad.nombre}"/>
+                  </p:column>
+
+                <p:column headerText="Territorio"><!--
+                            filterBy="{o.territorioNativo.nombre}" filterMatchMode="contains"-->
+                        <h:outputText value="#{o.territorioNativo.nombre}"/>
+                  </p:column>
+
+                  <p:ajax event="rowSelect" listener="#{tiendasController.seleccionar}" update=":center-form:tiendas-dialog-editar"/>
+                  <p:ajax event="rowUnselect" listener="#{tiendasController.quitarSeleccion}" update=":center-form:tiendas-dialog-editar"/>
+            </p:dataTable>
+        </div>
+    </center>
+</h:body>
+</html>

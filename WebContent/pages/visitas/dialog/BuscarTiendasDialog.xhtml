@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- *************************************************** DIALOG BUSCAR **************************************************************** -->
+    <ui:composition>
+        <p:dialog header="Buscar Tiendas" widgetVar="busDialog" showEffect="explode" hideEffect="fade"
+                  width="80%" id="dialogContent" resizable="false"  onShow="resetView(),initEstados(),initCadena(),initNativo(),initGrupo()">
+
+            <p:remoteCommand id="initEstados" name="initEstados" actionListener="#{MBEstados.estadosList()}" update="comboEstado" />
+            <p:remoteCommand id="initCadena" name="initCadena" actionListener="#{MBCadena.cadenasList()}" update="comboCadena" />
+            <p:remoteCommand id="initNativo" name="initNativo" actionListener="#{MBTerritorios.territoriosList()}" update="comboNativo" />
+            <p:remoteCommand id="initGrupo" name="initGrupo" actionListener="#{MBTiendas.listaGruposTiendas()}" update="comboGrupo" />
+            <p:remoteCommand id="resetView" name="resetView" action="#{MBTiendas.resetTiendaSearchList()}" update="tableBusqueda" /> 
+
+            <p:panel id="panelBusTiendas" styleClass="innermenu">
+                <div align="right">
+                    <p:commandButton id="bttnBuscarTiendas"
+                                     styleClass="ui-icon-ADSearch"
+                                     title="Agregar Tiendas"
+                                     icon="ui-icon-search"
+                                     update="comboGrupo,tableBusqueda"
+                                     actionListener="#{MBTiendas.tiendasBusqueda()}">
+                    </p:commandButton>
+                    <p:tooltip for="bttnBuscarTiendas" value="Buscar" trackMouse="true" />
+
+                    <p:commandButton id="bttnAddBusTiendas" actionListener="#{MBTiendas.addTiendasToMainTable()}" styleClass="ui-icon-ADAdd" icon="ui-icon-plus"
+                                     update="tableResult,tableBusqueda" />
+                    <p:tooltip for="bttnAddBusTiendas" value="Agregar Tiendas" trackMouse="true" />
+
+                </div>
+            </p:panel>
+            <br /><br />
+            <h:panelGrid columns="5" cellpadding="5" id="panelFiltros">
+                <p:outputLabel for="txtNombreTienda" value="Nombre tienda" styleClass="text-label" />
+                <p:outputLabel for="comboCadena" value="Cadena" styleClass="text-label" />
+                <p:outputLabel for="comboEstado" value="Estado" styleClass="text-label" />
+                <p:outputLabel for="comboCiudad" value="Ciudad" styleClass="text-label" />
+                <p:outputLabel for="comboNativo" value="Territorio nativo" styleClass="text-label" />
+
+                <p:inputText id="txtNombreTienda" type="text" value="#{MBTiendas.tiendaNombre}" />
+
+                <p:selectOneMenu id="comboCadena" label="Cadena" value="#{MBTiendas.cadenaId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:200px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona Cadena" itemValue="0" />
+                    <f:selectItems value="#{MBCadena.cadenas}" var="cadena" 
+                                   itemLabel="#{cadena.nombre}" itemValue="#{cadena.id}"/>
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboEstado" label="Estado" value="#{MBTiendas.estadoId}" 
+                                 filter="true" filterMatchMode="startsWith" 
+                                 panelStyle="width:100px;font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona Estado" itemValue="0" />
+                    <f:selectItems value="#{MBEstados.estados}" var="estado"
+                                   itemLabel="#{estado.nombre}" itemValue="#{estado.id}" />
+                    <p:ajax update="comboCiudad" listener="#{MBTiendas.ciudadeByEstadoId()}" />
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboCiudad" label="Ciudad" value="#{MBTiendas.ciudadId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona Ciudad" itemValue="0" />
+                    <f:selectItems value="#{MBTiendas.ciudades}" var="ciudad"
+                                   itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
+                </p:selectOneMenu>
+
+                <p:selectOneMenu id="comboNativo" value="#{MBTiendas.territorioNatId}" 
+                                 filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                    <f:selectItem itemLabel="Selecciona Territorio" itemValue="" />
+                    <f:selectItems value="#{MBTerritorios.territorios}" var="terr"
+                                   itemLabel="#{terr.nombre}" itemValue="#{terr.id}" />
+                </p:selectOneMenu>
+
+            </h:panelGrid>
+            <br /><br />
+            <p:outputLabel value="Filtrar por grupo" for="comboGrupo" styleClass="text-label" /><br /><br />
+            <p:selectOneMenu id="comboGrupo" value="#{MBTiendas.grupoSelected}"
+                             filter="true" filterMatchMode="startsWith" panelStyle="width:100px; font-size: 10px;">
+                <f:selectItem itemLabel="Todas las Tiendas (Filtros)" itemValue="0" />
+                <f:selectItems value="#{MBTiendas.grupos}" var="grupo"
+                               itemLabel="#{grupo.nombre}" itemValue="#{grupo.id}" /> 
+                <p:ajax update="tableBusqueda" listener="#{MBTiendas.fillTableByGrupo()}" />
+            </p:selectOneMenu>
+            <br /><br />
+
+            <br />
+
+            <p:dataTable id="tableBusqueda" var="data" value="#{MBTiendas.lazyModelSearch}" selectionMode="multiple" 
+                         selection="#{MBTiendas.selectedTiendas}" rowKey="#{data.id}" rows="10" lazy="true" 
+                         paginator="true" rowsPerPageTemplate="10,20,50,100" emptyMessage="No existen Registros">
+                <p:column headerText="N&uacute;mero tienda" width="10%" >
+                    <h:outputText value="#{data.clave}" />
+                </p:column>
+                <p:column headerText="Nombre tienda"  >
+                    <h:outputText value="#{data.nombre}" />
+                </p:column>
+                <p:column headerText="Cadena" width="10%">
+                    <h:outputText value="#{data.cadena}" />
+                </p:column>
+                <p:column headerText="Estado" width="10%">
+                    <h:outputText value="#{data.estados}" />
+                </p:column>
+                <p:column headerText="Ciudad" width="10%">
+                    <h:outputText value="#{data.ciudades}" />
+                </p:column>
+            </p:dataTable>
+
+        </p:dialog>
+
+    </ui:composition>   
+</html>
+

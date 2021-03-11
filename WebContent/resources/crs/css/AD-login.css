@@ -1,0 +1,67 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 29/09/2014, 03:47:10 PM
+    Author     : christian
+*/
+
+/**
+azulfondo rgb(0,96,169);
+rojofondo rgb(207,10,44);
+
+**/
+body{
+    font-family: Calibri, sans-serif !important;
+    font-size:  12px !important;
+}
+.ui-widget{
+    font-family: Calibri, sans-serif !important;
+}
+.login-body{
+    background-color: rgb(0,96,169);
+
+}
+#login-formulario-logo { 
+    background-color: white;
+    width: 100%;
+}
+#login-formulario{
+    position: absolute; 
+    /*nos posicionamos en el centro del navegador*/ 
+    top:50%; left:50%; /*determinamos una anchura*/ 
+    width:300px; /*indicamos que el margen izquierdo,
+                 es la mitad de la anchura*/
+    margin-left:-150px; /*determinamos una altura*/ 
+    height:100px; /*indicamos que el margen superior, es la mitad de la altura*/ 
+    margin-top:-150px;
+    border-radius: 4px 4px 4px 4px;
+    border:1px solid rgb(0,96,169); 
+    padding:10px;
+
+
+}
+
+
+
+.login-formulario-texto {
+    height: 22px;
+    border:1px solid rgb(0,96,169);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.login-formulario-button{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border: 0;
+    float: right;
+}
+
+.login-formulario-password{
+    height: 24px;
+    border-radius: 4px 0px 0px 4px;
+    border:1px solid rgb(0,96,169);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}

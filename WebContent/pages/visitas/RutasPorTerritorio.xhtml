@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <f:metadata>
+        <f:viewParam name="query" value="#{MBRutas.urlQuery}" />
+        <f:event type="preRenderView" listener="#{MBRutas.processUrl()}" />
+    </f:metadata>
+
+    <h:body>   
+        <ui:composition template="../template/templatef.xhtml">          
+            <ui:define name="center" >
+
+                <p:remoteCommand autoRun="true" action="#{MBRutas.RutasListByTerritorio()}" update="tableRutas,nombreTerritorio" />
+
+                <div align="right">
+                    <p:panel id="panelOpsRutas" styleClass="innermenu">
+                        <p:commandButton id="bttnNuevaRuta" styleClass="ui-icon-ADAdd" title="Nueva Ruta" actionListener="#{MBRutas.showNewDialog()}" icon="ui-icon-plus"
+                                         update="txtRutaNombre,tableTiendas,tablePromotores,tableRutas" />
+                        <p:tooltip for="bttnNuevaRuta" value="Nueva Ruta" trackMouse="true" />
+
+                        <p:commandButton id="bttnEditar" styleClass="ui-icon-ADEdit" title="Editar Ruta" actionListener="#{MBRutas.showEditDialog()}" icon="ui-icon-pencil"
+                                         update="txtRutaNombre,tableTiendas,tablePromotores"/>
+                        <p:tooltip for="bttnEditar" value="Editar Ruta" trackMouse="true" />
+
+                        <p:commandButton id="bttnDelRuta" styleClass="ui-icon-ADTrash" title="Eliminar Ruta" icon="ui-icon-trash"
+                                         actionListener="#{MBRutas.eliminarRuta()}">
+                            <!--    <p:confirm header="Confirmacion" message="Esta seguro que desea eliminar la ruta ?" icon="ui-icon-alert" /> -->
+                        </p:commandButton>
+                        <p:tooltip for="bttnDelRuta" value="Eliminar Rutas" trackMouse="true" />  
+                    </p:panel>
+                    <p:confirmDialog widgetVar="deleteConfirmation" severity="alert" appendTo="center-form"
+                                     showEffect="fade" hideEffect="explode" header="Confirmacion"
+                                     message="¿Está seguro que desea eliminar las rutas seleccionadas?" >
+                        <p:commandButton value="Si" onclick="remoteConfirm()" styleClass="ui-confirmdialog-yes"
+                                         type="button" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" onclick="PF('deleteConfirmation').hide()" 
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+
+                    <p:remoteCommand id="remoteConfirm" name="remoteConfirm" actionListener="#{MBRutas.confirmDelete()}" update="tableRutas" />
+                </div>
+                <br />
+                <h1 class="title">Rutas por territorio</h1>
+                <br /><br />
+                <p:outputLabel id="nombreTerritorio" value="#{MBRutas.nombreEquipo} - #{MBRutas.territorioNombre}" 
+                               styleClass="text-label" style="padding-left: 2.5%" /><br /><br />
+                <br /><br />
+                <div align="center" class="page-content">
+                    <p:dataTable id="tableRutas" paginator="true" paginatorAlwaysVisible="true" value="#{MBRutas.listaRutas}" rows="10" 
+                                 var="data" emptyMessage="No existen registros" rowsPerPageTemplate="10,20,50,100" selectionMode="multiple"
+                                 selection="#{MBRutas.rutaSelected}" rowKey="#{data.id}" style="width: 95%" >
+                        <p:column headerText="Nombre Ruta" filterBy="#{data.nombre}"  filterMatchMode="contains">
+                            <h:outputText value="#{data.nombre}" />
+                        </p:column>
+                        <p:column id="columnTiendas" headerText="Tiendas">
+                            <ui:repeat value="#{data.tiendas}" var="tienda">
+                                <h:outputText value="#{tienda.clave} - #{tienda.nombre}" />
+                                <br />
+                            </ui:repeat>
+                        </p:column>
+                        <p:column headerText="Promotores">
+                            <p:row>
+                                <ui:repeat value="#{data.promotores}" var="promos">
+                                    <h:outputText value="#{promos.nroEmpleado} - #{promos.nombre} #{promos.apellidoPaterno} #{promos.apellidoMaterno}" />
+                                    <br />
+                                </ui:repeat>
+                            </p:row>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <ui:include src="dialog/NuevaRutaDialog.xhtml" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

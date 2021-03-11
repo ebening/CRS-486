@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd" xmlns:util="http://www.springframework.org/schema/util">
+        
+	<!-- ******************************************************************* -->
+	<!-- Declaración de trabajos -->
+	<!-- ******************************************************************* -->
+        
+        <bean name="updateMovResultados" 
+              class="com.crossmark.collector.business.jobs.UpdateMovResultados">
+            <property name="serviceJobs">
+                <ref bean="serviceJobs" />
+            </property>
+	</bean>
+        
+        <!-- Spring Quartz -->
+        <bean name="movResultadosJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+            <property name="jobClass" value="com.crossmark.collector.business.jobs.MovResultados" />
+            <property name="jobDataAsMap">
+              <map>
+                  <entry key="updateMovResultados" value-ref="updateMovResultados" />
+              </map>
+            </property>
+        </bean>
+        
+        <bean id="movResultadosCronTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="movResultadosJob" />
+            <property name="cronExpression" value="${movResultados.cron}" />
+	</bean>
+        
+        <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+            <property name="triggers">
+                <list>
+                    <ref bean="movResultadosCronTrigger"/>
+                </list>
+            </property>
+        </bean>
+        
+</beans>

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:body>
+        <p:panel id="panel-crear" styleClass="innermenu" >
+            <p:commandButton id="equipos-crear-guardar" title="Guardar" icon="ui-icon-disk"
+                             styleClass="ui-icon-ADSave" validateClient="true"
+                             process="@this equipos-panel-crear-formulario"
+                             ignoreAutoUpdate="true"
+                             update="equipos-panel-crear-formulario equipos-tabla mensajes2"
+                             oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialog-equipos-crear').hide()"
+                             actionListener="#{equiposController.crear}"/>
+        </p:panel>  
+        <center>
+            <p:panel id="equipos-panel-crear-formulario" style="border:none;">
+                <h:panelGrid styleClass="catalogos-datatable" columns="2" cellpadding="5" >
+
+                    <p:outputLabel id="equipos-crear-equipoNombre-Label" styleClass="text-label"
+                                   for="equipos-crear-equipoNombre-value" value="#{msg.nombre_equipo}"/>
+                    <p:inputText id="equipos-crear-equipoNombre-value" label="#{msg.nombre_equipo}"
+                                 value="#{equiposController.current.nombre}" required="true" >
+                        <pe:keyFilter regEx="#{msg.alphanumericwCharacters}"/>
+                        <f:attribute name="label" value="#{msg.nombre_equipo}"/>
+                        <f:validator validatorId="whiteSpaces" />
+                    </p:inputText>
+
+                    <p:outputLabel id="equipos-crear-region-label" styleClass="text-label"
+                                   for="equipos-crear-region-value" value="#{msg.region}"/>
+                    <p:selectOneMenu id="equipos-crear-region-value" required="true"
+                                     value="#{equiposController.current.region.id}" >
+                        <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                        <f:selectItems value="#{equiposController.listaRegiones}"
+                                       var="region" itemLabel="#{region.nombre}"
+                                       itemValue="#{region.id}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="equipos-crear-unidadNegocio-label" styleClass="text-label"
+                                   for="equipos-crear-unidadNegocio-value" value="Unidad de Negocio"/>
+                    <p:selectOneMenu id="equipos-crear-unidadNegocio-value" required="true"
+                                     value="#{equiposController.current.unidadesNegocio.idUnidadNegocio}" >
+                        <f:selectItem itemValue="" itemLabel="#{msg.combo_default_selection}" />
+                        <f:selectItems value="#{equiposController.listaUnidadesNegocios}"
+                                       var="unidad" itemLabel="#{unidad.nombreUnidad}"
+                                       itemValue="#{unidad.idUnidadNegocio}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="equipos-crear-territorios-label" styleClass="text-label"
+                                   for="equipos-crear-territorios-value" value="#{msg.territorios}"/>
+                    <p:selectManyMenu id="equipos-crear-territorios-value" required="true"
+                                     value="#{equiposController.listaTerrioriosSeleccionadas}" >
+                        <f:selectItems value="#{equiposController.listaTerritorios}"
+                                       var="territorio" itemLabel="#{territorio.nombre}"
+                                       itemValue="#{territorio.id}"/>
+                    </p:selectManyMenu>
+
+                </h:panelGrid>
+            </p:panel>
+        </center>   
+    </h:body>
+</html>
+

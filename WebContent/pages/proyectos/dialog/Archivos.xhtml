@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition >
+        <p:dialog  header="Subir archivos" widgetVar="archivosProyectoDialog"  id="archivosProyectoDialog"
+                   width="40%" 
+                    resizable="false" modal="true">
+            
+            <p:panel styleClass="innermenu">
+                <p:commandButton id="btnEliminarArchivo" icon="ui-icon-trash"
+                                 styleClass="ui-icon-ADTrash" 
+                                 title="Eliminar" 
+                                 actionListener="#{MBProyectos.eliminaArchivoProyecto()}" 
+                                 process="@this,contenedorArchivosProyecto" 
+                                 validateClient="true" 
+                                 update="contenedorArchivosProyecto,growl" ignoreAutoUpdate="true">
+                    <p:confirm header="Confirmaci&oacute;n"
+                                            message="#{msg.confirm_umploadfile_proyectos}"
+                                            icon="ui-icon-alert" />
+                </p:commandButton>
+                <!--
+                <p:commandButton id="btnCierraArchivos" title="Regresar" 
+                                 process="@this"
+                                 styleClass="ui-icon-ADGo-left" oncomplete="PF('archivosProyectoDialog').hide()"  />
+                -->
+            </p:panel>
+            
+            
+            
+            <div class="page-content">
+                <br/>
+                <p:fileUpload fileUploadListener="#{MBProyectos.subirArchivosProyecto}" mode="advanced" fileLimit="1" uploadLabel="Subir" cancelLabel="Cancelar"
+                            allowTypes="/(\.|\/)(pdf|pptx|ppt|docx|doc|xls|xlsx|gif|jpe?g|png)$/" sizeLimit="2000000" 
+                            process="@this" 
+                            label="Seleccione un archivo." 
+                            fileLimitMessage="Solo puede subir un archivo a la vez." 
+                            invalidFileMessage="Tipo de archivo no valido (Formatos permitidos:pdf,ppt,doc,xls,gif,jpeg,png)." 
+                            invalidSizeMessage="Tamaño de archivo no valido." 
+                            update="contenedorArchivosProyecto,@this"  />
+                
+                <!-- PDF, Excel, PPT, Word, Imágenes -->
+                <br/>
+                <p:dataTable id="contenedorArchivosProyecto" var="archivo" widgetVar="contenedorArchivosProyecto"
+                             value="#{MBProyectos.listaArchivosProyecto}"
+                           emptyMessage="No hay archivos relacionados al proyecto"
+                           paginator="false" rows="25" 
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           rowsPerPageTemplate="5" selectionMode="single"
+                           selection="#{MBProyectos.archivoSelecccionado}"
+                           rowKey="#{archivo.archivosOID}"  >
+                    <f:facet name="header">
+                        Archivos del Proyecto
+                    </f:facet>
+                    <p:column width="85%">
+                        <f:facet name="header">
+                            Nombre de archivo
+                        </f:facet>
+                        <h:outputText value="#{archivo.nombre}" />
+                    </p:column>
+                    <p:column width="15%" >
+                        <f:facet name="header">
+                            Ver archivo
+                        </f:facet>
+                        <p:commandButton id="descargaArchivo" styleClass="ui-icon-ADFolder-abierto25x25" process="@this" update="fileContent,growl" icon="ui-icon-folder-open"
+                                         actionListener="#{MBProyectos.descargarArchivoProyecto(archivo.nombre)}" ignoreAutoUpdate="true" ajax="false" immediate="true" >
+                            <f:param name="nombreArchivo" value="#{archivo.nombre}"/>
+                            <p:fileDownload id="fileContent" value="#{MBProyectos.archivoDescargar}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                
+            </div>
+            
+        </p:dialog>
+    </ui:composition>
+</html>
+
+
+

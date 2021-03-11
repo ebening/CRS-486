@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <!--
+        <div>
+            <ui:insert name="top"><ui:include src="commonHeader.xhtml" /></ui:insert>
+        </div>
+        -->
+        <div class="template-wrapper group">
+            <ui:insert name="top"><ui:include src="commonHeader.xhtml" /></ui:insert>
+        </div>
+        
+        <div class="template-wrapper group">
+            <div class="template-columns div-menuf">
+                <ui:insert name="left"><ui:include src="commonMenu.xhtml" /></ui:insert>
+            </div>
+            <div class="template-columns div-contentf">
+                <ui:insert name="content">
+                    <div id="center-div" class="div-centerf">
+                        <!--ui:include src="commonCenter2.xhtml" /-->
+                        <ui:include src="commonCenter.xhtml" />
+                    </div>
+                </ui:insert>
+            </div>
+        </div>
+        <div class="div-pief">
+            <ui:insert name="bottom"><ui:include src="commonFooter.xhtml" /></ui:insert>
+        </div>
+        
+    </h:body>
+</html>
+
+
